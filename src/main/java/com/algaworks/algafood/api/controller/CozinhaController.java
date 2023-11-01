@@ -17,7 +17,7 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 
 @RestController
-@RequestMapping(path = "/cozinhas", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+@RequestMapping(value = "/cozinhas", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 public class CozinhaController {
 	
 	@Autowired
@@ -28,13 +28,13 @@ public class CozinhaController {
 		return cozinhaRepository.findAll();
 	}
 	
-	@GetMapping(value = "/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Cozinha>> findById(@PathVariable Long id){
 		Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
 		return ResponseEntity.ok().body(cozinha);
 	}
 	
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteById(@PathVariable Long id){
 		return ResponseEntity.noContent().build();
 	}

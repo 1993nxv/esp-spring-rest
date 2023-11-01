@@ -19,6 +19,8 @@ public class Cozinha {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+//	@JsonIgnore
+//	@JsonProperty("gastronomia")
 	@Column(nullable = false)
 	private String nome;
 
