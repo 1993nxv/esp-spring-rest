@@ -1,18 +1,18 @@
 package com.algaworks.algafood.api.controller;
 
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -54,14 +54,34 @@ public class CozinhaController {
 		return cozinhaRepository.save(cozinha);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteById(@PathVariable Long id){
+	@PutMapping("/{id}")
+	public ResponseEntity<Cozinha> update(@PathVariable Long id, @RequestBody Cozinha cozinha){
 		
-		Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
+		Optional<Cozinha> cozinhaAtual = cozinhaRepository.findById(id);
 		
-		if(!cozinha.isEmpty()) {
-			cozinhaRepository.deleteById(id);
+		if(!cozinhaAtual.isEmpty()) {
+		
+			BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id");
+//			cozinhaAtual.get().setNome(cozinha.getNome());
+			
+			cozinha = cozinhaAtual.get();
+			cozinhaRepository.save(cozinha);
+			
+			return ResponseEntity.ok(cozinha);
+			
+		} else {
+			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.noContent().build();
 	}
+	
+//	@DeleteMapping("/{id}")
+//	public ResponseEntity<Void> deleteById(@PathVariable Long id){
+//		
+//		Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
+//		
+//		if(!cozinha.isEmpty()) {
+//			cozinhaRepository.deleteById(id);
+//		}
+//		return ResponseEntity.noContent().build();
+//	}
 }
