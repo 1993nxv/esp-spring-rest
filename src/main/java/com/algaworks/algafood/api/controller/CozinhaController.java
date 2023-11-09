@@ -6,9 +6,11 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,14 +76,17 @@ public class CozinhaController {
 		}
 	}
 	
-//	@DeleteMapping("/{id}")
-//	public ResponseEntity<Void> deleteById(@PathVariable Long id){
-//		
-//		Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
-//		
-//		if(!cozinha.isEmpty()) {
-//			cozinhaRepository.deleteById(id);
-//		}
-//		return ResponseEntity.noContent().build();
-//	}
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteById(@PathVariable Long id){
+		try {
+			Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
+			
+			if(!cozinha.isEmpty()) {
+				cozinhaRepository.delete(cozinha.get());
+			}
+			return ResponseEntity.noContent().build();
+		} catch (DataIntegrityViolationException error) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+	}
 }
