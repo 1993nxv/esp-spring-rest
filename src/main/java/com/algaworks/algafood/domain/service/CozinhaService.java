@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,22 @@ public class CozinhaService {
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 	
+	public List<Cozinha> findAll(){	
+		return cozinhaRepository.findAll();
+	}
+	
+	public Cozinha findById(Long id){
+		
+			Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
+			
+			return cozinha
+					.orElseThrow(() -> new EntidadeNaoEncontradaException("Entidade não encontrada!"));	
+	}
+	
 	public Cozinha save(Cozinha cozinha){
 		return cozinhaRepository.save(cozinha);
 	}
+	
 	
 	public void deleteById(Long id) {
 		try {
