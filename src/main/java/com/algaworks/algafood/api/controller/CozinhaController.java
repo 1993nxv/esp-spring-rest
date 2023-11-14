@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
+import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CozinhaService;
@@ -81,15 +82,18 @@ public class CozinhaController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteById(@PathVariable Long id){
+	public ResponseEntity<Cozinha> deleteById(@PathVariable Long id){
 		try {
-			Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
 			
-			if(!cozinha.isEmpty()) {
-				cozinhaRepository.delete(cozinha.get());
-			}
+			cozinhaService.deleteById(id);
 			return ResponseEntity.noContent().build();
-		} catch (DataIntegrityViolationException error) {
+		
+		} catch (EntidadeNaoEncontradaException error) {
+			
+			return ResponseEntity.notFound().build();
+		
+		} catch (EntidadeEmUsoException error) {
+			
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
