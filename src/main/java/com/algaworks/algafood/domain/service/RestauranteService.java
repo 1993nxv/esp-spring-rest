@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
+import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 
 @Service
@@ -15,6 +17,9 @@ public class RestauranteService {
 	
 	@Autowired
 	RestauranteRepository restauranteRepository;
+	
+	@Autowired
+	CozinhaRepository cozinhaRepository;
 	
 	public List<Restaurante> findAll(){
 		return restauranteRepository.findAll();
@@ -26,5 +31,17 @@ public class RestauranteService {
 			
 		return restaurante
 				.orElseThrow(() -> new EntidadeNaoEncontradaException("Entidade não encontrada!"));	
+	}
+	
+	public Restaurante save(Restaurante restaurante) {
+		Cozinha cozinha = cozinhaRepository
+				.findById(restaurante
+						.getCozinha()
+						.getId())
+						.orElseThrow(() -> new EntidadeNaoEncontradaException("Cozinha não encontrada!"));
+		
+		restaurante.setCozinha(cozinha);
+		
+		return restauranteRepository.save(restaurante);
 	}
 }
