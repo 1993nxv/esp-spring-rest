@@ -31,7 +31,7 @@ public class RestauranteController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Restaurante> findById(@PathVariable Long id) {
+	public ResponseEntity<?> findById(@PathVariable Long id) {
 		try {
 			
 			Restaurante restaurante = restauranteService.findById(id);
@@ -39,7 +39,9 @@ public class RestauranteController {
 		
 		} catch (EntidadeNaoEncontradaException e) {
 			
-			return ResponseEntity.notFound().build();
+			return ResponseEntity
+					.status(HttpStatus.NOT_FOUND)
+					.body(e.getMessage());
 		
 		}
 	}

@@ -28,7 +28,7 @@ public class CozinhaService {
 			Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
 			
 			return cozinha
-					.orElseThrow(() -> new EntidadeNaoEncontradaException("Entidade não encontrada!"));	
+					.orElseThrow(() -> new EntidadeNaoEncontradaException("Cozinha com id:" + id + " não encontrada."));	
 	}
 	
 	public Cozinha save(Cozinha cozinha){
@@ -48,11 +48,11 @@ public class CozinhaService {
 			
 		} catch (EmptyResultDataAccessException error) {
 			
-			throw new EntidadeNaoEncontradaException("Entidade não encontrada!");
+			throw new EntidadeNaoEncontradaException("Cozinha com id:" + id + " não encontrada.");
 		
 		} catch (DataIntegrityViolationException error) {
 			
-			throw new EntidadeEmUsoException("Cozinha de código " + id + " não pode ser removida, pois está em uso.");
+			throw new EntidadeEmUsoException("Cozinha com id:" + id + " não pode ser removida, pois está em uso.");
 		
 		}
 	}
