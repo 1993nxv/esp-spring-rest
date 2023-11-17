@@ -38,7 +38,7 @@ public class CozinhaController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Cozinha> findById(@PathVariable Long id){
+	public ResponseEntity<?> findById(@PathVariable Long id){
 		try {
 			
 			Cozinha cozinha = cozinhaService.findById(id);
@@ -46,7 +46,9 @@ public class CozinhaController {
 			
 		} catch (EntidadeNaoEncontradaException e) {
 			
-			return ResponseEntity.noContent().build();
+			return ResponseEntity
+					.badRequest()
+					.body(e.getMessage());
 			
 		}
 				
@@ -59,7 +61,7 @@ public class CozinhaController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Cozinha> update(@PathVariable Long id, @RequestBody Cozinha cozinha){
+	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Cozinha cozinha){
 		
 		try {
 			
@@ -71,7 +73,9 @@ public class CozinhaController {
 			
 		} catch (EntidadeNaoEncontradaException e) {
 			
-			return ResponseEntity.notFound().build();
+			return ResponseEntity
+					.badRequest()
+					.body(e.getMessage());
 			
 		}
 		

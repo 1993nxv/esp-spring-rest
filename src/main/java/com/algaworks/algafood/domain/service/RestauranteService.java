@@ -30,7 +30,8 @@ public class RestauranteService {
 		Optional<Restaurante> restaurante = restauranteRepository.findById(id);
 			
 		return restaurante
-				.orElseThrow(() -> new EntidadeNaoEncontradaException("Entidade não encontrada!"));	
+				.orElseThrow(() -> new EntidadeNaoEncontradaException
+						("Restaurante com id:" + id + " não encontrado."));	
 	}
 	
 	public Restaurante save(Restaurante restaurante) {
@@ -38,7 +39,8 @@ public class RestauranteService {
 				.findById(restaurante
 						.getCozinha()
 						.getId())
-						.orElseThrow(() -> new EntidadeNaoEncontradaException("Cozinha não encontrada!"));
+						.orElseThrow(() -> new EntidadeNaoEncontradaException
+								("Cozinha com id:" + restaurante.getCozinha().getId() + " não encontrada."));
 		
 		restaurante.setCozinha(cozinha);
 		
