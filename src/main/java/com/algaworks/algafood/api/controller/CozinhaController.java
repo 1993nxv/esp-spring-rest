@@ -84,11 +84,11 @@ public class CozinhaController {
 			cozinhaService.deleteById(id);
 			return ResponseEntity.noContent().build();
 		
-		} catch (EntidadeNaoEncontradaException error) {
+		} catch (EntidadeNaoEncontradaException e) {
 			
 			return ResponseEntity.notFound().build();
 		
-		} catch (EntidadeEmUsoException error) {
+		} catch (EntidadeEmUsoException e) {
 			
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
