@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -81,5 +82,16 @@ public class RestauranteController {
 					.status(HttpStatus.NOT_FOUND)
 					.body(e.getMessage());
 		}
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Restaurante> deleteById(@PathVariable Long id) {
+		
+		try {
+			restauranteService.deleteById(id);
+			return ResponseEntity.noContent().build();
+		}
+		
+		return null;
 	}
 }
