@@ -85,10 +85,19 @@ public class RestauranteController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Restaurante> deleteById(@PathVariable Long id) {
+	public ResponseEntity<?> deleteById(@PathVariable Long id) {
+		try {
+			
+			restauranteService.deleteById(id);
+			return ResponseEntity.noContent().build();
 		
-		restauranteService.deleteById(id);
-		return ResponseEntity.noContent().build();
+		} catch (EntidadeNaoEncontradaException e) {
+			
+			return ResponseEntity
+					.status(HttpStatus.NOT_FOUND)
+					.body(e.getMessage());
+			
+		}
 		
 	}
 }
