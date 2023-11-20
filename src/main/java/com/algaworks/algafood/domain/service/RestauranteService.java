@@ -49,7 +49,7 @@ public class RestauranteService {
 
 	public void deleteById(Long id) {
 		
-			Restaurante restaurante = findById(id);
+			findById(id);
 			restauranteRepository.deleteById(id);
 			
 	}

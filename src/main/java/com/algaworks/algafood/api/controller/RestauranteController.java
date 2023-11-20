@@ -87,11 +87,8 @@ public class RestauranteController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Restaurante> deleteById(@PathVariable Long id) {
 		
-		try {
-			restauranteService.deleteById(id);
-			return ResponseEntity.noContent().build();
-		}
+		restauranteService.deleteById(id);
+		return ResponseEntity.noContent().build();
 		
-		return null;
 	}
 }
