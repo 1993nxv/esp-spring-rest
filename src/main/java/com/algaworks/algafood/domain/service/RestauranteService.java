@@ -1,16 +1,20 @@
 package com.algaworks.algafood.domain.service;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class RestauranteService {
@@ -35,6 +39,7 @@ public class RestauranteService {
 	}
 	
 	public Restaurante save(Restaurante restaurante) {
+		
 		Cozinha cozinha = cozinhaRepository
 				.findById(restaurante
 						.getCozinha()
@@ -52,5 +57,25 @@ public class RestauranteService {
 			findById(id);
 			restauranteRepository.deleteById(id);
 			
+	}
+
+	public Restaurante updatePartially(Restaurante restaurante, Map<String, Object> campos) {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		Restaurante restauranteOrigem = objectMapper.convertValue(campos, Restaurante.class);
+		
+		campos.forEach((nomePropriedade, valorPropriedade) -> {
+			
+			Field field  = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
+			
+			field.setAccessible(true);
+			
+			Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+			
+			ReflectionUtils.setField(field, restaurante, novoValor);
+			
+		});
+		
+		return restauranteRepository.save(restaurante);
 	}
 }
