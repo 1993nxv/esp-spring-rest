@@ -107,6 +107,7 @@ public class RestauranteController {
 	public ResponseEntity<?> updatePartially(
 			@PathVariable Long id,
 			@RequestBody Map<String, Object> campos){
+		
 		try {
 			
 			Restaurante restaurante = restauranteService.findById(id);
