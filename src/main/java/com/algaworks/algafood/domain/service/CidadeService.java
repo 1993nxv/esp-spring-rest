@@ -48,6 +48,14 @@ public class CidadeService {
 		return cidadeRepository.save(cidade);
 	}
 	
+	public Cidade updatePartially(Long id, Cidade cidade) {
+		
+		findById(id);
+		cidade.setId(id);
+		return save(cidade);
+		
+	}
+	
 	
 	public void deleteById(Long id) {
 		try {
