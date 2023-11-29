@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -122,5 +124,12 @@ public class RestauranteController {
 			
 		}
 		
+	}
+	
+	@GetMapping("/por-taxa")
+	public List<Restaurante> findByTaxaFreteBetween
+		(@RequestParam BigDecimal taxaInicial, @RequestParam BigDecimal taxaFinal){
+		
+		return restauranteService.findByTaxaFreteBetween(taxaInicial, taxaFinal);
 	}
 }

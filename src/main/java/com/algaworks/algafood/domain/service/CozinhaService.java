@@ -56,4 +56,16 @@ public class CozinhaService {
 		
 		}
 	}
+
+	public List<Cozinha> findByNome(String nome) {
+		
+		return cozinhaRepository.findByNome(nome);
+		
+	}
+	
+	public List<Cozinha> findByNomeContaining(String nome) {
+		
+		return cozinhaRepository.findByNomeContaining(nome);
+		
+	}
 }
