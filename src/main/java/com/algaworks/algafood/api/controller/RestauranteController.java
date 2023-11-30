@@ -132,4 +132,9 @@ public class RestauranteController {
 		
 		return restauranteService.findByTaxaFreteBetween(taxaInicial, taxaFinal);
 	}
+	
+	@GetMapping("/por-nome-e-id")
+	public List<Restaurante> porNomeAndCozinhaId(@RequestParam String nome, @RequestParam Long cozinhaId){
+		return restauranteService.porNomeAndCozinhaId(nome, cozinhaId);
+	}
 }

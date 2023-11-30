@@ -84,4 +84,10 @@ public class RestauranteService {
 	
 		return restauranteRepository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
 	}
+
+	public List<Restaurante> porNomeAndCozinhaId(String nome, Long cozinhaId) {
+		
+		return restauranteRepository.porNomeAndCozinhaId(nome, cozinhaId);
+		
+	}
 }
