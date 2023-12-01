@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
@@ -89,5 +90,13 @@ public class RestauranteService {
 		
 		return restauranteRepository.porNomeAndCozinhaId(nome, cozinhaId);
 		
+	}
+	
+	public List<Restaurante> findImp(
+			@RequestParam String nome, 
+			@RequestParam BigDecimal taxaFreteInicial, 
+			@RequestParam BigDecimal taxaFreteFinal){
+		
+		return restauranteRepository.findImp(nome, taxaFreteInicial, taxaFreteFinal);
 	}
 }
