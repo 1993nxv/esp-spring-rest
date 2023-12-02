@@ -16,14 +16,13 @@ public class RestauranteRepositoryImpl {
 	@PersistenceContext
 	private EntityManager manager;
 	
-	public List<Restaurante> findImp(
+	public List<Restaurante> findImpl(
 			String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
 		
 		var jpql = "from Restaurante "
-				+ "where nome like :nome and taxaFrete"
-				+ "between :taxaFreteInicial"
-				+ "and :taxaFreteFinal";
+				+ "where nome like :nome and taxaFrete between :taxaFreteInicial and :taxaFreteFinal";
 		
+
 		
 		return manager.createQuery(jpql, Restaurante.class)
 				.setParameter("nome", "%" + nome + "%")

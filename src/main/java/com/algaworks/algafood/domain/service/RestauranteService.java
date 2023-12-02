@@ -92,11 +92,11 @@ public class RestauranteService {
 		
 	}
 	
-	public List<Restaurante> findImp(
+	public List<Restaurante> findImpl(
 			@RequestParam String nome, 
 			@RequestParam BigDecimal taxaFreteInicial, 
 			@RequestParam BigDecimal taxaFreteFinal){
 		
-		return restauranteRepository.findImp(nome, taxaFreteInicial, taxaFreteFinal);
+		return restauranteRepository.findImpl(nome, taxaFreteInicial, taxaFreteFinal);
 	}
 }
