@@ -9,13 +9,15 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import com.algaworks.algafood.domain.model.Restaurante;
+import com.algaworks.algafood.domain.repository.RestauranteRepositoryQueries;
 
 @Repository
-public class RestauranteRepositoryImpl {
+public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 	
 	@PersistenceContext
 	private EntityManager manager;
 	
+	@Override
 	public List<Restaurante> findImpl(
 			String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
 		
