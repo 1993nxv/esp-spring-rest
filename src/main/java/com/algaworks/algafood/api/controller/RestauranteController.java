@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Restaurante;
+import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
 @RestController
@@ -29,6 +30,9 @@ public class RestauranteController {
 	
 	@Autowired
 	RestauranteService restauranteService;
+	
+	@Autowired
+	RestauranteRepository restauranteRepository;
 	
 	
 	@GetMapping
@@ -141,10 +145,10 @@ public class RestauranteController {
 	
 	@GetMapping("/findImp")
 	public List<Restaurante> findImpl(
-			@RequestParam String nome, 
-			@RequestParam BigDecimal taxaFreteInicial, 
-			@RequestParam BigDecimal taxaFreteFinal){
+			 String nome, 
+			 BigDecimal taxaFreteInicial, 
+			 BigDecimal taxaFreteFinal){
 		
-		return restauranteService.findImpl(nome, taxaFreteInicial, taxaFreteFinal);
+		return restauranteRepository.findImpl(nome, taxaFreteInicial, taxaFreteFinal);
 	}
 }

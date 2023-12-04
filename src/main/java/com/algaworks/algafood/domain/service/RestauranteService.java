@@ -9,7 +9,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
@@ -93,9 +92,9 @@ public class RestauranteService {
 	}
 	
 	public List<Restaurante> findImpl(
-			@RequestParam String nome, 
-			@RequestParam BigDecimal taxaFreteInicial, 
-			@RequestParam BigDecimal taxaFreteFinal){
+			 String nome, 
+			 BigDecimal taxaFreteInicial, 
+			 BigDecimal taxaFreteFinal){
 		
 		return restauranteRepository.findImpl(nome, taxaFreteInicial, taxaFreteFinal);
 	}
