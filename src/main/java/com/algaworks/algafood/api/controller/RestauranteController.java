@@ -31,10 +31,6 @@ public class RestauranteController {
 	@Autowired
 	RestauranteService restauranteService;
 	
-	@Autowired
-	RestauranteRepository restauranteRepository;
-	
-	
 	@GetMapping
 	public List<Restaurante> findAll(){
 		return restauranteService.findAll();
@@ -149,6 +145,6 @@ public class RestauranteController {
 			 BigDecimal taxaFreteInicial, 
 			 BigDecimal taxaFreteFinal){
 		
-		return restauranteRepository.findImpl(nome, taxaFreteInicial, taxaFreteFinal);
+		return restauranteService.findImpl(nome, taxaFreteInicial, taxaFreteFinal);
 	}
 }
