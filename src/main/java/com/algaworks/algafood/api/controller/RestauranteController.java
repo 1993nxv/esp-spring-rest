@@ -146,4 +146,10 @@ public class RestauranteController {
 		
 		return restauranteService.findImpl(nome, taxaFreteInicial, taxaFreteFinal);
 	}
+	
+	@GetMapping("/frete-gratis")
+	public List<Restaurante> findImpl(String nome){
+		
+		return restauranteService.findFreteGratis(nome);
+	}
 }
