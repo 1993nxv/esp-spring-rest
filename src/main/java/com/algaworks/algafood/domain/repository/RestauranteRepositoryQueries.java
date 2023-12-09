@@ -7,6 +7,9 @@ import com.algaworks.algafood.domain.model.Restaurante;
 
 public interface RestauranteRepositoryQueries {
 
-	List<Restaurante> findImpl(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
+	List<Restaurante> findImpl(
+			String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
+	
+	List<Restaurante> findComFreteGratis(String nome);
 
 }

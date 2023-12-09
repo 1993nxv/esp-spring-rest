@@ -101,6 +101,6 @@ public class RestauranteService {
 
 	public List<Restaurante> findFreteGratis(String nome) {
 	
-		return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
+		return restauranteRepository.findComFreteGratis(nome);
 	}
 }
