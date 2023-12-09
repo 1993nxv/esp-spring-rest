@@ -1,8 +1,5 @@
 package com.algaworks.algafood.domain.service;
 
-import static com.algaworks.algafood.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
-import static com.algaworks.algafood.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
-
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
