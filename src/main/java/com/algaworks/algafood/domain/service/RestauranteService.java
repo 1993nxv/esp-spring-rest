@@ -100,4 +100,8 @@ public class RestauranteService {
 	
 		return restauranteRepository.findComFreteGratis(nome);
 	}
+
+	public Optional<Restaurante> buscarPrimeiro() {
+		return restauranteRepository.buscaPrimeiro();
+	}
 }

@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.controller;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class RestauranteController {
 	
 	@Autowired
 	RestauranteService restauranteService;
+	
+//	@Autowired
+//	RestauranteRepository restauranteRepository;
 	
 	@GetMapping
 	public List<Restaurante> findAll(){
@@ -151,5 +155,12 @@ public class RestauranteController {
 	public List<Restaurante> findImpl(String nome){
 		
 		return restauranteService.findFreteGratis(nome);
+	}
+	
+	@GetMapping("/primeiro")
+	public Optional<Restaurante> buscarPrimeiro(){
+		
+		return restauranteService.buscarPrimeiro();
+		
 	}
 }
