@@ -70,6 +70,8 @@ public class CozinhaService {
 	}
 
 	public Optional<Cozinha> buscarPrimeiro() {
+		
 		return cozinhaRepository.buscaPrimeiro();
+		
 	}
 }
