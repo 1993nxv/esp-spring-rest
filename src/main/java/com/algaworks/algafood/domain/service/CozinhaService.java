@@ -68,4 +68,8 @@ public class CozinhaService {
 		return cozinhaRepository.findByNomeContaining(nome);
 		
 	}
+
+	public Optional<Cozinha> buscarPrimeiro() {
+		return cozinhaRepository.buscaPrimeiro();
+	}
 }
