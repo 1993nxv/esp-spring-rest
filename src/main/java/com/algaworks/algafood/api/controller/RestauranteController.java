@@ -41,51 +41,40 @@ public class RestauranteController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
-		try {
-			
+		try {			
 			Restaurante restaurante = restauranteService.findById(id);
 			return ResponseEntity.ok(restaurante);
 		
-		} catch (EntidadeNaoEncontradaException e) {
-			
+		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());
-		
+					.body(e.getMessage());		
 		}
 	}
 	
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Restaurante restaurante) {
-		try {
-			
+		try {			
 			return ResponseEntity
 					.status(HttpStatus.CREATED)
 					.body(restauranteService.save(restaurante));
-		
-		
-		} catch (EntidadeNaoEncontradaException e) {
-			
+				
+		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.badRequest()
-					.body(e.getMessage());
-			
-		}
-			
+					.body(e.getMessage());			
+		}			
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Restaurante restaurante) {
-		try {
-			
+		try {			
 			Restaurante restauranteAtual = restauranteService.findById(id);
-			BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
-			
+			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento");			
 			return ResponseEntity
 					.ok(restauranteService.save(restauranteAtual));
 			
-		} catch (EntidadeNaoEncontradaException e) {
-			
+		} catch (EntidadeNaoEncontradaException e) {		
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
 					.body(e.getMessage());
@@ -94,46 +83,37 @@ public class RestauranteController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
-		try {
-			
+		try {		
 			restauranteService.deleteById(id);
 			return ResponseEntity.noContent().build();
 		
-		} catch (EntidadeNaoEncontradaException e) {
-			
+		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());
-			
-		}
-		
+					.body(e.getMessage());		
+		}	
 	}
 	
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> updatePartially(
 			@PathVariable Long id,
-			@RequestBody Map<String, Object> campos){
-		
-		try {
-			
+			@RequestBody Map<String, Object> campos){		
+		try {			
 			Restaurante restaurante = restauranteService.findById(id);
 			Restaurante restauranteSave = restauranteService.updatePartially(restaurante, campos);
 			return ResponseEntity.ok(restauranteSave);
 			
-		} catch (EntidadeNaoEncontradaException e) {
-			
+		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());
-			
+					.body(e.getMessage());			
 		}
 		
 	}
 	
 	@GetMapping("/por-taxa")
 	public List<Restaurante> findByTaxaFreteBetween
-		(@RequestParam BigDecimal taxaInicial, @RequestParam BigDecimal taxaFinal){
-		
+		(@RequestParam BigDecimal taxaInicial, @RequestParam BigDecimal taxaFinal){		
 		return restauranteService.findByTaxaFreteBetween(taxaInicial, taxaFinal);
 	}
 	
@@ -146,21 +126,17 @@ public class RestauranteController {
 	public List<Restaurante> findImpl(
 			 String nome, 
 			 BigDecimal taxaFreteInicial, 
-			 BigDecimal taxaFreteFinal){
-		
+			 BigDecimal taxaFreteFinal){		
 		return restauranteService.findImpl(nome, taxaFreteInicial, taxaFreteFinal);
 	}
 	
 	@GetMapping("/frete-gratis")
-	public List<Restaurante> findImpl(String nome){
-		
+	public List<Restaurante> findImpl(String nome){		
 		return restauranteService.findFreteGratis(nome);
 	}
 	
 	@GetMapping("/primeiro")
-	public Optional<Restaurante> buscarPrimeiro(){
-		
-		return restauranteService.buscarPrimeiro();
-		
+	public Optional<Restaurante> buscarPrimeiro(){	
+		return restauranteService.buscarPrimeiro();	
 	}
 }

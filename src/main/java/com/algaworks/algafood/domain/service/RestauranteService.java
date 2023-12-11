@@ -30,60 +30,47 @@ public class RestauranteService {
 		return restauranteRepository.findAll();
 	}
 
-	public Restaurante findById(Long id) {
-		
-		Optional<Restaurante> restaurante = restauranteRepository.findById(id);
-			
+	public Restaurante findById(Long id) {		
+		Optional<Restaurante> restaurante = restauranteRepository.findById(id);			
 		return restaurante
 				.orElseThrow(() -> new EntidadeNaoEncontradaException
 						("Restaurante com id:" + id + " não encontrado."));	
 	}
 	
-	public Restaurante save(Restaurante restaurante) {
-		
+	public Restaurante save(Restaurante restaurante) {		
 		Cozinha cozinha = cozinhaRepository
 				.findById(restaurante
 						.getCozinha()
 						.getId())
 						.orElseThrow(() -> new EntidadeNaoEncontradaException
-								("Cozinha com id:" + restaurante.getCozinha().getId() + " não encontrada."));
-		
-		restaurante.setCozinha(cozinha);
-		
+								("Cozinha com id:" + restaurante.getCozinha().getId() + " não encontrada."));	
+		restaurante.setCozinha(cozinha);	
 		return restauranteRepository.save(restaurante);
 	}
 
-	public void deleteById(Long id) {
-		
+	public void deleteById(Long id) {		
 			findById(id);
-			restauranteRepository.deleteById(id);
-			
+			restauranteRepository.deleteById(id);		
 	}
 
-	public Restaurante updatePartially(Restaurante restaurante, Map<String, Object> campos) {
-		
+	public Restaurante updatePartially(Restaurante restaurante, Map<String, Object> campos) {	
 		ObjectMapper objectMapper = new ObjectMapper();
 		Restaurante restauranteOrigem = objectMapper.convertValue(campos, Restaurante.class);
 		
-		campos.forEach((nomePropriedade, valorPropriedade) -> {
-			
+		campos.forEach((nomePropriedade, valorPropriedade) -> {			
 			Field field  = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
 			field.setAccessible(true);
 			Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
-			ReflectionUtils.setField(field, restaurante, novoValor);
-			
-		});
-		
+			ReflectionUtils.setField(field, restaurante, novoValor);			
+		});		
 		return restauranteRepository.save(restaurante);
 	}
 
-	public List<Restaurante> findByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal) {
-	
+	public List<Restaurante> findByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal) {	
 		return restauranteRepository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
 	}
 
-	public List<Restaurante> porNomeAndCozinhaId(String nome, Long cozinhaId) {
-		
+	public List<Restaurante> porNomeAndCozinhaId(String nome, Long cozinhaId) {		
 		return restauranteRepository.porNomeAndCozinhaId(nome, cozinhaId);
 		
 	}
@@ -91,13 +78,11 @@ public class RestauranteService {
 	public List<Restaurante> findImpl(
 			 String nome, 
 			 BigDecimal taxaFreteInicial, 
-			 BigDecimal taxaFreteFinal){
-		
+			 BigDecimal taxaFreteFinal){		
 		return restauranteRepository.findImpl(nome, taxaFreteInicial, taxaFreteFinal);
 	}
 
 	public List<Restaurante> findFreteGratis(String nome) {
-	
 		return restauranteRepository.findComFreteGratis(nome);
 	}
 
