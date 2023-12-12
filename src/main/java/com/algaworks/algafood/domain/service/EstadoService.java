@@ -20,18 +20,14 @@ public class EstadoService {
 		return estadoRepository.findAll();
 	}
 
-	public Estado findById(Long id) {
-		
-		Optional<Estado> estado = estadoRepository.findById(id);
-			
+	public Estado findById(Long id) {	
+		Optional<Estado> estado = estadoRepository.findById(id);		
 		return estado
 				.orElseThrow(() -> new EntidadeNaoEncontradaException
 						("Estado com id:" + id + " não encontrado."));	
 	}
 	
 	public Estado save(Estado estado) {
-
 		return estadoRepository.save(estado);
-
 	}
 }

@@ -26,52 +26,41 @@ public class CidadeService {
 		return cidadeRepository.findAll();
 	}
 	
-	public Cidade findById(Long id){
-		
-			Optional<Cidade> cidade = cidadeRepository.findById(id);
-			
+	public Cidade findById(Long id){	
+			Optional<Cidade> cidade = cidadeRepository.findById(id);		
 			return cidade
 					.orElseThrow(() -> new EntidadeNaoEncontradaException
 							("Cidade com id:" + id + " não encontrada."));	
 	}
 	
-	public Cidade save(Cidade cidade){
-		
+	public Cidade save(Cidade cidade){	
 		Estado estado = estadoRepository
 				.findById(cidade
 						.getEstado()
 						.getId())
 						.orElseThrow(() -> new EntidadeNaoEncontradaException
-								("Estado com id:" + cidade.getEstado().getId() + " não encontrado."));
-		
+								("Estado com id:" + cidade.getEstado().getId() + " não encontrado."));	
 		cidade.setEstado(estado);
 		return cidadeRepository.save(cidade);
 	}
 	
-	public Cidade updatePartially(Long id, Cidade cidade) {
-		
+	public Cidade updatePartially(Long id, Cidade cidade) {	
 		findById(id);
 		cidade.setId(id);
-		return save(cidade);
-		
+		return save(cidade);	
 	}
-	
 	
 	public void deleteById(Long id) {
 		try {
 			Optional<Cidade> cidade = cidadeRepository.findById(id);
-			
 			if(!cidade.isEmpty()) {
 				cidadeRepository.deleteById(id);
 			} else {
 				throw new EmptyResultDataAccessException(0);
-			}
-			
-		} catch (EmptyResultDataAccessException error) {
-			
+			}	
+		} catch (EmptyResultDataAccessException error) {		
 			throw new EntidadeNaoEncontradaException
 			("Cidade com id:" + id + " não encontrada.");
-		
 		}
 	}
 }

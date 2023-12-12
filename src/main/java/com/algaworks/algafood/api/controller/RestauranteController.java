@@ -43,8 +43,7 @@ public class RestauranteController {
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		try {			
 			Restaurante restaurante = restauranteService.findById(id);
-			return ResponseEntity.ok(restaurante);
-		
+			return ResponseEntity.ok(restaurante);	
 		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
@@ -57,8 +56,7 @@ public class RestauranteController {
 		try {			
 			return ResponseEntity
 					.status(HttpStatus.CREATED)
-					.body(restauranteService.save(restaurante));
-				
+					.body(restauranteService.save(restaurante));				
 		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.badRequest()
@@ -72,8 +70,7 @@ public class RestauranteController {
 			Restaurante restauranteAtual = restauranteService.findById(id);
 			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento");			
 			return ResponseEntity
-					.ok(restauranteService.save(restauranteAtual));
-			
+					.ok(restauranteService.save(restauranteAtual));			
 		} catch (EntidadeNaoEncontradaException e) {		
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
@@ -85,8 +82,7 @@ public class RestauranteController {
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
 		try {		
 			restauranteService.deleteById(id);
-			return ResponseEntity.noContent().build();
-		
+			return ResponseEntity.noContent().build();	
 		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
@@ -101,14 +97,12 @@ public class RestauranteController {
 		try {			
 			Restaurante restaurante = restauranteService.findById(id);
 			Restaurante restauranteSave = restauranteService.updatePartially(restaurante, campos);
-			return ResponseEntity.ok(restauranteSave);
-			
+			return ResponseEntity.ok(restauranteSave);		
 		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
 					.body(e.getMessage());			
-		}
-		
+		}	
 	}
 	
 	@GetMapping("/por-taxa")

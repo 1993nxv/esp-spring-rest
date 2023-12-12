@@ -33,50 +33,36 @@ public class EstadoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		try {
-			
 			Estado estado = estadoService.findById(id);
-			return ResponseEntity.ok(estado);
-		
-		} catch (EntidadeNaoEncontradaException e) {
-			
+			return ResponseEntity.ok(estado);		
+		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());
-		
+					.body(e.getMessage());	
 		}
 	}
 	
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Estado estado) {
-		try {
-			
+		try {			
 			return ResponseEntity
 					.status(HttpStatus.CREATED)
-					.body(estadoService.save(estado));
-		
-		
-		} catch (EntidadeNaoEncontradaException e) {
-			
+					.body(estadoService.save(estado));				
+		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.badRequest()
-					.body(e.getMessage());
-			
-		}
-			
+					.body(e.getMessage());			
+		}		
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Estado estado) {
-		try {
-			
+		try {			
 			Estado estadoAtual = estadoService.findById(id);
-			BeanUtils.copyProperties(estado, estadoAtual, "id");
-			
+			BeanUtils.copyProperties(estado, estadoAtual, "id");			
 			return ResponseEntity
-					.ok(estadoService.save(estadoAtual));
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			
+					.ok(estadoService.save(estadoAtual));			
+		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
 					.body(e.getMessage());

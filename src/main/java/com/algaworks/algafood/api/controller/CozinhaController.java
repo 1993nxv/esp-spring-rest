@@ -29,8 +29,7 @@ import com.algaworks.algafood.domain.service.CozinhaService;
 @RestController
 @RequestMapping("/cozinhas")
 public class CozinhaController {
-	
-	
+		
 	@Autowired
 	private CozinhaService cozinhaService;
 	
@@ -41,19 +40,14 @@ public class CozinhaController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id){
-		try {
-			
+		try {			
 			Cozinha cozinha = cozinhaService.findById(id);
-			return ResponseEntity.ok(cozinha);
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			
+			return ResponseEntity.ok(cozinha);			
+		} catch (EntidadeNaoEncontradaException e) {		
 			return ResponseEntity
 					.badRequest()
-					.body(e.getMessage());
-			
-		}
-				
+					.body(e.getMessage());	
+		}			
 	}
 	
 	@PostMapping
@@ -63,39 +57,29 @@ public class CozinhaController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Cozinha cozinha){
-		
-		try {
-			
+	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Cozinha cozinha){		
+		try {			
 			Cozinha cozinhaAtual = cozinhaService.findById(id);
 			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 			cozinha = cozinhaAtual;
 			cozinhaService.save(cozinha);
 			return ResponseEntity.ok(cozinha);
 			
-		} catch (EntidadeNaoEncontradaException e) {
-			
+		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.badRequest()
-					.body(e.getMessage());
-			
-		}
-		
+					.body(e.getMessage());		
+		}	
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Cozinha> deleteById(@PathVariable Long id){
-		try {
-			
+		try {			
 			cozinhaService.deleteById(id);
-			return ResponseEntity.noContent().build();
-		
-		} catch (EntidadeNaoEncontradaException e) {
-			
-			return ResponseEntity.notFound().build();
-		
-		} catch (EntidadeEmUsoException e) {
-			
+			return ResponseEntity.noContent().build();	
+		} catch (EntidadeNaoEncontradaException e) {		
+			return ResponseEntity.notFound().build();	
+		} catch (EntidadeEmUsoException e) {		
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
@@ -111,9 +95,7 @@ public class CozinhaController {
 	}
 	
 	@GetMapping("/primeiro")
-	public Optional<Cozinha> buscarPrimeiro(){
-		
-		return cozinhaService.buscarPrimeiro();
-		
+	public Optional<Cozinha> buscarPrimeiro(){		
+		return cozinhaService.buscarPrimeiro();	
 	}
 }

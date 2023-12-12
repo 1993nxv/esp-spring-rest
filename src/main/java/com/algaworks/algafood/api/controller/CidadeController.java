@@ -28,8 +28,7 @@ import com.algaworks.algafood.domain.service.CidadeService;
 @RestController
 @RequestMapping("/cidades")
 public class CidadeController {
-	
-	
+		
 	@Autowired
 	private CidadeService cidadeService;
 	
@@ -40,19 +39,14 @@ public class CidadeController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id){
-		try {
-			
+		try {			
 			Cidade cidade = cidadeService.findById(id);
-			return ResponseEntity.ok(cidade);
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			
+			return ResponseEntity.ok(cidade);		
+		} catch (EntidadeNaoEncontradaException e) {		
 			return ResponseEntity
 					.badRequest()
-					.body(e.getMessage());
-			
-		}
-				
+					.body(e.getMessage());		
+		}			
 	}
 	
 	@PostMapping
@@ -62,61 +56,43 @@ public class CidadeController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Cidade cidade){
-		
-		try {
-			
+	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Cidade cidade){		
+		try {			
 			Cidade cidadeAtual = cidadeService.findById(id);
 			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 			cidade = cidadeAtual;
 			cidadeService.save(cidade);
-			return ResponseEntity.ok(cidade);
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			
+			return ResponseEntity.ok(cidade);		
+		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.badRequest()
-					.body(e.getMessage());
-			
-		}
-		
+					.body(e.getMessage());		
+		}	
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> updatePartially(@PathVariable Long id, @RequestBody Cidade cidade){
-		
-		try {
-			
-			Cidade cidadeUpdate = cidadeService.updatePartially(id, cidade);
-			
-			return ResponseEntity.ok(cidadeUpdate);
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			
+	public ResponseEntity<?> updatePartially(@PathVariable Long id, @RequestBody Cidade cidade){		
+		try {			
+			Cidade cidadeUpdate = cidadeService.updatePartially(id, cidade);			
+			return ResponseEntity.ok(cidadeUpdate);			
+		} catch (EntidadeNaoEncontradaException e) {		
+			return ResponseEntity
+					.badRequest()
+					.body(e.getMessage());			
+		} catch (DataIntegrityViolationException e) {			
 			return ResponseEntity
 					.badRequest()
 					.body(e.getMessage());
-			
-		} catch (DataIntegrityViolationException e) {
-			
-			return ResponseEntity
-					.badRequest()
-					.body(e.getMessage());
-		}
-		
+		}	
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Cidade> deleteById(@PathVariable Long id){
-		try {
-			
+		try {			
 			cidadeService.deleteById(id);
-			return ResponseEntity.noContent().build();
-		
-		} catch (EntidadeNaoEncontradaException e) {
-			
-			return ResponseEntity.notFound().build();
-		
+			return ResponseEntity.noContent().build();		
+		} catch (EntidadeNaoEncontradaException e) {			
+			return ResponseEntity.notFound().build();		
 		}
 	}
 }

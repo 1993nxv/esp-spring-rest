@@ -25,8 +25,7 @@ import com.algaworks.algafood.domain.service.FormaPagamentoService;
 @RestController
 @RequestMapping("/formasdepagamento")
 public class FormaPagamentoController {
-	
-	
+		
 	@Autowired
 	private FormaPagamentoService formaPagamentoService;
 	
@@ -39,8 +38,7 @@ public class FormaPagamentoController {
 	public ResponseEntity<?> findById(@PathVariable Long id){
 		try {			
 			FormaPagamento formaPagamento = formaPagamentoService.findById(id);
-			return ResponseEntity.ok(formaPagamento);
-			
+			return ResponseEntity.ok(formaPagamento);			
 		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.badRequest()
@@ -58,11 +56,9 @@ public class FormaPagamentoController {
 	public ResponseEntity<FormaPagamento> deleteById(@PathVariable Long id){
 		try {			
 			formaPagamentoService.deleteById(id);
-			return ResponseEntity.noContent().build();
-		
+			return ResponseEntity.noContent().build();		
 		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity.notFound().build();
-		
+			return ResponseEntity.notFound().build();		
 		} catch (EntidadeEmUsoException e) {			
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}

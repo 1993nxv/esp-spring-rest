@@ -25,8 +25,7 @@ import com.algaworks.algafood.domain.service.PermissaoService;
 @RestController
 @RequestMapping("/permissoes")
 public class PermissaoController {
-	
-	
+		
 	@Autowired
 	private PermissaoService permissaoService;
 	
@@ -37,19 +36,14 @@ public class PermissaoController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id){
-		try {
-			
+		try {			
 			Permissao permissao = permissaoService.findById(id);
-			return ResponseEntity.ok(permissao);
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			
+			return ResponseEntity.ok(permissao);			
+		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.badRequest()
-					.body(e.getMessage());
-			
-		}
-				
+					.body(e.getMessage());			
+		}			
 	}
 	
 	@PostMapping
@@ -58,20 +52,14 @@ public class PermissaoController {
 		return permissaoService.save(permissao);
 	}
 	
-	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Permissao> deleteById(@PathVariable Long id){
-		try {
-			
+		try {			
 			permissaoService.deleteById(id);
-			return ResponseEntity.noContent().build();
-		
-		} catch (EntidadeNaoEncontradaException e) {
-			
-			return ResponseEntity.notFound().build();
-		
-		} catch (EntidadeEmUsoException e) {
-			
+			return ResponseEntity.noContent().build();		
+		} catch (EntidadeNaoEncontradaException e) {			
+			return ResponseEntity.notFound().build();	
+		} catch (EntidadeEmUsoException e) {		
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}

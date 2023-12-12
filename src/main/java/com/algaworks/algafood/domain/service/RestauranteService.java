@@ -56,7 +56,6 @@ public class RestauranteService {
 	public Restaurante updatePartially(Restaurante restaurante, Map<String, Object> campos) {	
 		ObjectMapper objectMapper = new ObjectMapper();
 		Restaurante restauranteOrigem = objectMapper.convertValue(campos, Restaurante.class);
-		
 		campos.forEach((nomePropriedade, valorPropriedade) -> {			
 			Field field  = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
 			field.setAccessible(true);
@@ -72,7 +71,6 @@ public class RestauranteService {
 
 	public List<Restaurante> porNomeAndCozinhaId(String nome, Long cozinhaId) {		
 		return restauranteRepository.porNomeAndCozinhaId(nome, cozinhaId);
-		
 	}
 	
 	public List<Restaurante> findImpl(

@@ -23,10 +23,8 @@ public class PermissaoService {
 		return permissaoRepository.findAll();
 	}
 	
-	public Permissao findById(Long id){
-		
-			Optional<Permissao> Permissao = permissaoRepository.findById(id);
-			
+	public Permissao findById(Long id){	
+			Optional<Permissao> Permissao = permissaoRepository.findById(id);		
 			return Permissao
 					.orElseThrow(() -> new EntidadeNaoEncontradaException("Permissão com id:" + id + " não encontrada."));	
 	}
@@ -35,25 +33,18 @@ public class PermissaoService {
 		return permissaoRepository.save(permissao);
 	}
 	
-	
 	public void deleteById(Long id) {
 		try {
-			Optional<Permissao> permissao = permissaoRepository.findById(id);
-			
+			Optional<Permissao> permissao = permissaoRepository.findById(id);		
 			if(!permissao.isEmpty()) {
 				permissaoRepository.deleteById(id);
 			} else {
 				throw new EmptyResultDataAccessException(0);
-			}
-			
-		} catch (EmptyResultDataAccessException error) {
-			
+			}	
+		} catch (EmptyResultDataAccessException error) {	
 			throw new EntidadeNaoEncontradaException("Permissão com id:" + id + " não encontrada.");
-		
 		} catch (DataIntegrityViolationException error) {
-			
 			throw new EntidadeEmUsoException("Permissão com id:" + id + " não pode ser removida, pois está em uso.");
-		
 		}
 	}
 }

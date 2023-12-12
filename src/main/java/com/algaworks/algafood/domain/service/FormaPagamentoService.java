@@ -23,10 +23,8 @@ public class FormaPagamentoService {
 		return formaPagamentoRepository.findAll();
 	}
 	
-	public FormaPagamento findById(Long id){
-		
-			Optional<FormaPagamento> formaPagamento = formaPagamentoRepository.findById(id);
-			
+	public FormaPagamento findById(Long id){	
+			Optional<FormaPagamento> formaPagamento = formaPagamentoRepository.findById(id);			
 			return formaPagamento
 					.orElseThrow(() -> new EntidadeNaoEncontradaException("Forma de Pagamento com id:" + id + " não encontrada."));	
 	}
@@ -35,25 +33,18 @@ public class FormaPagamentoService {
 		return formaPagamentoRepository.save(formaPagamento);
 	}
 	
-	
 	public void deleteById(Long id) {
 		try {
-			Optional<FormaPagamento> formaPagamento = formaPagamentoRepository.findById(id);
-			
+			Optional<FormaPagamento> formaPagamento = formaPagamentoRepository.findById(id);			
 			if(!formaPagamento.isEmpty()) {
 				formaPagamentoRepository.deleteById(id);
 			} else {
 				throw new EmptyResultDataAccessException(0);
-			}
-			
-		} catch (EmptyResultDataAccessException error) {
-			
+			}		
+		} catch (EmptyResultDataAccessException error) {	
 			throw new EntidadeNaoEncontradaException("Forma de Pagamento com id:" + id + " não encontrada.");
-		
 		} catch (DataIntegrityViolationException error) {
-			
 			throw new EntidadeEmUsoException("Forma de Pagamento com id:" + id + " não pode ser removida, pois está em uso.");
-		
 		}
 	}
 }
