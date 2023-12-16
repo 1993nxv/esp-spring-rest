@@ -40,7 +40,7 @@ public class RestauranteController {
 		List<Restaurante> restaurantes = restauranteService.findAll();
 		
 		
-		
+		//Entendendo o Lazy Loading.
 		System.out.println(restaurantes.get(0).getFormasPagamento());
 		
 		return restaurantes;
