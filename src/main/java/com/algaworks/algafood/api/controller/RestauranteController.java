@@ -36,7 +36,14 @@ public class RestauranteController {
 	
 	@GetMapping
 	public List<Restaurante> findAll(){
-		return restauranteService.findAll();
+		
+		List<Restaurante> restaurantes = restauranteService.findAll();
+		
+		
+		
+		System.out.println(restaurantes.get(0).getFormasPagamento());
+		
+		return restaurantes;
 	}
 	
 	@GetMapping("/{id}")
