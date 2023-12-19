@@ -41,7 +41,7 @@ public class RestauranteController {
 		
 		
 		//Entendendo o Lazy Loading.
-		System.out.println(restaurantes.get(0).getFormasPagamento());
+//		System.out.println(restaurantes.get(0).getFormasPagamento());
 		
 		return restaurantes;
 	}
