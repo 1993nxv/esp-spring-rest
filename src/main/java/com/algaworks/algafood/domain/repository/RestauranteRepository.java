@@ -2,6 +2,7 @@ package com.algaworks.algafood.domain.repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,9 @@ public interface RestauranteRepository extends
 	
 	@Query("from Restaurante r join fetch r.cozinha left outer join fetch r.formasPagamento left outer join fetch r.endereco")
 	List<Restaurante> findAll();
+	
+	@Query("from Restaurante r join fetch r.cozinha left outer join fetch r.formasPagamento left outer join fetch r.endereco")
+	Optional<Restaurante> findById();
 	
 	List<Restaurante> findByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
 	
