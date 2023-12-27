@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
@@ -29,5 +32,18 @@ public class EstadoService {
 	
 	public Estado save(Estado estado) {
 		return estadoRepository.save(estado);
+	}
+	
+	public void deleteById(Long id) {
+		try {
+			Optional<Estado> estado = estadoRepository.findById(id);		
+			if(!estado.isEmpty()) {
+				estadoRepository.deleteById(id);
+			} else {
+				throw new EmptyResultDataAccessException(0);
+			}			
+		}catch (DataIntegrityViolationException error) {
+			throw new EntidadeEmUsoException("Cozinho com id:" + id + " não pode ser removido, pois está em uso.");
+		}
 	}
 }
