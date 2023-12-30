@@ -31,16 +31,8 @@ public class RestauranteController {
 	@Autowired
 	RestauranteService restauranteService;
 	
-//	@Autowired
-//	RestauranteRepository restauranteRepository;
-	
 	@GetMapping
 	public List<Restaurante> findAll(){
-		
-				
-		//Entendendo o Lazy Loading.
-//		System.out.println(restaurantes.get(0).getFormasPagamento());
-		
 		return restauranteService.findAll();
 	}
 	

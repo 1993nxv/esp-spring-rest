@@ -21,7 +21,7 @@ import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.service.EstadoService;
 
 @RestController
-@RequestMapping("/Estados")
+@RequestMapping("/estados")
 public class EstadoController {
 	
 	@Autowired
