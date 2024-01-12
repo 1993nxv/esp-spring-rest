@@ -42,10 +42,8 @@ public class CozinhaService {
 						
 		} catch (EmptyResultDataAccessException error) {
 			
-//			throw new EntidadeNaoEncontradaException("Cozinha com id:" + id + " não encontrada.");
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-					"Cozinha com id:" + id + " não encontrada.");
-			
+			throw new EntidadeNaoEncontradaException("Cozinha com id:" + id + " não encontrada.");
+	
 		} catch (DataIntegrityViolationException error) {
 			throw new EntidadeEmUsoException("Cozinha com id:" + id + " não pode ser removida, pois está em uso.");
 		}
