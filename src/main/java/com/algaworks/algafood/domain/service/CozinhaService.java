@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -35,14 +37,15 @@ public class CozinhaService {
 	
 	public void deleteById(Long id) {
 		try {
-			Optional<Cozinha> cozinha = cozinhaRepository.findById(id);		
-			if(!cozinha.isEmpty()) {
-				cozinhaRepository.deleteById(id);
-			} else {
-				throw new EmptyResultDataAccessException(0);
-			}			
-		} catch (EmptyResultDataAccessException error) {		
-			throw new EntidadeNaoEncontradaException("Cozinha com id:" + id + " não encontrada.");
+			cozinhaRepository.findById(id);		
+			cozinhaRepository.deleteById(id);
+						
+		} catch (EmptyResultDataAccessException error) {
+			
+//			throw new EntidadeNaoEncontradaException("Cozinha com id:" + id + " não encontrada.");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"Cozinha com id:" + id + " não encontrada.");
+			
 		} catch (DataIntegrityViolationException error) {
 			throw new EntidadeEmUsoException("Cozinha com id:" + id + " não pode ser removida, pois está em uso.");
 		}
