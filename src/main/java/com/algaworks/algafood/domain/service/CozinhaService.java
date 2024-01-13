@@ -38,11 +38,11 @@ public class CozinhaService {
 			cozinhaRepository.findById(id);		
 			cozinhaRepository.deleteById(id);
 						
-		} catch (EmptyResultDataAccessException error) {
+		} catch (EmptyResultDataAccessException e) {
 			
 			throw new EntidadeNaoEncontradaException("Cozinha com id:" + id + " não encontrada.");
 	
-		} catch (DataIntegrityViolationException error) {
+		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException("Cozinha com id:" + id + " não pode ser removida, pois está em uso.");
 		}
 	}
