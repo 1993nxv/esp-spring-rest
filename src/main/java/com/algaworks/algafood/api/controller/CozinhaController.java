@@ -38,15 +38,9 @@ public class CozinhaController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findById(@PathVariable Long id){
-		try {			
+	public ResponseEntity<?> findById(@PathVariable Long id){		
 			Cozinha cozinha = cozinhaService.findById(id);
-			return ResponseEntity.ok(cozinha);			
-		} catch (EntidadeNaoEncontradaException e) {		
-			return ResponseEntity
-					.badRequest()
-					.body(e.getMessage());	
-		}			
+			return ResponseEntity.ok(cozinha);						
 	}
 	
 	@PostMapping
@@ -70,18 +64,6 @@ public class CozinhaController {
 					.body(e.getMessage());		
 		}	
 	}
-	
-//	@DeleteMapping("/{id}")
-//	public ResponseEntity<Cozinha> deleteById(@PathVariable Long id){
-//		try {			
-//			cozinhaService.deleteById(id);
-//			return ResponseEntity.noContent().build();	
-//		} catch (EntidadeNaoEncontradaException e) {		
-//			return ResponseEntity.notFound().build();	
-//		} catch (EntidadeEmUsoException e) {		
-//			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//		}
-//	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
