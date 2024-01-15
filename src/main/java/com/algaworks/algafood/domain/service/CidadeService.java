@@ -18,15 +18,13 @@ public class CidadeService {
 	
 	private static final String MSG_CIDADE_NAO_ENCONTRADA = "Cidade com id:%d não encontrada.";
 
-	private static final String MSG_ESTADO_NAO_ENCONTRADO = "Estado com id:%d não encontrado.";
-	
 	private static final String MSG_CIDADE_EM_USO = "Cidade com id:%d não pode ser removida, pois está em uso.";
 	
 	@Autowired
 	private CidadeRepository cidadeRepository;
 	
 	@Autowired
-	private EstadoRepository estadoRepository;
+	private EstadoService estadoService;
 	
 	public List<Cidade> findAll(){	
 		return cidadeRepository.findAll();
@@ -39,13 +37,7 @@ public class CidadeService {
 	}
 	
 	public Cidade save(Cidade cidade){	
-		Estado estado = estadoRepository
-				.findById(cidade
-						.getEstado()
-						.getId())
-						.orElseThrow(() -> new EntidadeNaoEncontradaException(
-								String.format(MSG_ESTADO_NAO_ENCONTRADO, cidade.getEstado().getId()
-						)));	
+		Estado estado = estadoService.findById(cidade.getEstado().getId());	
 		cidade.setEstado(estado);
 		return cidadeRepository.save(cidade);
 	}
