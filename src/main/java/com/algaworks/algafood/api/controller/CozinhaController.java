@@ -50,19 +50,10 @@ public class CozinhaController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Cozinha cozinha){		
-		try {			
+	public Cozinha update(@PathVariable Long id, @RequestBody Cozinha cozinha){		
 			Cozinha cozinhaAtual = cozinhaService.findById(id);
 			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-			cozinha = cozinhaAtual;
-			cozinhaService.save(cozinha);
-			return ResponseEntity.ok(cozinha);
-			
-		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity
-					.badRequest()
-					.body(e.getMessage());		
-		}	
+			return cozinhaService.save(cozinhaAtual);	
 	}
 	
 	@DeleteMapping("/{id}")
