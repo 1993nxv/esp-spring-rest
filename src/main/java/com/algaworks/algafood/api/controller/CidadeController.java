@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.service.CidadeService;
 
@@ -38,15 +35,8 @@ public class CidadeController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findById(@PathVariable Long id){
-		try {			
-			Cidade cidade = cidadeService.findById(id);
-			return ResponseEntity.ok(cidade);		
-		} catch (EntidadeNaoEncontradaException e) {		
-			return ResponseEntity
-					.badRequest()
-					.body(e.getMessage());		
-		}			
+	public Cidade findById(@PathVariable Long id){			
+			return cidadeService.findById(id);		
 	}
 	
 	@PostMapping
@@ -56,43 +46,20 @@ public class CidadeController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Cidade cidade){		
-		try {			
+	public Cidade update(@PathVariable Long id, @RequestBody Cidade cidade){		
 			Cidade cidadeAtual = cidadeService.findById(id);
 			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-			cidade = cidadeAtual;
-			cidadeService.save(cidade);
-			return ResponseEntity.ok(cidade);		
-		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity
-					.badRequest()
-					.body(e.getMessage());		
-		}	
+			return cidadeService.save(cidadeAtual);
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> updatePartially(@PathVariable Long id, @RequestBody Cidade cidade){		
-		try {			
-			Cidade cidadeUpdate = cidadeService.updatePartially(id, cidade);			
-			return ResponseEntity.ok(cidadeUpdate);			
-		} catch (EntidadeNaoEncontradaException e) {		
-			return ResponseEntity
-					.badRequest()
-					.body(e.getMessage());			
-		} catch (DataIntegrityViolationException e) {			
-			return ResponseEntity
-					.badRequest()
-					.body(e.getMessage());
-		}	
+	public Cidade updatePartially(@PathVariable Long id, @RequestBody Cidade cidade){						
+			return cidadeService.updatePartially(id, cidade);			
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Cidade> deleteById(@PathVariable Long id){
-		try {			
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteById(@PathVariable Long id){		
 			cidadeService.deleteById(id);
-			return ResponseEntity.noContent().build();		
-		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity.notFound().build();		
-		}
 	}
 }
