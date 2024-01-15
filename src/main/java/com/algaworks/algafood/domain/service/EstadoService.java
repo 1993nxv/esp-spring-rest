@@ -16,6 +16,10 @@ import com.algaworks.algafood.domain.repository.EstadoRepository;
 @Service
 public class EstadoService {
 	
+	private static final String MSG_ESTADO_NAO_ENCONTRADO = "Estado com id:%d não encontrado.";
+
+	private static final String MSG_ESTADO_EM_USO = "Estado com id:%d não pode ser removido, pois está em uso.";
+	
 	@Autowired
 	EstadoRepository estadoRepository;
 	
@@ -23,11 +27,10 @@ public class EstadoService {
 		return estadoRepository.findAll();
 	}
 
-	public Estado findById(Long id) {	
-		Optional<Estado> estado = estadoRepository.findById(id);		
-		return estado
-				.orElseThrow(() -> new EntidadeNaoEncontradaException
-						("Estado com id:" + id + " não encontrado."));	
+	public Estado findById(Long id) {		
+		return estadoRepository.findById(id)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException(
+						String.format(MSG_ESTADO_NAO_ENCONTRADO, id)));	
 	}
 	
 	public Estado save(Estado estado) {
@@ -35,15 +38,12 @@ public class EstadoService {
 	}
 	
 	public void deleteById(Long id) {
-		try {
-			Optional<Estado> estado = estadoRepository.findById(id);		
-			if(!estado.isEmpty()) {
-				estadoRepository.deleteById(id);
-			} else {
-				throw new EmptyResultDataAccessException(0);
-			}			
+		findById(id);
+		try {	
+			estadoRepository.deleteById(id);
 		}catch (DataIntegrityViolationException error) {
-			throw new EntidadeEmUsoException("Cozinho com id:" + id + " não pode ser removido, pois está em uso.");
+			throw new EntidadeEmUsoException(
+					String.format(MSG_ESTADO_EM_USO, id));
 		}
 	}
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
@@ -33,53 +34,26 @@ public class EstadoController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findById(@PathVariable Long id) {
-		try {
-			Estado estado = estadoService.findById(id);
-			return ResponseEntity.ok(estado);		
-		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity
-					.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());	
-		}
+	public Estado findById(@PathVariable Long id) {
+		return estadoService.findById(id);	
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Estado estado) {
-		try {			
-			return ResponseEntity
-					.status(HttpStatus.CREATED)
-					.body(estadoService.save(estado));				
-		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity
-					.badRequest()
-					.body(e.getMessage());			
-		}		
+	@ResponseStatus(HttpStatus.CREATED)
+	public Estado save(@RequestBody Estado estado) {
+		return estadoService.save(estado);						
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Estado estado) {
-		try {			
-			Estado estadoAtual = estadoService.findById(id);
-			BeanUtils.copyProperties(estado, estadoAtual, "id");			
-			return ResponseEntity
-					.ok(estadoService.save(estadoAtual));			
-		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity
-					.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());
-		}
+	public Estado update(@PathVariable Long id, @RequestBody Estado estado) {	
+		Estado estadoAtual = estadoService.findById(id);
+		BeanUtils.copyProperties(estado, estadoAtual, "id");			
+		return estadoService.save(estadoAtual);			
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Estado> deleteById(@PathVariable Long id){
-		try {			
-			estadoService.deleteById(id);
-			return ResponseEntity.noContent().build();	
-		} catch (EntidadeNaoEncontradaException e) {		
-			return ResponseEntity.notFound().build();	
-		} catch (EntidadeEmUsoException e) {		
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteById(@PathVariable Long id){
+		estadoService.deleteById(id);
 	}
 }
