@@ -1,7 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,9 +32,8 @@ public class CidadeService {
 		return cidadeRepository.findAll();
 	}
 	
-	public Cidade findById(Long id){	
-			Optional<Cidade> cidade = cidadeRepository.findById(id);		
-			return cidade
+	public Cidade findById(Long id){		
+			return cidadeRepository.findById(id)
 					.orElseThrow(() -> new EntidadeNaoEncontradaException
 							(String.format(MSG_CIDADE_NAO_ENCONTRADA, id)));	
 	}

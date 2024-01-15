@@ -25,9 +25,8 @@ public class CozinhaService {
 		return cozinhaRepository.findAll();
 	}
 	
-	public Cozinha findById(Long id){	
-			Optional<Cozinha> cozinha = cozinhaRepository.findById(id);		
-			return cozinha
+	public Cozinha findById(Long id){			
+			return cozinhaRepository.findById(id)
 					.orElseThrow(() -> new EntidadeNaoEncontradaException(
 							String.format(MSG_COZINHA_NAO_ENCONTRADA, id)));	
 	}
@@ -37,7 +36,6 @@ public class CozinhaService {
 	}
 	
 	public void deleteById(Long id) {
-		
 		cozinhaRepository.findById(id);	
 		try {	
 			cozinhaRepository.deleteById(id);
