@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -37,69 +38,39 @@ public class RestauranteController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findById(@PathVariable Long id) {
-		try {			
-			Restaurante restaurante = restauranteService.findById(id);
-			return ResponseEntity.ok(restaurante);	
-		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity
-					.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());		
-		}
+	public Restaurante findById(@PathVariable Long id) {
+			return restauranteService.findById(id);	
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Restaurante restaurante) {
-		try {			
-			return ResponseEntity
-					.status(HttpStatus.CREATED)
-					.body(restauranteService.save(restaurante));				
-		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity
-					.badRequest()
-					.body(e.getMessage());			
-		}			
+	@ResponseStatus(HttpStatus.CREATED)
+	public Restaurante save(@RequestBody Restaurante restaurante) {
+			return restauranteService.save(restaurante);							
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Restaurante restaurante) {
-		try {			
+	public Restaurante update(
+				@PathVariable Long id, 
+				@RequestBody Restaurante restaurante) {
+		
 			Restaurante restauranteAtual = restauranteService.findById(id);
 			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");			
-			return ResponseEntity
-					.ok(restauranteService.save(restauranteAtual));			
-		} catch (EntidadeNaoEncontradaException e) {		
-			return ResponseEntity
-					.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());
-		}
+			return restauranteService.save(restauranteAtual);			
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Long id) {
-		try {		
-			restauranteService.deleteById(id);
-			return ResponseEntity.noContent().build();	
-		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity
-					.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());		
-		}	
+	public void deleteById(@PathVariable Long id) {
+			findById(id);
+			restauranteService.deleteById(id);	
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> updatePartially(
-			@PathVariable Long id,
-			@RequestBody Map<String, Object> campos){		
-		try {			
+	public Restaurante updatePartially(
+				@PathVariable Long id,
+				@RequestBody Map<String, Object> campos){		
+		
 			Restaurante restaurante = restauranteService.findById(id);
-			Restaurante restauranteSave = restauranteService.updatePartially(restaurante, campos);
-			return ResponseEntity.ok(restauranteSave);		
-		} catch (EntidadeNaoEncontradaException e) {			
-			return ResponseEntity
-					.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());			
-		}	
+			return restauranteService.updatePartially(restaurante, campos);			
 	}
 	
 	@GetMapping("/por-taxa")

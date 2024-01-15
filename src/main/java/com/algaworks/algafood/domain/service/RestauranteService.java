@@ -13,37 +13,33 @@ import org.springframework.util.ReflectionUtils;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
-import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class RestauranteService {
 	
+	private static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Restaurante com id:%d não encontrado.";
+
 	@Autowired
 	RestauranteRepository restauranteRepository;
 	
 	@Autowired
-	CozinhaRepository cozinhaRepository;
+	CozinhaService cozinhaService;
 	
 	public List<Restaurante> findAll(){
 		return restauranteRepository.findAll();
 	}
 
-	public Restaurante findById(Long id) {		
-		Optional<Restaurante> restaurante = restauranteRepository.findById(id);			
-		return restaurante
+	public Restaurante findById(Long id) {			
+		return restauranteRepository.findById(id)
 				.orElseThrow(() -> new EntidadeNaoEncontradaException
-						("Restaurante com id:" + id + " não encontrado."));	
+						(String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id)));	
 	}
 	
 	public Restaurante save(Restaurante restaurante) {		
-		Cozinha cozinha = cozinhaRepository
-				.findById(restaurante
-						.getCozinha()
-						.getId())
-						.orElseThrow(() -> new EntidadeNaoEncontradaException
-								("Cozinha com id:" + restaurante.getCozinha().getId() + " não encontrada."));	
+		Cozinha cozinha = cozinhaService
+				.findById(restaurante.getCozinha().getId());
 		restaurante.setCozinha(cozinha);	
 		return restauranteRepository.save(restaurante);
 	}
@@ -54,8 +50,10 @@ public class RestauranteService {
 	}
 
 	public Restaurante updatePartially(Restaurante restaurante, Map<String, Object> campos) {	
+		
 		ObjectMapper objectMapper = new ObjectMapper();
 		Restaurante restauranteOrigem = objectMapper.convertValue(campos, Restaurante.class);
+		
 		campos.forEach((nomePropriedade, valorPropriedade) -> {			
 			Field field  = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
 			field.setAccessible(true);
