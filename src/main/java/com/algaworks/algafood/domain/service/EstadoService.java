@@ -14,9 +14,10 @@ import com.algaworks.algafood.domain.repository.EstadoRepository;
 @Service
 public class EstadoService {
 	
-	private static final String MSG_ESTADO_NAO_ENCONTRADO = "Estado com id:%d não encontrado.";
 
 	private static final String MSG_ESTADO_EM_USO = "Estado com id:%d não pode ser removido, pois está em uso.";
+
+	private static final String MSG_ESTADO_NAO_ENCONTRADO = "Estado com id:%d não encontrado.";
 	
 	@Autowired
 	EstadoRepository estadoRepository;
