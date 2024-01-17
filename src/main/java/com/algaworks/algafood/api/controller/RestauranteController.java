@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
@@ -45,7 +45,11 @@ public class RestauranteController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Restaurante save(@RequestBody Restaurante restaurante) {
-			return restauranteService.save(restaurante);							
+		try {	
+			return restauranteService.save(restaurante);
+		} catch (EntidadeNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage());
+		}
 	}
 	
 	@PutMapping("/{id}")
@@ -55,7 +59,11 @@ public class RestauranteController {
 		
 			Restaurante restauranteAtual = restauranteService.findById(id);
 			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");			
-			return restauranteService.save(restauranteAtual);			
+			try {
+				return restauranteService.save(restauranteAtual);
+			} catch (EntidadeNaoEncontradaException e) {
+				throw new NegocioException(e.getMessage());
+			}
 	}
 	
 	@DeleteMapping("/{id}")

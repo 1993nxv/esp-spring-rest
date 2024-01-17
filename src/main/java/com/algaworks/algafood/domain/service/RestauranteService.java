@@ -38,8 +38,7 @@ public class RestauranteService {
 	}
 	
 	public Restaurante save(Restaurante restaurante) {		
-		Cozinha cozinha = cozinhaService
-				.findById(restaurante.getCozinha().getId());
+		Cozinha cozinha = cozinhaService.findById(restaurante.getCozinha().getId());
 		restaurante.setCozinha(cozinha);	
 		return restauranteRepository.save(restaurante);
 	}
