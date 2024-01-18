@@ -7,15 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 
 @Service
 public class CozinhaService {
 	
-	private static final String MSG_COZINHA_NAO_ENCONTRADA = "Cozinha de id:%d não encontrada.";
 	private static final String MSG_COZINHA_EM_USO = "Cozinha com id:%d não pode ser removida, pois está em uso.";
 	
 	@Autowired
@@ -27,8 +26,7 @@ public class CozinhaService {
 	
 	public Cozinha findById(Long id){			
 			return cozinhaRepository.findById(id)
-					.orElseThrow(() -> new EntidadeNaoEncontradaException(
-							String.format(MSG_COZINHA_NAO_ENCONTRADA, id)));	
+					.orElseThrow(() -> new CozinhaNaoEncontradoException(id));	
 	}
 	
 	public Cozinha save(Cozinha cozinha){
