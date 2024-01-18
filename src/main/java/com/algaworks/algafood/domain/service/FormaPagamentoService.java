@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
 
@@ -26,7 +27,7 @@ public class FormaPagamentoService {
 	public FormaPagamento findById(Long id){	
 			Optional<FormaPagamento> formaPagamento = formaPagamentoRepository.findById(id);			
 			return formaPagamento
-					.orElseThrow(() -> new EntidadeNaoEncontradaException("Forma de Pagamento com id:" + id + " não encontrada."));	
+					.orElseThrow(() -> new NegocioException("Forma de Pagamento com id:" + id + " não encontrada."));	
 	}
 	
 	public FormaPagamento save(FormaPagamento formaPagamento){
@@ -42,7 +43,7 @@ public class FormaPagamentoService {
 				throw new EmptyResultDataAccessException(0);
 			}		
 		} catch (EmptyResultDataAccessException error) {	
-			throw new EntidadeNaoEncontradaException("Forma de Pagamento com id:" + id + " não encontrada.");
+			throw new NegocioException("Forma de Pagamento com id:" + id + " não encontrada.");
 		} catch (DataIntegrityViolationException error) {
 			throw new EntidadeEmUsoException("Forma de Pagamento com id:" + id + " não pode ser removida, pois está em uso.");
 		}
