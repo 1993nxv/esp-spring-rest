@@ -8,14 +8,15 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.algaworks.algafood.domain.exception.CidadeNaoEncontradoException;
+import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
+import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
 	
-	@ExceptionHandler(CidadeNaoEncontradoException.class)
-	public ResponseEntity<?> trataCidadeNaoEncontrada(CidadeNaoEncontradoException e){
+	@ExceptionHandler(EntidadeNaoEncontradaException.class)
+	public ResponseEntity<?> trataEntidadeNaoEncontrada(EntidadeNaoEncontradaException e){
 		
 		Problema problema = Problema.builder()
 				.dataHora(LocalDateTime.now())
@@ -34,6 +35,17 @@ public class ApiExceptionHandler {
 				.build();
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(problema);
+	}
+	
+	@ExceptionHandler(EntidadeEmUsoException.class)
+	public ResponseEntity<?> trataEntidadeEmUsoException(EntidadeEmUsoException e){
+		Problema problema = Problema.builder()
+				.dataHora(LocalDateTime.now())
+				.menssagem(e.getMessage())
+				.build();
+		
+		return ResponseEntity.status(HttpStatus.CONFLICT)
 				.body(problema);
 	}
 	
