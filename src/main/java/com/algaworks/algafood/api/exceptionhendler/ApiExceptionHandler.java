@@ -25,7 +25,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.menssagem(e.getMessage())
 				.build();
 		
-		return handleExceptionInternal(e, problema, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+		return handleExceptionInternal(e, problema, new HttpHeaders(), null, request);
 	}
 	
 	@ExceptionHandler(NegocioException.class)
@@ -35,7 +35,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.menssagem(e.getMessage())
 				.build();
 		
-		return handleExceptionInternal(e, problema, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		return handleExceptionInternal(e, problema, new HttpHeaders(), null, request);
 	}
 	
 	@ExceptionHandler(EntidadeEmUsoException.class)
