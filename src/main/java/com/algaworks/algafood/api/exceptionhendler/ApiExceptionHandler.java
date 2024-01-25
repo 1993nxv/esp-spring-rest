@@ -59,7 +59,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 					.menssagem(status.getReasonPhrase())
 					.build();
 		}
-		
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
 }
