@@ -1,7 +1,5 @@
 package com.algaworks.algafood.api.exceptionhendler;
 
-import java.time.LocalDateTime;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,34 +17,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
 	public ResponseEntity<?> trataEntidadeNaoEncontrada(EntidadeNaoEncontradaException e, WebRequest request){
-		
-		Problema problema = Problema.builder()
-				.dataHora(LocalDateTime.now())
-				.menssagem(e.getMessage())
-				.build();
-		
-		return handleExceptionInternal(e, problema, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+
+		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
 	@ExceptionHandler(NegocioException.class)
 	public ResponseEntity<?> trataNegocioException(NegocioException e, WebRequest request){
-		Problema problema = Problema.builder()
-				.dataHora(LocalDateTime.now())
-				.menssagem(e.getMessage())
-				.build();
-		
-		return handleExceptionInternal(e, problema, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+
+		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@ExceptionHandler(EntidadeEmUsoException.class)
-	public ResponseEntity<?> trataEntidadeEmUsoException(EntidadeEmUsoException e){
-		Problema problema = Problema.builder()
-				.dataHora(LocalDateTime.now())
-				.menssagem(e.getMessage())
-				.build();
+	public ResponseEntity<?> trataEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request){
 		
-		return ResponseEntity.status(HttpStatus.CONFLICT)
-				.body(problema);
+		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@Override
@@ -54,9 +38,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpStatus status, WebRequest request) {
 		
 		if (body == null) {
-			body = Problema.builder()
-					.dataHora(LocalDateTime.now())
-					.menssagem(status.getReasonPhrase())
+			body = Problem.builder()
+					.title(status.getReasonPhrase())
+					.status(status.value())
+					.build();
+		} else if (body instanceof String) {
+			body = Problem.builder()
+					.title((String) body)
+					.status(status.value())
 					.build();
 		}
 		return super.handleExceptionInternal(ex, body, headers, status, request);
