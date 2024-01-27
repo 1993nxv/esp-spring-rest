@@ -16,19 +16,31 @@ import com.algaworks.algafood.domain.exception.NegocioException;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
-	public ResponseEntity<?> trataEntidadeNaoEncontrada(EntidadeNaoEncontradaException e, WebRequest request){
-
-		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException e, WebRequest request){
+		
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
+		
+		Problem problem = createProblemBuilder(status, problemType, e.getMessage()).build();
+		
+//		Problem problem = Problem.builder()
+//				.status(status.value())
+//				.type("ENTIDADE_NAO_ENCONTRADA")//("https://api.algafods.local/entidade-nao-encontrada")
+//				.title("Entidade não encontrada.")
+//				.detail(e.getMessage())
+//				.build();
+		
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
 	
 	@ExceptionHandler(NegocioException.class)
-	public ResponseEntity<?> trataNegocioException(NegocioException e, WebRequest request){
+	public ResponseEntity<?> handleNegocioException(NegocioException e, WebRequest request){
 
 		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@ExceptionHandler(EntidadeEmUsoException.class)
-	public ResponseEntity<?> trataEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request){
+	public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request){
 		
 		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
@@ -49,5 +61,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 					.build();
 		}
 		return super.handleExceptionInternal(ex, body, headers, status, request);
+	}
+	
+	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
+		return Problem.builder()
+				.status(status.value())
+				.type(problemType.getUri())
+				.title(problemType.getTitle())
+				.detail(detail);
 	}
 }
