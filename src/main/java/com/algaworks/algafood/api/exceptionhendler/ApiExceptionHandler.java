@@ -1,10 +1,8 @@
 package com.algaworks.algafood.api.exceptionhendler;
 
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
