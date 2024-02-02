@@ -15,7 +15,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
+import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -28,6 +30,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		if(rootCause instanceof InvalidFormatException) {
 			return handleInvalidFormatExcepion((InvalidFormatException) rootCause, headers, status, request);
+		}else if(rootCause instanceof IgnoredPropertyException) {
+			return handleInvalidFormatExcepion((InvalidFormatException) rootCause, headers, status, request);
+		}else if(rootCause instanceof UnrecognizedPropertyException) {
+			return handleInvalidFormatExcepion((InvalidFormatException) rootCause, headers, status, request);
 		}
 		
 		ProblemType problemType = ProblemType.CORPO_INVALIDO;
@@ -38,6 +44,27 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 		
 	}
+	
+//	protected ResponseEntity<Object> handleHttpMessageNotReadable(PropertyBindingException e,
+//			HttpHeaders headers, HttpStatus status, WebRequest request) {
+//		
+//		Throwable rootCause = ExceptionUtils.getRootCause(e);
+//		
+//		if(rootCause instanceof IgnoredPropertyException) {
+//			return handleInvalidFormatExcepion((InvalidFormatException) rootCause, headers, status, request);
+//		}else if(rootCause instanceof UnrecognizedPropertyException) {
+//			return handleInvalidFormatExcepion((InvalidFormatException) rootCause, headers, status, request);
+//		}
+//		
+//		ProblemType problemType = ProblemType.CORPO_INVALIDO;
+//		String detail = "JSON parse error, corpo enviado é inválido, verifique a sintaxe";
+//		
+//		Problem problem = createProblemBuilder(status, problemType, detail).build();
+//		
+//		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
+//		
+//	}
+//	
 	
 	private ResponseEntity<Object> handleInvalidFormatExcepion(InvalidFormatException e, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
