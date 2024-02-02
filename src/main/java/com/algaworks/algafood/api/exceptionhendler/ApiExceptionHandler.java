@@ -26,28 +26,28 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		    Throwable rootCause = ExceptionUtils.getRootCause(ex);
+		Throwable rootCause = ExceptionUtils.getRootCause(ex);
 		    
-		    if (rootCause instanceof InvalidFormatException) {
-		        return handleInvalidFormatExcepion((InvalidFormatException) rootCause, headers, status, request);
-		    } else if (rootCause instanceof PropertyBindingException) {
-		        return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request); 
-		    }
-		    
-		    ProblemType problemType = ProblemType.CORPO_INVALIDO;
-		    String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
-		    
-		    Problem problem = createProblemBuilder(status, problemType, detail).build();
-		    
-		    return handleExceptionInternal(ex, problem, headers, status, request);
+		if (rootCause instanceof InvalidFormatException) {
+		    	return handleInvalidFormatExcepion((InvalidFormatException) rootCause, headers, status, request);
+	    } else if (rootCause instanceof PropertyBindingException) {
+		    	return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request); 
 		}
+		    
+		ProblemType problemType = ProblemType.CORPO_INVALIDO;
+		String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
+		    
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		    
+		return handleExceptionInternal(ex, problem, headers, status, request);
+	}
 	
 	private ResponseEntity<Object> handleInvalidFormatExcepion(InvalidFormatException e, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 		
 		String path = joinPath(e.getPath());
 		
-				ProblemType problemType = ProblemType.CORPO_INVALIDO;
+		ProblemType problemType = ProblemType.CORPO_INVALIDO;
 		
 		String detail = String.format("A propriedade '%s' recebeu o valor '%s', " 
 				+ "que é um tipo inválido."
