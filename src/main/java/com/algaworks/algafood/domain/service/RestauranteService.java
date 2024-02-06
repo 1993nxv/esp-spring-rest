@@ -14,6 +14,7 @@ import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -48,6 +49,8 @@ public class RestauranteService {
 	public Restaurante updatePartially(Restaurante restaurante, Map<String, Object> campos) {	
 		
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 		Restaurante restauranteOrigem = objectMapper.convertValue(campos, Restaurante.class);
 		
 		campos.forEach((nomePropriedade, valorPropriedade) -> {			
