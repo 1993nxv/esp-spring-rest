@@ -6,7 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -46,19 +51,28 @@ public class RestauranteService {
 			restauranteRepository.deleteById(id);		
 	}
 
-	public Restaurante updatePartially(Restaurante restaurante, Map<String, Object> campos) {	
+	public Restaurante updatePartially(Restaurante restaurante, Map<String, Object> campos, HttpServletRequest request) {	
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-		Restaurante restauranteOrigem = objectMapper.convertValue(campos, Restaurante.class);
+		ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
 		
-		campos.forEach((nomePropriedade, valorPropriedade) -> {			
-			Field field  = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
-			field.setAccessible(true);
-			Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
-			ReflectionUtils.setField(field, restaurante, novoValor);			
-		});		
+		try {
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+			
+			Restaurante restauranteOrigem = objectMapper.convertValue(campos, Restaurante.class);
+			
+			campos.forEach((nomePropriedade, valorPropriedade) -> {			
+				Field field  = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
+				field.setAccessible(true);
+				Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+				ReflectionUtils.setField(field, restaurante, novoValor);} );			
+				
+		catch (IllegalArgumentException e) {
+			Throwable rootCause = ExceptionUtils.getRootCause(e);
+			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, request);
+		}
 		return restauranteRepository.save(restaurante);
 	}
 
