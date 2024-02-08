@@ -67,7 +67,7 @@ public class RestauranteService {
 				Field field  = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
 				field.setAccessible(true);
 				Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
-				ReflectionUtils.setField(field, restaurante, novoValor);} );			
+				ReflectionUtils.setField(field, restaurante, novoValor);});			
 				
 		catch (IllegalArgumentException e) {
 			Throwable rootCause = ExceptionUtils.getRootCause(e);
