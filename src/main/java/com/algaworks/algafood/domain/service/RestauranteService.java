@@ -69,7 +69,7 @@ public class RestauranteService {
 				Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
 				ReflectionUtils.setField(field, restaurante, novoValor);});			
 				
-		catch (IllegalArgumentException e) {
+		}catch (IllegalArgumentException e) {
 			Throwable rootCause = ExceptionUtils.getRootCause(e);
 			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, request);
 		}
