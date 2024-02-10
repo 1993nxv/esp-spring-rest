@@ -82,30 +82,30 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
+	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException e, HttpHeaders headers,
 	        HttpStatus status, WebRequest request) {
 	    
-	    if (ex instanceof MethodArgumentTypeMismatchException) {
+	    if (e instanceof MethodArgumentTypeMismatchException) {
 	        return handleMethodArgumentTypeMismatch(
-	                (MethodArgumentTypeMismatchException) ex, headers, status, request);
+	                (MethodArgumentTypeMismatchException) e, headers, status, request);
 	    }
 
-	    return super.handleTypeMismatch(ex, headers, status, request);
+	    return super.handleTypeMismatch(e, headers, status, request);
 	}
 
 	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(
-	        MethodArgumentTypeMismatchException ex, HttpHeaders headers,
+	        MethodArgumentTypeMismatchException e, HttpHeaders headers,
 	        HttpStatus status, WebRequest request) {
 
 	    ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
 
 	    String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s', "
 	            + "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
-	            ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
+	            e.getName(), e.getValue(), e.getRequiredType().getSimpleName());
 
 	    Problem problem = createProblemBuilder(status, problemType, detail).build();
 
-	    return handleExceptionInternal(ex, problem, headers, status, request);
+	    return handleExceptionInternal(e, problem, headers, status, request);
 	}
 
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
