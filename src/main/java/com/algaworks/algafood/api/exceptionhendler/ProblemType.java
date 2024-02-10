@@ -8,6 +8,7 @@ public enum ProblemType {
 	CORPO_INVALIDO("/corpo-invalido", "Corpo enviado inválido"),
 	ENTIDADE_NAO_ENCONTRADA("/enditade-nao-encontrada", "Entidade não encontrada"),
 	ENTIDADE_EM_USO("/enditade-em-uso", "Entidade em uso"),
+	PARAMETRO_INVALIDO("/parametro-invalido", "Parametro inválido"),
 	NEGOCIO_EXCEPTION("/negocio-exception", "Negócio exception");
 	
 	
