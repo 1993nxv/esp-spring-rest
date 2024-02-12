@@ -25,15 +25,17 @@ import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
+	private static final String MSG_ERRO_GENERICO = "Ocorreu um erro interno inesperado no sistema."
+			+ "Tente novamente e se o problema persisitir, entre em "
+			+ "contato com o administrador do sistema.";
+
 	@ExceptionHandler(Exception.class)
 	private ResponseEntity<Object> handleExcepion(Exception e, WebRequest request) {
 		
 		ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		
-		String detail = "Ocorreu um erro interno inesperado no sistema."
-				+ "Tente novamente e se o problema persisitir, entre em "
-				+ "contato com o administrador do sistema.";
+		String detail = MSG_ERRO_GENERICO;
 		
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 		
@@ -86,7 +88,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	    String detail = String.format("A propriedade '%s' não existe. "
 	            + "Corrija ou remova essa propriedade e tente novamente.", path);
 
-	    Problem problem = createProblemBuilder(status, problemType, detail).build();
+	    Problem problem = createProblemBuilder(status, problemType, detail)
+	    		.userMessage(MSG_ERRO_GENERICO)
+	    		.build();
 	    
 	    return handleExceptionInternal(e, problem, headers, status, request);
 	}
@@ -152,7 +156,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpStatus status = HttpStatus.CONFLICT	;
 		ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
 		
-		Problem problem = createProblemBuilder(status, problemType, e.getMessage()).build();
+		Problem problem = createProblemBuilder(status, problemType, e.getMessage())
+				.userMessage(e.getMessage())
+				.build();
 		
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
