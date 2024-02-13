@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.exceptionhendler;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,7 +58,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.CORPO_INVALIDO;
 		String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
 		    
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(MSG_ERRO_GENERICO)
+				.build();
 		    
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
@@ -74,7 +77,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				+ " Corrija e informe um valor compatível com o tipo %s.",
 				path, e.getValue(), e.getTargetType().getSimpleName());
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(MSG_ERRO_GENERICO)
+				.build();
 		
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
@@ -123,7 +128,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	            + "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
 	            e.getName(), e.getValue(), e.getRequiredType().getSimpleName());
 
-	    Problem problem = createProblemBuilder(status, problemType, detail).build();
+	    Problem problem = createProblemBuilder(status, problemType, detail)
+	    		.userMessage(MSG_ERRO_GENERICO)
+	    		.build();
 
 	    return handleExceptionInternal(e, problem, headers, status, request);
 	}
@@ -134,7 +141,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
 		
-		Problem problem = createProblemBuilder(status, problemType, e.getMessage()).build();
+		Problem problem = createProblemBuilder(status, problemType, e.getMessage())
+				.userMessage(e.getMessage())
+				.build();
 		
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
@@ -145,7 +154,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		ProblemType problemType = ProblemType.NEGOCIO_EXCEPTION;
 		
-		Problem problem = createProblemBuilder(status, problemType, e.getMessage()).build();
+		Problem problem = createProblemBuilder(status, problemType, e.getMessage())
+				.userMessage(e.getMessage())
+				.build();
 		
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
@@ -164,25 +175,30 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
+	protected ResponseEntity<Object> handleExceptionInternal(Exception e, Object body, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 		
 		if (body == null) {
 			body = Problem.builder()
+					.timeStamp(LocalDateTime.now())
 					.title(status.getReasonPhrase())
 					.status(status.value())
+					.userMessage(MSG_ERRO_GENERICO)
 					.build();
 		} else if (body instanceof String) {
 			body = Problem.builder()
+					.timeStamp(LocalDateTime.now())
 					.title((String) body)
 					.status(status.value())
+					.userMessage(MSG_ERRO_GENERICO)
 					.build();
 		}
-		return super.handleExceptionInternal(ex, body, headers, status, request);
+		return super.handleExceptionInternal(e, body, headers, status, request);
 	}
 	
 	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
 		return Problem.builder()
+				.timeStamp(LocalDateTime.now())
 				.status(status.value())
 				.type(problemType.getUri())
 				.title(problemType.getTitle())
