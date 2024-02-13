@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class RestauranteController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurante save(@RequestBody Restaurante restaurante) {
+	public Restaurante save(@RequestBody @Valid Restaurante restaurante) {
 		try {	
 			return restauranteService.save(restaurante);
 		} catch (CozinhaNaoEncontradoException e) {

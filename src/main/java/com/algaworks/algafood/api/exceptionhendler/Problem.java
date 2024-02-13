@@ -13,12 +13,13 @@ import lombok.Getter;
 @Builder
 public class Problem {
 	
+	private LocalDateTime timeStamp;
+	
 	private Integer status;
 	private String type;
 	private String title;
 	private String detail;
 	
 	private String userMessage;
-	private LocalDateTime timeStamp;
 		
 }
