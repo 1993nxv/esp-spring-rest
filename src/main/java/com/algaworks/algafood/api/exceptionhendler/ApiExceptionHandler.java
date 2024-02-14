@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -45,9 +46,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+			HttpHeaders headers, HttpStatus status, WebRequest request){
+		
+		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
+				
+		return handleExceptionInternal(e, problem, headers, status, request);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		Throwable rootCause = ExceptionUtils.getRootCause(ex);
+		Throwable rootCause = ExceptionUtils.getRootCause(e);
 		    
 		if (rootCause instanceof InvalidFormatException) {
 		    	return handleInvalidFormatExcepion((InvalidFormatException) rootCause, headers, status, request);
@@ -62,7 +75,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.userMessage(MSG_ERRO_GENERICO)
 				.build();
 		    
-		return handleExceptionInternal(ex, problem, headers, status, request);
+		return handleExceptionInternal(e, problem, headers, status, request);
 	}
 	
 	private ResponseEntity<Object> handleInvalidFormatExcepion(InvalidFormatException e, HttpHeaders headers,
