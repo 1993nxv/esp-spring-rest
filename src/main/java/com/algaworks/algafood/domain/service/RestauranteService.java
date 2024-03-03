@@ -14,7 +14,10 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 
+import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
@@ -30,6 +33,9 @@ public class RestauranteService {
 	
 	@Autowired
 	CozinhaService cozinhaService;
+	
+	@Autowired
+	private SmartValidator validator;
 	
 	public List<Restaurante> findAll(){
 		return restauranteRepository.findAll();
@@ -51,7 +57,10 @@ public class RestauranteService {
 			restauranteRepository.deleteById(id);		
 	}
 
-	public Restaurante updatePartially(Restaurante restaurante, Map<String, Object> campos, HttpServletRequest request) {	
+	public Restaurante updatePartially(
+			Restaurante restaurante, 
+			Map<String, Object> campos, 
+			HttpServletRequest request) {	
 		
 		ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
 		
@@ -73,7 +82,17 @@ public class RestauranteService {
 			Throwable rootCause = ExceptionUtils.getRootCause(e);
 			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
 		}
+		validate(restaurante, "restaurante");
 		return restauranteRepository.save(restaurante);
+	}
+
+	private void validate(Restaurante restaurante, String objectName) {
+		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+		validator.validate(restaurante, bindingResult);
+		
+		if (bindingResult.hasErrors()) {
+			throw new ValidacaoException(bindingResult);
+		}
 	}
 
 	public List<Restaurante> findByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal) {	
