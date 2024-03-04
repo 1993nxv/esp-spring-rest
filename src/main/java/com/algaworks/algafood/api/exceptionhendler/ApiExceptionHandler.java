@@ -47,7 +47,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		String detail = MSG_ERRO_GENERICO;
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
 		
 		e.printStackTrace();
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
