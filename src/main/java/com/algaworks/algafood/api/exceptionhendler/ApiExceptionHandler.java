@@ -62,7 +62,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
 		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 		
-		BindingResult bindingResult = e.getBindingResult();
+		List<Problem.Object> problemObjects = trataBindingResult(e);
+		
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.objects(problemObjects)
+				.build();
+				
+		return handleExceptionInternal(e, problem, headers, status, request);
+	}
+
+	private List<Problem.Object> trataBindingResult(Exception e) {
+		
+		BindingResult bindingResult = ((MethodArgumentNotValidException) e).getBindingResult();
 		
 		List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream()
 				.map(objectError -> {
@@ -84,13 +96,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 							.build();
 				})
 				.collect(Collectors.toList());
-		
-		Problem problem = createProblemBuilder(status, problemType, detail)
-				.userMessage(detail)
-				.objects(problemObjects)
-				.build();
-				
-		return handleExceptionInternal(e, problem, headers, status, request);
+		return problemObjects;
 	}
 	
 	@Override
