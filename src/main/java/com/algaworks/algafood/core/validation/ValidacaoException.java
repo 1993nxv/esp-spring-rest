@@ -10,6 +10,6 @@ import lombok.Getter;
 public class ValidacaoException extends RuntimeException {
 	private static final long serialVersionUID = 4947724883850011525L;
 	
-	private BindingResult diBindingResult;
+	private BindingResult bindingResult;
 	
 }

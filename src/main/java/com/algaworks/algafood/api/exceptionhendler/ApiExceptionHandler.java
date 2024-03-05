@@ -22,6 +22,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -62,7 +63,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
 		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 		
-		List<Problem.Object> problemObjects = trataBindingResult(e);
+		BindingResult bindingResult = e.getBindingResult();
+		
+		List<Problem.Object> problemObjects = trataBindingResult(bindingResult);
 		
 		Problem problem = createProblemBuilder(status, problemType, detail)
 				.userMessage(detail)
@@ -71,10 +74,27 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				
 		return handleExceptionInternal(e, problem, headers, status, request);
 	}
-
-	private List<Problem.Object> trataBindingResult(Exception e) {
+	
+	@ExceptionHandler(ValidacaoException.class)
+	public ResponseEntity<?> handleValidationException(ValidacaoException e, WebRequest request){
 		
-		BindingResult bindingResult = ((MethodArgumentNotValidException) e).getBindingResult();
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+		String detail = e.getMessage();
+		
+		BindingResult bindingResult = e.getBindingResult();
+		
+		List<Problem.Object> problemObjects = trataBindingResult(bindingResult);
+		
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.objects(problemObjects)
+				.build();
+				
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
+	}
+
+	private List<Problem.Object> trataBindingResult(BindingResult bindingResult) {
 		
 		List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream()
 				.map(objectError -> {
