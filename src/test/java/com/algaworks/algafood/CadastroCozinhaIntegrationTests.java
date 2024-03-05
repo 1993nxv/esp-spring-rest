@@ -2,6 +2,8 @@ package com.algaworks.algafood;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +35,18 @@ public class CadastroCozinhaIntegrationTests {
 	    assertThat(novaCozinha).isNotNull();
 	    assertThat(novaCozinha.getId()).isNotNull();
 	}
-
+	
+	@Test(expected = ConstraintViolationException.class)
+	public void cadastroCozinhaSemNomeTeste() {
+		
+//		Cenário
+		Cozinha novaCozinha = Cozinha.builder()
+	    	.nome("")
+			.build();
+		
+//		Ação
+	    novaCozinha = cozinhaController.save(novaCozinha);
+		
+//		Validação na anotação
+	}
 }
