@@ -10,43 +10,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.algaworks.algafood.api.controller.CozinhaController;
+import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
+import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.domain.service.CozinhaService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CadastroCozinhaIntegrationTests {
 	
 	@Autowired
-	CozinhaController cozinhaController;
+	CozinhaService cozinhaService;
 	
 	@Test
-	public void cadastroCozinhaTeste() {
-
-//		Cenário
-		Cozinha novaCozinha = Cozinha.builder()
+	public void deveAtribuirId_QuandoCadastrarCozinhaTeste() {
+		Cozinha cozinha = Cozinha.builder()
 	    	.nome("Tailandesa - Teste")
 			.build();
-		
-//		Ação
-	    novaCozinha = cozinhaController.save(novaCozinha);
-		
-//		Validação
-	    assertThat(novaCozinha).isNotNull();
-	    assertThat(novaCozinha.getId()).isNotNull();
+		cozinha = cozinhaService.save(cozinha);
+	    assertThat(cozinha.getId()).isNotNull();
 	}
 	
 	@Test(expected = ConstraintViolationException.class)
-	public void cadastroCozinhaSemNomeTeste() {
-		
-//		Cenário
-		Cozinha novaCozinha = Cozinha.builder()
+	public void deveFalhar_QuandoCadastrarCozinhaSemNomeTeste() {
+		Cozinha cozinha = Cozinha.builder()
 	    	.nome("")
 			.build();
-		
-//		Ação
-	    novaCozinha = cozinhaController.save(novaCozinha);
-		
-//		Validação na anotação
+		cozinha = cozinhaService.save(cozinha);
 	}
+	
+	@Test(expected = CozinhaNaoEncontradoException.class)
+	public void deveFalhar_QuandoExcluirCozinhaInexistente() {
+		cozinhaService.deleteById(500L);
+	}
+	
+	@Test(expected = EntidadeEmUsoException.class)
+	public void deveFalhar_QuandoExcluirCozinhaEmUsoTeste() {
+		cozinhaService.deleteById(1L);
+	}	
 }

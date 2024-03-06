@@ -26,7 +26,7 @@ public class CozinhaService {
 	
 	public Cozinha findById(Long id){			
 			return cozinhaRepository.findById(id)
-					.orElseThrow(() -> new CozinhaNaoEncontradoException(id));	
+					.orElseThrow(() -> new CozinhaNaoEncontradoException(id));			
 	}
 	
 	public Cozinha save(Cozinha cozinha){
@@ -34,7 +34,7 @@ public class CozinhaService {
 	}
 	
 	public void deleteById(Long id) {
-		cozinhaRepository.findById(id);	
+		findById(id);	
 		try {	
 			cozinhaRepository.deleteById(id);
 				
