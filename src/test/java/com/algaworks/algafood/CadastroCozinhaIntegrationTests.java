@@ -19,6 +19,8 @@ import com.algaworks.algafood.domain.service.CozinhaService;
 @SpringBootTest
 public class CadastroCozinhaIntegrationTests {
 	
+//	Rodar testes pelo terminal #./mvnw test
+	
 	@Autowired
 	CozinhaService cozinhaService;
 	
