@@ -20,6 +20,7 @@ import com.algaworks.algafood.domain.service.CozinhaService;
 public class CadastroCozinhaIntegrationIT {
 	
 //	Rodar testes pelo terminal #./mvnw test
+//	Rodar testes apos add Failsafe
 	
 	@Autowired
 	CozinhaService cozinhaService;
