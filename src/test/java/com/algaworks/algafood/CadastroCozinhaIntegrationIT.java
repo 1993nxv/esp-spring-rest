@@ -17,7 +17,7 @@ import com.algaworks.algafood.domain.service.CozinhaService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CadastroCozinhaIntegrationTests {
+public class CadastroCozinhaIntegrationIT {
 	
 //	Rodar testes pelo terminal #./mvnw test
 	
