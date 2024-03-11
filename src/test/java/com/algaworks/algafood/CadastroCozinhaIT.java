@@ -2,10 +2,12 @@ package com.algaworks.algafood;
 
 import static io.restassured.RestAssured.given;
 
+
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
+import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.domain.repository.CozinhaRepository;
+import com.algaworks.algafood.util.DatabaseCleaner;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
@@ -22,12 +28,21 @@ public class CadastroCozinhaIT {
 	
 	@LocalServerPort
 	private int port;
+	
+	@Autowired
+	private DatabaseCleaner databaseCleaner;
+	
+	@Autowired
+	private CozinhaRepository cozinhaRepository;
 		
 	@Before
 	public void setUp() {
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
 		RestAssured.basePath = "/cozinhas";
+		
+		databaseCleaner.clearTables();
+		prepararDados();
 	}
 	
 	@Test
@@ -41,17 +56,17 @@ public class CadastroCozinhaIT {
 	}
 	
 	@Test
-	public void deveConter4Cozinhas_QuandoConsultarCozinhas() {
+	public void deveConter3Cozinhas_QuandoConsultarCozinhas() {
 		given()
 			.accept(ContentType.JSON)
 		.when()
 			.get()
 		.then()
-			.body("", Matchers.hasSize(4));
+			.body("", Matchers.hasSize(3));
 	}
 	
 	@Test
-	public void testRetornarStatus201_QuandoCadastrarCozinha() {
+	public void deveRetornarStatus201_QuandoCadastrarCozinha() {
 		given()
 			.body("{ \"nome\": \"Chinesa\" }")
 			.contentType(ContentType.JSON)
@@ -60,5 +75,19 @@ public class CadastroCozinhaIT {
 			.post()
 		.then()
 			.statusCode(HttpStatus.CREATED.value());
+	}
+	
+	public void prepararDados() {
+		Cozinha cozinha = new Cozinha();
+		cozinha.setNome("Tailandesa");
+		cozinhaRepository.save(cozinha);
+		
+		Cozinha cozinha1 = new Cozinha();
+		cozinha1.setNome("Brasileira");
+		cozinhaRepository.save(cozinha1);
+		
+		Cozinha cozinha2 = new Cozinha();
+		cozinha2.setNome("Americana");
+		cozinhaRepository.save(cozinha2);
 	}
 }
