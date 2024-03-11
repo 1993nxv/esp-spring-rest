@@ -73,7 +73,7 @@ public class CadastroCozinhaIT {
 	@Test
 	public void deveRetornarStatus201_QuandoCadastrarCozinha() {
 		given()
-			.body(ResourceUtils.getContentFromFile("EntradaCozinha.json"))
+			.body(ResourceUtils.getContentFromFile("\\json\\EntradaCozinha.json"))
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
