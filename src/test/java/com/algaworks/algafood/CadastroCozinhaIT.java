@@ -37,6 +37,8 @@ public class CadastroCozinhaIT {
 	private CozinhaRepository cozinhaRepository;
 	
 	private Long quantidadeCozinhas;
+	
+	private Cozinha cozinhaBrazileira;
 		
 	@Before
 	public void setUp() {
@@ -46,8 +48,6 @@ public class CadastroCozinhaIT {
 		
 		databaseCleaner.clearTables();
 		prepararDados();
-		
-		quantidadeCozinhas = cozinhaRepository.count();
 	}
 	
 	@Test
@@ -85,13 +85,13 @@ public class CadastroCozinhaIT {
 	@Test
 	public void deveRetornarRespostaEStatuscorrestos_QuandoConsultarCozinhaExistente() {
 		given()
-			.pathParam("id", 2)
+			.pathParam("id", cozinhaBrazileira.getId())
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{id}")
 		.then()
 			.statusCode(HttpStatus.OK.value())
-			.body("nome", equalTo("Brasileira"));
+			.body("nome", equalTo(cozinhaBrazileira.getNome()));
 	}
 	
 	@Test
@@ -112,7 +112,7 @@ public class CadastroCozinhaIT {
 		
 		Cozinha cozinha1 = new Cozinha();
 		cozinha1.setNome("Brasileira");
-		cozinhaRepository.save(cozinha1);
+		cozinhaBrazileira =  cozinhaRepository.save(cozinha1);
 		
 		Cozinha cozinha2 = new Cozinha();
 		cozinha2.setNome("Americana");
@@ -121,5 +121,7 @@ public class CadastroCozinhaIT {
 		Cozinha cozinha3 = new Cozinha();
 		cozinha3.setNome("Japonesa");
 		cozinhaRepository.save(cozinha3);
+		
+		quantidadeCozinhas = cozinhaRepository.count();
 	}
 }
