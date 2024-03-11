@@ -20,6 +20,7 @@ import io.restassured.http.ContentType;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.util.DatabaseCleaner;
+import com.algaworks.algafood.util.ResourceUtils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -34,6 +35,8 @@ public class CadastroCozinhaIT {
 	
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
+	
+	private Long quantidadeCozinhas;
 		
 	@Before
 	public void setUp() {
@@ -43,6 +46,8 @@ public class CadastroCozinhaIT {
 		
 		databaseCleaner.clearTables();
 		prepararDados();
+		
+		quantidadeCozinhas = cozinhaRepository.count();
 	}
 	
 	@Test
@@ -56,19 +61,19 @@ public class CadastroCozinhaIT {
 	}
 	
 	@Test
-	public void deveConter3Cozinhas_QuandoConsultarCozinhas() {
+	public void deveRetornarQuantidadeCorretaDeCozinhas_QuandoConsultarCozinhas() {
 		given()
 			.accept(ContentType.JSON)
 		.when()
 			.get()
 		.then()
-			.body("", Matchers.hasSize(3));
+			.body("", Matchers.hasSize(quantidadeCozinhas.intValue()));
 	}
 	
 	@Test
 	public void deveRetornarStatus201_QuandoCadastrarCozinha() {
 		given()
-			.body("{ \"nome\": \"Chinesa\" }")
+			.body(ResourceUtils.getContentFromFile("EntradaCozinha.json"))
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
@@ -112,5 +117,9 @@ public class CadastroCozinhaIT {
 		Cozinha cozinha2 = new Cozinha();
 		cozinha2.setNome("Americana");
 		cozinhaRepository.save(cozinha2);
+		
+		Cozinha cozinha3 = new Cozinha();
+		cozinha3.setNome("Japonesa");
+		cozinhaRepository.save(cozinha3);
 	}
 }
