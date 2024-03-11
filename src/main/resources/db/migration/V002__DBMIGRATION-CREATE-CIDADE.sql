@@ -1,5 +1,3 @@
-
-use algafoodapi;
 create table cidade (
 	id bigint not null auto_increment,
     nome_cidade varchar(80) not null,
