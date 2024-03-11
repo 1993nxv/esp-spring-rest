@@ -10,7 +10,6 @@ public class ResourceUtils {
 	public static String getContentFromFile(String fileName) {
 		try {
 			InputStream stream = ResourceUtils.class
-					.getClassLoader()
 					.getResourceAsStream(fileName);
 			return StreamUtils.copyToString(stream, Charset.forName("UTF-8"));
 		} catch (Exception e) {

@@ -27,6 +27,8 @@ import com.algaworks.algafood.util.ResourceUtils;
 @TestPropertySource("/application-test.properties")
 public class CadastroCozinhaIT {
 	
+	private static final int COZINHA_ID_INEXISTENTE = 1000;
+	
 	@LocalServerPort
 	private int port;
 	
@@ -37,9 +39,8 @@ public class CadastroCozinhaIT {
 	private CozinhaRepository cozinhaRepository;
 	
 	private Long quantidadeCozinhas;
-	
 	private Cozinha cozinhaBrazileira;
-		
+
 	@Before
 	public void setUp() {
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
@@ -73,7 +74,7 @@ public class CadastroCozinhaIT {
 	@Test
 	public void deveRetornarStatus201_QuandoCadastrarCozinha() {
 		given()
-			.body(ResourceUtils.getContentFromFile("\\json\\EntradaCozinha.json"))
+			.body(ResourceUtils.getContentFromFile("/json/EntradaCozinha.json"))
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
@@ -97,7 +98,7 @@ public class CadastroCozinhaIT {
 	@Test
 	public void deveRetornarStatus404_QuandoConsultarCozinhaExistente() {
 		given()
-			.pathParam("id", 200)
+			.pathParam("id", COZINHA_ID_INEXISTENTE)
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{id}")
