@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
@@ -46,17 +47,20 @@ public class RestauranteService {
 				.orElseThrow(() -> new RestauranteNaoEncontradoException(id));	
 	}
 	
+	@Transactional
 	public Restaurante save(Restaurante restaurante) {		
 		Cozinha cozinha = cozinhaService.findById(restaurante.getCozinha().getId());
 		restaurante.setCozinha(cozinha);	
 		return restauranteRepository.save(restaurante);
 	}
-
+	
+	@Transactional
 	public void deleteById(Long id) {		
 			findById(id);
 			restauranteRepository.deleteById(id);		
 	}
-
+	
+	@Transactional
 	public Restaurante updatePartially(
 			Restaurante restaurante, 
 			Map<String, Object> campos, 

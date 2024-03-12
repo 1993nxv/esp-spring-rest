@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
@@ -29,10 +30,12 @@ public class CozinhaService {
 					.orElseThrow(() -> new CozinhaNaoEncontradoException(id));			
 	}
 	
+	@Transactional
 	public Cozinha save(Cozinha cozinha){
 		return cozinhaRepository.save(cozinha);
 	}
 	
+	@Transactional
 	public void deleteById(Long id) {
 		findById(id);	
 		try {	

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -29,10 +30,12 @@ public class FormaPagamentoService {
 					.orElseThrow(() -> new NegocioException("Forma de Pagamento com id:" + id + " não encontrada."));	
 	}
 	
+	@Transactional
 	public FormaPagamento save(FormaPagamento formaPagamento){
 		return formaPagamentoRepository.save(formaPagamento);
 	}
 	
+	@Transactional
 	public void deleteById(Long id) {
 		try {
 			Optional<FormaPagamento> formaPagamento = formaPagamentoRepository.findById(id);			

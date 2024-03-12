@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.CidadeNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
@@ -32,18 +33,21 @@ public class CidadeService {
 					.orElseThrow(() -> new CidadeNaoEncontradoException(id));	
 	}
 	
+	@Transactional
 	public Cidade save(Cidade cidade){	
 		Estado estado = estadoService.findById(cidade.getEstado().getId());	
 		cidade.setEstado(estado);
 		return cidadeRepository.save(cidade);
 	}
 	
+	@Transactional
 	public Cidade updatePartially(Long id, Cidade cidade) {	
 		findById(id);
 		cidade.setId(id);
 		return save(cidade);	
 	}
 	
+	@Transactional
 	public void deleteById(Long id) {
 		cidadeRepository.findById(id);
 		try {
