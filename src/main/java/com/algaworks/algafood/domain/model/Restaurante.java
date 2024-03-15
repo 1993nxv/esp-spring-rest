@@ -1,7 +1,7 @@
 package com.algaworks.algafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -41,9 +41,6 @@ import lombok.EqualsAndHashCode;
 @Entity
 public class Restaurante {
 
-//	2.3.1. Jakarta Bean Validation constraints - Documentação
-//	https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-builtin-constraints
-	
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,11 +68,11 @@ public class Restaurante {
 	
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime(2)")
-	private LocalDateTime dataCadastro;
+	private OffsetDateTime dataCadastro;
 	
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime(2)")
-	private LocalDateTime dataAtualizacao;
+	private OffsetDateTime dataAtualizacao;
 	
 	@ManyToMany //(fetch = FetchType.EAGER)
 	@JoinTable(name = "restaurante_forma_pagamento", 
