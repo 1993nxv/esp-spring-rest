@@ -9,7 +9,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -23,7 +22,6 @@ import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
-import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,16 +42,9 @@ public class RestauranteService {
 		return restauranteRepository.findAll();
 	}
 
-	public RestauranteDTO findById(Long id) {
-		
-		RestauranteDTO restauranteDTO = new RestauranteDTO();
-		
-		Restaurante restaurante = restauranteRepository.findById(id).get();
-//		.orElseThrow(() -> new RestauranteNaoEncontradoException(id));
-		restauranteDTO.setId(restaurante.getId());
-		restauranteDTO.setNome(restaurante.getNome());
-		restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
-		return restauranteDTO;
+	public Restaurante findById(Long id) {
+		return restauranteRepository.findById(id)
+				.orElseThrow(() -> new RestauranteNaoEncontradoException(id));
 	}
 	
 	@Transactional

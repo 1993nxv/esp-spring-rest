@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Restaurante;
+import com.algaworks.algafood.domain.model.modelDTO.CozinhaDTO;
 import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
@@ -43,7 +44,19 @@ public class RestauranteController {
 	
 	@GetMapping("/{id}")
 	public RestauranteDTO findById(@PathVariable Long id) {
-		return restauranteService.findById(id);	
+		Restaurante restaurante = restauranteService.findById(id);
+		RestauranteDTO restauranteDTO = new RestauranteDTO();
+		CozinhaDTO cozinhaDTO = new CozinhaDTO();
+		
+		cozinhaDTO.setId(restaurante.getCozinha().getId());
+		cozinhaDTO.setNome(restaurante.getCozinha().getNome());
+		
+		restauranteDTO.setId(restaurante.getId());
+		restauranteDTO.setNome(restaurante.getNome());
+		restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
+		restauranteDTO.setCozinha(cozinhaDTO);
+		
+		return restauranteDTO;	
 	}
 	
 	@PostMapping
