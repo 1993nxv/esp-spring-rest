@@ -22,6 +22,7 @@ import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
+import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,13 +39,18 @@ public class RestauranteService {
 	@Autowired
 	private SmartValidator validator;
 	
+	@Autowired
+	RestauranteDTO restauranteDTO;
+	
 	public List<Restaurante> findAll(){
 		return restauranteRepository.findAll();
 	}
 
-	public Restaurante findById(Long id) {			
-		return restauranteRepository.findById(id)
-				.orElseThrow(() -> new RestauranteNaoEncontradoException(id));	
+	public RestauranteDTO findById(Long id) {			
+		
+		Restaurante restaurante = restauranteRepository.findById(id)
+				.orElseThrow(() -> new RestauranteNaoEncontradoException(id));
+		return restauranteDTO;
 	}
 	
 	@Transactional

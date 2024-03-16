@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Restaurante;
+import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
 @RestController
@@ -41,7 +42,7 @@ public class RestauranteController {
 	}
 	
 	@GetMapping("/{id}")
-	public Restaurante findById(@PathVariable Long id) {
+	public RestauranteDTO findById(@PathVariable Long id) {
 		return restauranteService.findById(id);	
 	}
 	
