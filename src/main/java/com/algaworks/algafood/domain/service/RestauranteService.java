@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -39,17 +40,19 @@ public class RestauranteService {
 	@Autowired
 	private SmartValidator validator;
 	
-	@Autowired
-	RestauranteDTO restauranteDTO;
-	
 	public List<Restaurante> findAll(){
 		return restauranteRepository.findAll();
 	}
 
-	public RestauranteDTO findById(Long id) {			
+	public RestauranteDTO findById(Long id) {
 		
-		Restaurante restaurante = restauranteRepository.findById(id)
-				.orElseThrow(() -> new RestauranteNaoEncontradoException(id));
+		RestauranteDTO restauranteDTO = new RestauranteDTO();
+		
+		Restaurante restaurante = restauranteRepository.findById(id).get();
+//		.orElseThrow(() -> new RestauranteNaoEncontradoException(id));
+		restauranteDTO.setId(restaurante.getId());
+		restauranteDTO.setNome(restaurante.getNome());
+		restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
 		return restauranteDTO;
 	}
 	
