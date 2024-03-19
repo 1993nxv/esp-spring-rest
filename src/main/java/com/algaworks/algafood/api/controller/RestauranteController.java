@@ -25,9 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
+import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.model.modelDTO.CozinhaDTO;
 import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
+import com.algaworks.algafood.domain.model.modelVO.RestauranteVO;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
 @RestController
@@ -45,39 +47,32 @@ public class RestauranteController {
 	@GetMapping("/{id}")
 	public RestauranteDTO findById(@PathVariable Long id) {
 		Restaurante restaurante = restauranteService.findById(id);
-		RestauranteDTO restauranteDTO = new RestauranteDTO();
-		CozinhaDTO cozinhaDTO = new CozinhaDTO();
-		
-		cozinhaDTO.setId(restaurante.getCozinha().getId());
-		cozinhaDTO.setNome(restaurante.getCozinha().getNome());
-		
-		restauranteDTO.setId(restaurante.getId());
-		restauranteDTO.setNome(restaurante.getNome());
-		restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
-		restauranteDTO.setCozinha(cozinhaDTO);
-		
+		RestauranteDTO restauranteDTO = restauranteDTOConverter(restaurante);
 		return restauranteDTO;	
 	}
-	
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurante save(@RequestBody @Valid Restaurante restaurante) {
+	public RestauranteDTO save(@RequestBody @Valid RestauranteVO restauranteVO) {
+		Restaurante restaurante = restauranteVOConverter(restauranteVO);
 		try {	
-			return restauranteService.save(restaurante);
+			return restauranteDTOConverter(restauranteService.save(restaurante));
 		} catch (CozinhaNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
 	
 	@PutMapping("/{id}")
-	public Restaurante update(
+	public RestauranteDTO update(
 				@PathVariable Long id, 
-				@RequestBody @Valid Restaurante restaurante) {
+				@RequestBody @Valid RestauranteVO restauranteVO) {
 		
 			Restaurante restauranteAtual = restauranteService.findById(id);
-			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");			
+			BeanUtils.copyProperties(
+					restauranteVOConverter(restauranteVO), restauranteAtual,
+					"id", "formasPagamento", "endereco", "dataCadastro");			
 			try {
-				return restauranteService.save(restauranteAtual);
+				return restauranteDTOConverter(restauranteService.save(restauranteAtual));
 			} catch (CozinhaNaoEncontradoException e) {
 				throw new NegocioException(e.getMessage(), e);
 			}
@@ -90,13 +85,15 @@ public class RestauranteController {
 	}
 	
 	@PatchMapping("/{id}")
-	public Restaurante updatePartially(
+	public RestauranteDTO updatePartially(
 				@PathVariable Long id,
 				@RequestBody Map<String, Object> campos,
 				HttpServletRequest request){		
 		
 			Restaurante restaurante = restauranteService.findById(id);
-			return restauranteService.updatePartially(restaurante, campos, request);			
+			return restauranteDTOConverter(
+					restauranteService.updatePartially(restaurante, campos, request)
+					);			
 	}
 	
 	@GetMapping("/por-taxa")
@@ -126,5 +123,31 @@ public class RestauranteController {
 	@GetMapping("/primeiro")
 	public Optional<Restaurante> buscarPrimeiro(){	
 		return restauranteService.buscarPrimeiro();	
+	}
+	
+	private Restaurante restauranteVOConverter(RestauranteVO restauranteVO) {
+		Restaurante restaurante = new Restaurante();
+		Cozinha cozinha = new Cozinha();
+		
+		cozinha.setId(restauranteVO.getCozinha().getId());
+		
+		restaurante.setNome(restauranteVO.getNome());
+		restaurante.setTaxaFrete(restauranteVO.getTaxaFrete());
+		restaurante.setCozinha(cozinha);
+		return restaurante;
+	}
+	
+	private RestauranteDTO restauranteDTOConverter(Restaurante restaurante) {
+		RestauranteDTO restauranteDTO = new RestauranteDTO();
+		CozinhaDTO cozinhaDTO = new CozinhaDTO();
+		
+		cozinhaDTO.setId(restaurante.getCozinha().getId());
+		cozinhaDTO.setNome(restaurante.getCozinha().getNome());
+		
+		restauranteDTO.setId(restaurante.getId());
+		restauranteDTO.setNome(restaurante.getNome());
+		restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
+		restauranteDTO.setCozinha(cozinhaDTO);
+		return restauranteDTO;
 	}
 }
