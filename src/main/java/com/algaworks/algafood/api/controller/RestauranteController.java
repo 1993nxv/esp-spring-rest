@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -40,15 +41,14 @@ public class RestauranteController {
 	RestauranteService restauranteService;
 	
 	@GetMapping
-	public List<Restaurante> findAll(){
-		return restauranteService.findAll();
+	public List<RestauranteDTO> findAll(){
+		return toListDTO(restauranteService.findAll());
 	}
+	
 	
 	@GetMapping("/{id}")
 	public RestauranteDTO findById(@PathVariable Long id) {
-		Restaurante restaurante = restauranteService.findById(id);
-		RestauranteDTO restauranteDTO = restauranteDTOConverter(restaurante);
-		return restauranteDTO;	
+		return restauranteDTOConverter(restauranteService.findById(id));
 	}
 
 	@PostMapping
@@ -92,37 +92,36 @@ public class RestauranteController {
 		
 			Restaurante restaurante = restauranteService.findById(id);
 			return restauranteDTOConverter(
-					restauranteService.updatePartially(restaurante, campos, request)
-					);			
+					restauranteService.updatePartially(restaurante, campos, request));			
 	}
 	
 	@GetMapping("/por-taxa")
-	public List<Restaurante> findByTaxaFreteBetween
+	public List<RestauranteDTO> findByTaxaFreteBetween
 		(@RequestParam BigDecimal taxaInicial, @RequestParam BigDecimal taxaFinal){		
-		return restauranteService.findByTaxaFreteBetween(taxaInicial, taxaFinal);
+		return toListDTO(restauranteService.findByTaxaFreteBetween(taxaInicial, taxaFinal));
 	}
 	
 	@GetMapping("/por-nome-e-id")
-	public List<Restaurante> porNomeAndCozinhaId(@RequestParam String nome, @RequestParam Long cozinhaId){
-		return restauranteService.porNomeAndCozinhaId(nome, cozinhaId);
+	public List<RestauranteDTO> porNomeAndCozinhaId(@RequestParam String nome, @RequestParam Long cozinhaId){
+		return toListDTO(restauranteService.porNomeAndCozinhaId(nome, cozinhaId));
 	}
 	
 	@GetMapping("/findImp")
-	public List<Restaurante> findImpl(
+	public List<RestauranteDTO> findImpl(
 			 String nome, 
 			 BigDecimal taxaFreteInicial, 
 			 BigDecimal taxaFreteFinal){		
-		return restauranteService.findImpl(nome, taxaFreteInicial, taxaFreteFinal);
+		return toListDTO(restauranteService.findImpl(nome, taxaFreteInicial, taxaFreteFinal));
 	}
 	
 	@GetMapping("/frete-gratis")
-	public List<Restaurante> findImpl(String nome){		
-		return restauranteService.findFreteGratis(nome);
+	public List<RestauranteDTO> findImpl(String nome){		
+		return toListDTO(restauranteService.findFreteGratis(nome));
 	}
 	
 	@GetMapping("/primeiro")
-	public Optional<Restaurante> buscarPrimeiro(){	
-		return restauranteService.buscarPrimeiro();	
+	public RestauranteDTO buscarPrimeiro(){	
+		return restauranteDTOConverter(restauranteService.buscarPrimeiro());	
 	}
 	
 	private Restaurante restauranteVOConverter(RestauranteVO restauranteVO) {
@@ -149,5 +148,11 @@ public class RestauranteController {
 		restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
 		restauranteDTO.setCozinha(cozinhaDTO);
 		return restauranteDTO;
+	}
+	
+	private List<RestauranteDTO> toListDTO(List<Restaurante> restaurantes){
+		return restaurantes.stream()
+				.map(restaurante -> restauranteDTOConverter(restaurante))
+				.collect(Collectors.toList());
 	}
 }

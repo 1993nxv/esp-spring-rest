@@ -118,7 +118,8 @@ public class RestauranteService {
 		return restauranteRepository.findComFreteGratis(nome);
 	}
 
-	public Optional<Restaurante> buscarPrimeiro() {
-		return restauranteRepository.buscaPrimeiro();
+	public Restaurante buscarPrimeiro() {
+		return restauranteRepository.buscaPrimeiro()
+				.orElseThrow(() -> new RestauranteNaoEncontradoException(""));
 	}
 }
