@@ -3,7 +3,6 @@ package com.algaworks.algafood.api.controller;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -23,12 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.algaworks.algafood.api.assembler.RestauranteDTOAssembler;
+import com.algaworks.algafood.api.assembler.RestauranteDTOassembler;
+import com.algaworks.algafood.api.disassembler.RestauranteVOdisassembler;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
-import com.algaworks.algafood.domain.model.modelDTO.CozinhaDTO;
 import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
 import com.algaworks.algafood.domain.model.modelVO.RestauranteVO;
 import com.algaworks.algafood.domain.service.RestauranteService;
@@ -41,7 +40,9 @@ public class RestauranteController {
 	RestauranteService restauranteService;
 	
 	@Autowired
-	RestauranteDTOAssembler restauranteDTOAssembler;
+	RestauranteDTOassembler restauranteDTOAssembler;
+	@Autowired
+	RestauranteVOdisassembler restauranteVOdisassembler;
 	
 	@GetMapping
 	public List<RestauranteDTO> findAll(){
@@ -57,7 +58,7 @@ public class RestauranteController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public RestauranteDTO save(@RequestBody @Valid RestauranteVO restauranteVO) {
-		Restaurante restaurante = restauranteVOConverter(restauranteVO);
+		Restaurante restaurante = restauranteVOdisassembler.restauranteVOConverter(restauranteVO);
 		try {	
 			return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.save(restaurante));
 		} catch (CozinhaNaoEncontradoException e) {
@@ -72,7 +73,7 @@ public class RestauranteController {
 		
 			Restaurante restauranteAtual = restauranteService.findById(id);
 			BeanUtils.copyProperties(
-					restauranteVOConverter(restauranteVO), restauranteAtual,
+					restauranteVOdisassembler.restauranteVOConverter(restauranteVO), restauranteAtual,
 					"id", "formasPagamento", "endereco", "dataCadastro");			
 			try {
 				return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.save(restauranteAtual));
@@ -125,18 +126,6 @@ public class RestauranteController {
 	@GetMapping("/primeiro")
 	public RestauranteDTO buscarPrimeiro(){	
 		return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.buscarPrimeiro());	
-	}
-	
-	private Restaurante restauranteVOConverter(RestauranteVO restauranteVO) {
-		Restaurante restaurante = new Restaurante();
-		Cozinha cozinha = new Cozinha();
-		
-		cozinha.setId(restauranteVO.getCozinha().getId());
-		
-		restaurante.setNome(restauranteVO.getNome());
-		restaurante.setTaxaFrete(restauranteVO.getTaxaFrete());
-		restaurante.setCozinha(cozinha);
-		return restaurante;
 	}
 	
 }

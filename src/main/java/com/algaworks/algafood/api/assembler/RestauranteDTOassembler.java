@@ -10,7 +10,7 @@ import com.algaworks.algafood.domain.model.modelDTO.CozinhaDTO;
 import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
 
 @Component
-public class RestauranteDTOAssembler {
+public class RestauranteDTOassembler {
 	
 	public RestauranteDTO restauranteDTOConverter(Restaurante restaurante) {
 		RestauranteDTO restauranteDTO = new RestauranteDTO();
