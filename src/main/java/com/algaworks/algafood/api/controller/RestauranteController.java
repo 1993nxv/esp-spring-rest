@@ -3,7 +3,6 @@ package com.algaworks.algafood.api.controller;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.assembler.RestauranteDTOAssembler;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Cozinha;
@@ -40,15 +40,18 @@ public class RestauranteController {
 	@Autowired
 	RestauranteService restauranteService;
 	
+	@Autowired
+	RestauranteDTOAssembler restauranteDTOAssembler;
+	
 	@GetMapping
 	public List<RestauranteDTO> findAll(){
-		return toListDTO(restauranteService.findAll());
+		return restauranteDTOAssembler.toListDTO(restauranteService.findAll());
 	}
 	
 	
 	@GetMapping("/{id}")
 	public RestauranteDTO findById(@PathVariable Long id) {
-		return restauranteDTOConverter(restauranteService.findById(id));
+		return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.findById(id));
 	}
 
 	@PostMapping
@@ -56,7 +59,7 @@ public class RestauranteController {
 	public RestauranteDTO save(@RequestBody @Valid RestauranteVO restauranteVO) {
 		Restaurante restaurante = restauranteVOConverter(restauranteVO);
 		try {	
-			return restauranteDTOConverter(restauranteService.save(restaurante));
+			return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.save(restaurante));
 		} catch (CozinhaNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
@@ -72,7 +75,7 @@ public class RestauranteController {
 					restauranteVOConverter(restauranteVO), restauranteAtual,
 					"id", "formasPagamento", "endereco", "dataCadastro");			
 			try {
-				return restauranteDTOConverter(restauranteService.save(restauranteAtual));
+				return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.save(restauranteAtual));
 			} catch (CozinhaNaoEncontradoException e) {
 				throw new NegocioException(e.getMessage(), e);
 			}
@@ -91,19 +94,19 @@ public class RestauranteController {
 				HttpServletRequest request){		
 		
 			Restaurante restaurante = restauranteService.findById(id);
-			return restauranteDTOConverter(
+			return restauranteDTOAssembler.restauranteDTOConverter(
 					restauranteService.updatePartially(restaurante, campos, request));			
 	}
 	
 	@GetMapping("/por-taxa")
 	public List<RestauranteDTO> findByTaxaFreteBetween
 		(@RequestParam BigDecimal taxaInicial, @RequestParam BigDecimal taxaFinal){		
-		return toListDTO(restauranteService.findByTaxaFreteBetween(taxaInicial, taxaFinal));
+		return restauranteDTOAssembler.toListDTO(restauranteService.findByTaxaFreteBetween(taxaInicial, taxaFinal));
 	}
 	
 	@GetMapping("/por-nome-e-id")
 	public List<RestauranteDTO> porNomeAndCozinhaId(@RequestParam String nome, @RequestParam Long cozinhaId){
-		return toListDTO(restauranteService.porNomeAndCozinhaId(nome, cozinhaId));
+		return restauranteDTOAssembler.toListDTO(restauranteService.porNomeAndCozinhaId(nome, cozinhaId));
 	}
 	
 	@GetMapping("/findImp")
@@ -111,17 +114,17 @@ public class RestauranteController {
 			 String nome, 
 			 BigDecimal taxaFreteInicial, 
 			 BigDecimal taxaFreteFinal){		
-		return toListDTO(restauranteService.findImpl(nome, taxaFreteInicial, taxaFreteFinal));
+		return restauranteDTOAssembler.toListDTO(restauranteService.findImpl(nome, taxaFreteInicial, taxaFreteFinal));
 	}
 	
 	@GetMapping("/frete-gratis")
 	public List<RestauranteDTO> findImpl(String nome){		
-		return toListDTO(restauranteService.findFreteGratis(nome));
+		return restauranteDTOAssembler.toListDTO(restauranteService.findFreteGratis(nome));
 	}
 	
 	@GetMapping("/primeiro")
 	public RestauranteDTO buscarPrimeiro(){	
-		return restauranteDTOConverter(restauranteService.buscarPrimeiro());	
+		return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.buscarPrimeiro());	
 	}
 	
 	private Restaurante restauranteVOConverter(RestauranteVO restauranteVO) {
@@ -136,23 +139,4 @@ public class RestauranteController {
 		return restaurante;
 	}
 	
-	private RestauranteDTO restauranteDTOConverter(Restaurante restaurante) {
-		RestauranteDTO restauranteDTO = new RestauranteDTO();
-		CozinhaDTO cozinhaDTO = new CozinhaDTO();
-		
-		cozinhaDTO.setId(restaurante.getCozinha().getId());
-		cozinhaDTO.setNome(restaurante.getCozinha().getNome());
-		
-		restauranteDTO.setId(restaurante.getId());
-		restauranteDTO.setNome(restaurante.getNome());
-		restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
-		restauranteDTO.setCozinha(cozinhaDTO);
-		return restauranteDTO;
-	}
-	
-	private List<RestauranteDTO> toListDTO(List<Restaurante> restaurantes){
-		return restaurantes.stream()
-				.map(restaurante -> restauranteDTOConverter(restaurante))
-				.collect(Collectors.toList());
-	}
 }
