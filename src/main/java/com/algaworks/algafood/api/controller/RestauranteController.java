@@ -26,7 +26,6 @@ import com.algaworks.algafood.api.assembler.RestauranteDTOassembler;
 import com.algaworks.algafood.api.disassembler.RestauranteVOdisassembler;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
-import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
 import com.algaworks.algafood.domain.model.modelVO.RestauranteVO;
