@@ -41,6 +41,7 @@ public class PermissaoService {
 			Optional<Permissao> permissao = permissaoRepository.findById(id);		
 			if(!permissao.isEmpty()) {
 				permissaoRepository.deleteById(id);
+				permissaoRepository.flush();
 			} else {
 				throw new EmptyResultDataAccessException(0);
 			}	

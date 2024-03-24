@@ -50,6 +50,7 @@ public class CidadeService {
 	@Transactional
 	public void deleteById(Long id) {
 		cidadeRepository.findById(id);
+		cidadeRepository.flush();
 		try {
 			cidadeRepository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {

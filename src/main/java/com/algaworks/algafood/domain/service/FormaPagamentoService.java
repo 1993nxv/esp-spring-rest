@@ -41,6 +41,7 @@ public class FormaPagamentoService {
 			Optional<FormaPagamento> formaPagamento = formaPagamentoRepository.findById(id);			
 			if(!formaPagamento.isEmpty()) {
 				formaPagamentoRepository.deleteById(id);
+				formaPagamentoRepository.flush();
 			} else {
 				throw new EmptyResultDataAccessException(0);
 			}		
