@@ -71,10 +71,6 @@ public class RestauranteController {
 		
 			Restaurante restauranteAtual = restauranteService.findById(id);
 			
-			
-//			BeanUtils.copyProperties(
-//					restauranteVOdisassembler.restauranteVOConverter(restauranteVO), restauranteAtual,
-//					"id", "formasPagamento", "endereco", "dataCadastro");
 			restauranteVOdisassembler.copyToDomainObj(restauranteVO, restauranteAtual);
 			try {
 				return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.save(restauranteAtual));

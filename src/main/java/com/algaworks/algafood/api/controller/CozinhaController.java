@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.assembler.CozinhaDTOassembler;
+import com.algaworks.algafood.api.disassembler.CozinhaVOdisassembler;
 import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.domain.model.modelDTO.CozinhaDTO;
+import com.algaworks.algafood.domain.model.modelVO.CozinhaVO;
 import com.algaworks.algafood.domain.service.CozinhaService;
 
 
@@ -33,32 +36,40 @@ public class CozinhaController {
 	@Autowired
 	private CozinhaService cozinhaService;
 	
+	@Autowired
+	private CozinhaDTOassembler cozinhaDTOassembler;
+	
+	@Autowired
+	private CozinhaVOdisassembler cozinhaVOdisassembler;
+	
 	@GetMapping
-	public List<Cozinha> findAll(){
-		return cozinhaService.findAll();
+	public List<CozinhaDTO> findAll(){
+		return cozinhaDTOassembler.toListDTO(cozinhaService.findAll());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findById(@PathVariable Long id){		
-			Cozinha cozinha = cozinhaService.findById(id);
-			return ResponseEntity.ok(cozinha);						
+	public ResponseEntity<CozinhaDTO> findById(@PathVariable Long id){		
+			CozinhaDTO cozinhaDTO = cozinhaDTOassembler
+					.cozinhaDTOConverter(cozinhaService.findById(id));
+			return ResponseEntity.ok(cozinhaDTO);					
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cozinha save(
+	public CozinhaDTO save(
 			@RequestBody 
-			@Valid 
-			Cozinha cozinha){
-		return cozinhaService.save(cozinha);
+			@Valid
+			CozinhaVO cozinhaVO){
+		Cozinha cozinha = cozinhaVOdisassembler.cozinhaVOConverter(cozinhaVO);
+		return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinha));
 	}
 	
 	@PutMapping("/{id}")
-	public Cozinha update(@PathVariable Long id, 
-				@RequestBody @Valid Cozinha cozinha){		
+	public CozinhaDTO update(@PathVariable Long id, 
+				@RequestBody @Valid CozinhaVO cozinhaVO){		
 			Cozinha cozinhaAtual = cozinhaService.findById(id);
-			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-			return cozinhaService.save(cozinhaAtual);	
+			cozinhaVOdisassembler.copyToDomainObj(cozinhaVO, cozinhaAtual);
+			return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinhaAtual));	
 	}
 	
 	@DeleteMapping("/{id}")

@@ -23,6 +23,6 @@ public class RestauranteVO {
 	
 	@Valid
 	@NotNull
-	private CozinhaVO cozinha;
+	private CozinhaIdVO cozinha;
 	
 }
