@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -71,9 +70,12 @@ public class RestauranteController {
 				@RequestBody @Valid RestauranteVO restauranteVO) {
 		
 			Restaurante restauranteAtual = restauranteService.findById(id);
-			BeanUtils.copyProperties(
-					restauranteVOdisassembler.restauranteVOConverter(restauranteVO), restauranteAtual,
-					"id", "formasPagamento", "endereco", "dataCadastro");			
+			
+			
+//			BeanUtils.copyProperties(
+//					restauranteVOdisassembler.restauranteVOConverter(restauranteVO), restauranteAtual,
+//					"id", "formasPagamento", "endereco", "dataCadastro");
+			restauranteVOdisassembler.copyToDomainObj(restauranteVO, restauranteAtual);
 			try {
 				return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.save(restauranteAtual));
 			} catch (CozinhaNaoEncontradoException e) {
