@@ -17,17 +17,6 @@ public class RestauranteDTOassembler {
 	private ModelMapper modelMapper;
 	
 	public RestauranteDTO restauranteDTOConverter(Restaurante restaurante) {
-//		RestauranteDTO restauranteDTO = new RestauranteDTO();
-//		CozinhaDTO cozinhaDTO = new CozinhaDTO();
-//		
-//		cozinhaDTO.setId(restaurante.getCozinha().getId());
-//		cozinhaDTO.setNome(restaurante.getCozinha().getNome());
-//		
-//		restauranteDTO.setId(restaurante.getId());
-//		restauranteDTO.setNome(restaurante.getNome());
-//		restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
-//		restauranteDTO.setCozinha(cozinhaDTO);
-		
 		return modelMapper.map(restaurante, RestauranteDTO.class);
 	}
 	
