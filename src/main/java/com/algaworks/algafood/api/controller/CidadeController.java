@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.assembler.CidadeDTOassembler;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Cidade;
+import com.algaworks.algafood.domain.model.modelDTO.CidadeDTO;
 import com.algaworks.algafood.domain.service.CidadeService;
 
 
@@ -33,40 +35,48 @@ public class CidadeController {
 	@Autowired
 	private CidadeService cidadeService;
 	
+	@Autowired
+	private CidadeDTOassembler cidadeDTOassembler;
+	
 	@GetMapping
-	public List<Cidade> findAll(){
-		return cidadeService.findAll();
+	public List<CidadeDTO> findAll(){
+		return cidadeDTOassembler.toListDTO(
+				cidadeService.findAll());
 	}
 	
 	@GetMapping("/{id}")
-	public Cidade findById(@PathVariable Long id){			
-			return cidadeService.findById(id);		
+	public CidadeDTO findById(@PathVariable Long id){			
+			return cidadeDTOassembler.cidadeDTOConverter(
+					cidadeService.findById(id));		
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cidade save(@RequestBody @Valid Cidade cidade){
+	public CidadeDTO save(@RequestBody @Valid Cidade cidade){
 		try {
-			return cidadeService.save(cidade);
+			return cidadeDTOassembler.cidadeDTOConverter(
+					cidadeService.save(cidade));
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
 	
 	@PutMapping("/{id}")
-	public Cidade update(@PathVariable Long id, @RequestBody @Valid Cidade cidade){		
+	public CidadeDTO update(@PathVariable Long id, @RequestBody @Valid Cidade cidade){		
 		Cidade cidadeAtual = cidadeService.findById(id);
 		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 		try {
-			return cidadeService.save(cidadeAtual);
+			return cidadeDTOassembler.cidadeDTOConverter(
+					cidadeService.save(cidadeAtual));
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
 	
 	@PatchMapping("/{id}")
-	public Cidade updatePartially(@PathVariable Long id, @RequestBody Cidade cidade){						
-			return cidadeService.updatePartially(id, cidade);			
+	public CidadeDTO updatePartially(@PathVariable Long id, @RequestBody Cidade cidade){						
+			return cidadeDTOassembler.cidadeDTOConverter(
+					cidadeService.updatePartially(id, cidade));			
 	}
 	
 	@DeleteMapping("/{id}")
