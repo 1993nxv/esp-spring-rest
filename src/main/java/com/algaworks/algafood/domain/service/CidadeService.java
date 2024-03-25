@@ -42,8 +42,11 @@ public class CidadeService {
 	
 	@Transactional
 	public Cidade updatePartially(Long id, Cidade cidade) {	
-		findById(id);
+		Cidade cidadeAtual = findById(id);
 		cidade.setId(id);
+		if (cidade.getEstado() == null) {
+			cidade.setEstado(cidadeAtual.getEstado());
+		}
 		return save(cidade);	
 	}
 	
