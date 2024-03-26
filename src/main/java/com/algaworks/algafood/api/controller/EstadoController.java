@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +17,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.EstadoDTOassembler;
+import com.algaworks.algafood.api.disassembler.EstadoVOdisassembler;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.model.modelDTO.EstadoDTO;
+import com.algaworks.algafood.domain.model.modelVO.EstadoVO;
 import com.algaworks.algafood.domain.service.EstadoService;
 
 @RestController
@@ -31,6 +32,9 @@ public class EstadoController {
 	
 	@Autowired
 	EstadoDTOassembler estadoDTOassembler;
+	
+	@Autowired
+	EstadoVOdisassembler estadoVOdisassembler;
 	
 	@GetMapping
 	public List<EstadoDTO> findAll(){
@@ -44,15 +48,18 @@ public class EstadoController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public EstadoDTO save(@RequestBody @Valid Estado estado) {
-		return estadoDTOassembler.estadoDTOConverter(estadoService.save(estado));						
+	public EstadoDTO save(@RequestBody @Valid EstadoVO estadoVO) {
+		return estadoDTOassembler.estadoDTOConverter(
+				estadoService.save(estadoVOdisassembler.estadoVOconverter(estadoVO))
+				);						
 	}
 	
 	@PutMapping("/{id}")
-	public EstadoDTO update(@PathVariable Long id, @RequestBody @Valid Estado estado) {	
+	public EstadoDTO update(@PathVariable Long id, @RequestBody @Valid EstadoVO estadoVO) {	
 		Estado estadoAtual = estadoService.findById(id);
-		BeanUtils.copyProperties(estado, estadoAtual, "id");			
-		return estadoDTOassembler.estadoDTOConverter(estadoService.save(estadoAtual));		
+		estadoVOdisassembler.copyToDomainObj(estadoVO, estadoAtual);		
+		return estadoDTOassembler.estadoDTOConverter(
+				estadoService.save(estadoAtual));	
 	}
 	
 	@DeleteMapping("/{id}")
