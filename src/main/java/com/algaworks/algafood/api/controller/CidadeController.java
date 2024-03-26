@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,10 +19,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.CidadeDTOassembler;
+import com.algaworks.algafood.api.disassembler.CidadeVOdisassembler;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.modelDTO.CidadeDTO;
+import com.algaworks.algafood.domain.model.modelVO.CidadeVO;
 import com.algaworks.algafood.domain.service.CidadeService;
 
 
@@ -37,6 +38,8 @@ public class CidadeController {
 	
 	@Autowired
 	private CidadeDTOassembler cidadeDTOassembler;
+	
+	@Autowired CidadeVOdisassembler cidadeVOdisassembler;
 	
 	@GetMapping
 	public List<CidadeDTO> findAll(){
@@ -52,19 +55,20 @@ public class CidadeController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CidadeDTO save(@RequestBody @Valid Cidade cidade){
+	public CidadeDTO save(@RequestBody @Valid CidadeVO cidadeVO){
 		try {
 			return cidadeDTOassembler.cidadeDTOConverter(
-					cidadeService.save(cidade));
+					cidadeService.save(
+							cidadeVOdisassembler.cidadeVOConverter(cidadeVO)));
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
 	
 	@PutMapping("/{id}")
-	public CidadeDTO update(@PathVariable Long id, @RequestBody @Valid Cidade cidade){		
+	public CidadeDTO update(@PathVariable Long id, @RequestBody @Valid CidadeVO cidadeVO){		
 		Cidade cidadeAtual = cidadeService.findById(id);
-		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+		cidadeVOdisassembler.copyToDomainObj(cidadeVO, cidadeAtual);
 		try {
 			return cidadeDTOassembler.cidadeDTOConverter(
 					cidadeService.save(cidadeAtual));
@@ -74,9 +78,9 @@ public class CidadeController {
 	}
 	
 	@PatchMapping("/{id}")
-	public CidadeDTO updatePartially(@PathVariable Long id, @RequestBody Cidade cidade){						
+	public CidadeDTO updatePartially(@PathVariable Long id, @RequestBody CidadeVO cidadeVO){						
 			return cidadeDTOassembler.cidadeDTOConverter(
-					cidadeService.updatePartially(id, cidade));			
+					cidadeService.updatePartially(id, cidadeVOdisassembler.cidadeVOConverter(cidadeVO)));			
 	}
 	
 	@DeleteMapping("/{id}")
