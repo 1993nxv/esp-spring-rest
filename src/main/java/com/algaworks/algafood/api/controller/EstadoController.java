@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.assembler.EstadoDTOassembler;
 import com.algaworks.algafood.domain.model.Estado;
+import com.algaworks.algafood.domain.model.modelDTO.EstadoDTO;
 import com.algaworks.algafood.domain.service.EstadoService;
 
 @RestController
@@ -27,27 +29,30 @@ public class EstadoController {
 	@Autowired
 	EstadoService estadoService;
 	
+	@Autowired
+	EstadoDTOassembler estadoDTOassembler;
+	
 	@GetMapping
-	public List<Estado> findAll(){
-		return estadoService.findAll();
+	public List<EstadoDTO> findAll(){
+		return estadoDTOassembler.toListDTO(estadoService.findAll());
 	}
 	
 	@GetMapping("/{id}")
-	public Estado findById(@PathVariable Long id) {
-		return estadoService.findById(id);	
+	public EstadoDTO findById(@PathVariable Long id) {
+		return estadoDTOassembler.estadoDTOConverter(estadoService.findById(id));	
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Estado save(@RequestBody @Valid Estado estado) {
-		return estadoService.save(estado);						
+	public EstadoDTO save(@RequestBody @Valid Estado estado) {
+		return estadoDTOassembler.estadoDTOConverter(estadoService.save(estado));						
 	}
 	
 	@PutMapping("/{id}")
-	public Estado update(@PathVariable Long id, @RequestBody @Valid Estado estado) {	
+	public EstadoDTO update(@PathVariable Long id, @RequestBody @Valid Estado estado) {	
 		Estado estadoAtual = estadoService.findById(id);
 		BeanUtils.copyProperties(estado, estadoAtual, "id");			
-		return estadoService.save(estadoAtual);			
+		return estadoDTOassembler.estadoDTOConverter(estadoService.save(estadoAtual));		
 	}
 	
 	@DeleteMapping("/{id}")
