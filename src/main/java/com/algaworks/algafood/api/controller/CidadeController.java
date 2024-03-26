@@ -79,8 +79,9 @@ public class CidadeController {
 	
 	@PatchMapping("/{id}")
 	public CidadeDTO updatePartially(@PathVariable Long id, @RequestBody CidadeVO cidadeVO){						
-			return cidadeDTOassembler.cidadeDTOConverter(
-					cidadeService.updatePartially(id, cidadeVOdisassembler.cidadeVOConverter(cidadeVO)));			
+		Cidade cidade = cidadeVOdisassembler.cidadeVOConverter(cidadeVO);	
+		return cidadeDTOassembler.cidadeDTOConverter(
+					cidadeService.updatePartially(id, cidade));			
 	}
 	
 	@DeleteMapping("/{id}")

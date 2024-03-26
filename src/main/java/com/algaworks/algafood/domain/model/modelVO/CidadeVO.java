@@ -16,6 +16,6 @@ public class CidadeVO {
 		
 	@Valid
 	@NotNull
-	private EstadoIdVo estado;
+	private EstadoIdVO estado;
 	
 }
