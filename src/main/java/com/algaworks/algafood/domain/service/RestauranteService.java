@@ -88,6 +88,18 @@ public class RestauranteService {
 		validate(restaurante, "restaurante");
 		return restauranteRepository.save(restaurante);
 	}
+	
+	@Transactional
+	public void ativacao(Long id) {
+		Restaurante restaurante = findById(id);
+		restaurante.setAtivo(true);
+	}
+	
+	@Transactional
+	public void inativacao(Long id) {
+		Restaurante restaurante = findById(id);
+		restaurante.setAtivo(false);
+	}
 
 	private void validate(Restaurante restaurante, String objectName) {
 		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);

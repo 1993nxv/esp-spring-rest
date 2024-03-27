@@ -96,6 +96,16 @@ public class RestauranteController {
 					restauranteService.updatePartially(restaurante, campos, request));			
 	}
 	
+	@PutMapping("/{id}/ativacao")
+	public void ativacao(@PathVariable Long id) {
+		restauranteService.ativacao(id);
+	}
+	
+	@DeleteMapping("/{id}/inativacao")
+	public void inativacao(@PathVariable Long id) {
+		restauranteService.inativacao(id);
+	}
+	
 	@GetMapping("/por-taxa")
 	public List<RestauranteDTO> findByTaxaFreteBetween
 		(@RequestParam BigDecimal taxaInicial, @RequestParam BigDecimal taxaFinal){		
@@ -116,11 +126,13 @@ public class RestauranteController {
 	}
 	
 	@GetMapping("/frete-gratis")
+	@ResponseStatus(HttpStatus.CREATED)
 	public List<RestauranteDTO> findImpl(String nome){		
 		return restauranteDTOAssembler.toListDTO(restauranteService.findFreteGratis(nome));
 	}
 	
 	@GetMapping("/primeiro")
+	@ResponseStatus(HttpStatus.CREATED)
 	public RestauranteDTO buscarPrimeiro(){	
 		return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.buscarPrimeiro());	
 	}
