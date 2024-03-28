@@ -51,6 +51,15 @@ public class FormaPagamentoController {
 						formaPagamentoService.save(formaPagamento));
 	}
 	
+//	@PutMapping("/{id}")
+//	public FormaPagamentoDTO update(@PathVariable Long id, 
+//				@RequestBody @Valid FormaPagamentoVO formaPagamentoVO){		
+//			FormaPagamento formaPagamentoAtual = FormaPagamentoService.findById(id);
+////			formaPagamentoVOdisassembler.copyToDomainObj(formaPagamentoVO, formaPagamentoAtual);
+//			return formaPagementoDTOassembler.formaPagamentoDTOassembler(
+//					formaPagamentoService.save(formaPagamentoAtual));	
+//	}
+	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable Long id){
