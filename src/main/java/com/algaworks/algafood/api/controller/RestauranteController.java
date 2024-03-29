@@ -73,7 +73,9 @@ public class RestauranteController {
 			
 			restauranteVOdisassembler.copyToDomainObj(restauranteVO, restauranteAtual);
 			try {
-				return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.save(restauranteAtual));
+				return restauranteDTOAssembler
+						.restauranteDTOConverter(
+								restauranteService.save(restauranteAtual));
 			} catch (CozinhaNaoEncontradoException e) {
 				throw new NegocioException(e.getMessage(), e);
 			}
