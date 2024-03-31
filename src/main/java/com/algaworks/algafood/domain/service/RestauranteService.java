@@ -19,6 +19,7 @@ import org.springframework.validation.SmartValidator;
 
 import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
+import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
@@ -35,6 +36,9 @@ public class RestauranteService {
 	CozinhaService cozinhaService;
 	
 	@Autowired
+	CidadeService cidadeService;
+	
+	@Autowired
 	private SmartValidator validator;
 	
 	public List<Restaurante> findAll(){
@@ -49,7 +53,11 @@ public class RestauranteService {
 	@Transactional
 	public Restaurante save(Restaurante restaurante) {		
 		Cozinha cozinha = cozinhaService.findById(restaurante.getCozinha().getId());
-		restaurante.setCozinha(cozinha);	
+		Cidade cidade = cidadeService.findById(restaurante.getEndereco().getCidade().getId());
+		
+		restaurante.setCozinha(cozinha);
+		restaurante.getEndereco().setCidade(cidade);
+		
 		return restauranteRepository.save(restaurante);
 	}
 	
@@ -68,7 +76,6 @@ public class RestauranteService {
 		ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
 		
 		try {
-			
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);

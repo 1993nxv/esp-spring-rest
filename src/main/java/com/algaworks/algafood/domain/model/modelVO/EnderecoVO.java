@@ -1,32 +1,31 @@
 package com.algaworks.algafood.domain.model.modelVO;
 
-import java.math.BigDecimal;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-public class RestauranteVO {
+@Getter
+public class EnderecoVO {
 	
 	@NotBlank
-	private String nome;
+	private String cep;
+	
+	@NotBlank
+	private String logradouro;
 	
 	@NotNull
-	@PositiveOrZero
-	private BigDecimal taxaFrete;
+	private String numero;
+	
+	private String complemento;
+	
+	@NotBlank
+	private String bairro;
 	
 	@Valid
 	@NotNull
-	private CozinhaIdVO cozinha;
-	
-	@Valid
-	@NotNull
-	private EnderecoVO endereco;
-	
+	private CidadeIdVO cidade;
 }
