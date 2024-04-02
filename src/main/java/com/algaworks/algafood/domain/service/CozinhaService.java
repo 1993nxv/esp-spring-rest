@@ -8,7 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
+import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
@@ -27,7 +27,7 @@ public class CozinhaService {
 	
 	public Cozinha findById(Long id){			
 			return cozinhaRepository.findById(id)
-					.orElseThrow(() -> new CozinhaNaoEncontradoException(id));			
+					.orElseThrow(() -> new CozinhaNaoEncontradaException(id));			
 	}
 	
 	@Transactional

@@ -55,3 +55,8 @@ insert into restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) val
 
 insert into produto (id, nome, descricao, preco, ativo, restaurante_id) values (1, 'Coca-cola', 'Bebida', 3.5, true, 1);
 insert into produto (id, nome, descricao, preco, ativo, restaurante_id) values (2, 'Prato Principal', 'Comida', 15.5, true, 1);
+
+insert into grupo (id, nome) values (1, "Gerente");
+insert into grupo (id, nome) values (2, "Vendedor");
+insert into grupo (id, nome) values (3, "Atendente");
+insert into grupo (id, nome) values (4, "Auxiliar");

@@ -52,8 +52,10 @@ public class RestauranteService {
 	
 	@Transactional
 	public Restaurante save(Restaurante restaurante) {		
-		Cozinha cozinha = cozinhaService.findById(restaurante.getCozinha().getId());
-		Cidade cidade = cidadeService.findById(restaurante.getEndereco().getCidade().getId());
+		Cozinha cozinha = cozinhaService.findById(
+				restaurante.getCozinha().getId());
+		Cidade cidade = cidadeService.findById(
+				restaurante.getEndereco().getCidade().getId());
 		
 		restaurante.setCozinha(cozinha);
 		restaurante.getEndereco().setCidade(cidade);

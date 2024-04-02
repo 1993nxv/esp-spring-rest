@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.RestauranteDTOassembler;
 import com.algaworks.algafood.api.disassembler.RestauranteVOdisassembler;
-import com.algaworks.algafood.domain.exception.CidadeNaoEncontradoException;
-import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
+import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
@@ -60,7 +60,7 @@ public class RestauranteController {
 		Restaurante restaurante = restauranteVOdisassembler.restauranteVOConverter(restauranteVO);
 		try {	
 			return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.save(restaurante));
-		} catch (CozinhaNaoEncontradoException | CidadeNaoEncontradoException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
@@ -77,7 +77,7 @@ public class RestauranteController {
 				return restauranteDTOAssembler
 						.restauranteDTOConverter(
 								restauranteService.save(restauranteAtual));
-			} catch (CozinhaNaoEncontradoException | CidadeNaoEncontradoException e) {
+			} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 				throw new NegocioException(e.getMessage(), e);
 			}
 	}
