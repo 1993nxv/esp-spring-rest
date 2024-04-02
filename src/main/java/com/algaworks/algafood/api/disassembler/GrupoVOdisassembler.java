@@ -13,12 +13,12 @@ public class GrupoVOdisassembler {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	public Grupo GrupoVOConverter(GrupoVO GrupoVO) {
-		return modelMapper.map(GrupoVO, Grupo.class);
+	public Grupo grupoVOConverter(GrupoVO grupoVO) {
+		return modelMapper.map(grupoVO, Grupo.class);
 	}
 	
-	public void copyToDomainObj(GrupoVO GrupoVO, Grupo Grupo) {
-		modelMapper.map(GrupoVO, Grupo);
+	public void copyToDomainObj(GrupoVO grupoVO, Grupo grupo) {
+		modelMapper.map(grupoVO, grupo);
 	}
 
 }

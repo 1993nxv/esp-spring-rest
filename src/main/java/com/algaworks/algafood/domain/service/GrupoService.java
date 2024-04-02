@@ -36,8 +36,10 @@ public class GrupoService {
 	}
 	
 	@Transactional
-	public Grupo updatePartially(Long id, Grupo Grupo) {	
-		return save(Grupo);	
+	public Grupo updatePartially(Long id, Grupo grupo) {
+		findById(id);
+		grupo.setId(id);
+		return save(grupo);
 	}
 	
 	@Transactional

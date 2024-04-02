@@ -16,13 +16,13 @@ public class GrupoDTOassembler {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	public GrupoDTO GrupoDTOConverter(Grupo Grupo) {
-		return modelMapper.map(Grupo, GrupoDTO.class);
+	public GrupoDTO grupoDTOConverter(Grupo grupo) {
+		return modelMapper.map(grupo, GrupoDTO.class);
 	}
 	
-	public List<GrupoDTO> toListDTO(List<Grupo> Grupos){
-		return Grupos.stream()
-				.map(Grupo -> GrupoDTOConverter(Grupo))
+	public List<GrupoDTO> toListDTO(List<Grupo> grupos){
+		return grupos.stream()
+				.map(Grupo -> grupoDTOConverter(Grupo))
 				.collect(Collectors.toList());
 	}
 }

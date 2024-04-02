@@ -31,56 +31,56 @@ import com.algaworks.algafood.domain.service.GrupoService;
 public class GrupoController {
 
 	@Autowired
-	private GrupoService GrupoService;
+	private GrupoService grupoService;
 
 	@Autowired
-	private GrupoDTOassembler GrupoDTOassembler;
+	private GrupoDTOassembler grupoDTOassembler;
 
 	@Autowired
-	GrupoVOdisassembler GrupoVOdisassembler;
+	private GrupoVOdisassembler grupoVOdisassembler;
 
 	@GetMapping
 	public List<GrupoDTO> findAll() {
-		return GrupoDTOassembler.toListDTO(GrupoService.findAll());
+		return grupoDTOassembler.toListDTO(grupoService.findAll());
 	}
 
 	@GetMapping("/{id}")
 	public GrupoDTO findById(@PathVariable Long id) {
-		return GrupoDTOassembler.GrupoDTOConverter(GrupoService.findById(id));
+		return grupoDTOassembler.grupoDTOConverter(grupoService.findById(id));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public GrupoDTO save(@RequestBody @Valid GrupoVO GrupoVO) {
+	public GrupoDTO save(@RequestBody @Valid GrupoVO grupoVO) {
 		try {
-			return GrupoDTOassembler
-					.GrupoDTOConverter(GrupoService.save(GrupoVOdisassembler.GrupoVOConverter(GrupoVO)));
+			return grupoDTOassembler
+					.grupoDTOConverter(grupoService.save(grupoVOdisassembler.grupoVOConverter(grupoVO)));
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
 
 	@PutMapping("/{id}")
-	public GrupoDTO update(@PathVariable Long id, @RequestBody @Valid GrupoVO GrupoVO) {
-		Grupo GrupoAtual = GrupoService.findById(id);
-		GrupoVOdisassembler.copyToDomainObj(GrupoVO, GrupoAtual);
+	public GrupoDTO update(@PathVariable Long id, @RequestBody @Valid GrupoVO grupoVO) {
+		Grupo grupoAtual = grupoService.findById(id);
+		grupoVOdisassembler.copyToDomainObj(grupoVO, grupoAtual);
 		try {
-			return GrupoDTOassembler.GrupoDTOConverter(GrupoService.save(GrupoAtual));
+			return grupoDTOassembler.grupoDTOConverter(grupoService.save(grupoAtual));
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
 
 	@PatchMapping("/{id}")
-	public GrupoDTO updatePartially(@PathVariable Long id, @RequestBody GrupoVO GrupoVO) {
-		Grupo Grupo = GrupoVOdisassembler.GrupoVOConverter(GrupoVO);
-		return GrupoDTOassembler.GrupoDTOConverter(GrupoService.updatePartially(id, Grupo));
+	public GrupoDTO updatePartially(@PathVariable Long id, @RequestBody GrupoVO grupoVO) {
+		Grupo grupo = grupoVOdisassembler.grupoVOConverter(grupoVO);
+		return grupoDTOassembler.grupoDTOConverter(grupoService.updatePartially(id, grupo));
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteById(@PathVariable Long id) {
-		GrupoService.deleteById(id);
+		grupoService.deleteById(id);
 	}
 
 }
