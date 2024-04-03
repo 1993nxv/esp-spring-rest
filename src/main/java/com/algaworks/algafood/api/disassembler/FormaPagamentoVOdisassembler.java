@@ -11,7 +11,7 @@ import com.algaworks.algafood.domain.model.modelVO.FormaPagamentoVO;
 public class FormaPagamentoVOdisassembler {
 	
 	@Autowired
-	ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 	
 	public FormaPagamento formaPagamentoVOconverter(FormaPagamentoVO formaPagamentoVO) {
 		return modelMapper.map(formaPagamentoVO, FormaPagamento.class);

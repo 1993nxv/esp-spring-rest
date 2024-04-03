@@ -11,7 +11,7 @@ import com.algaworks.algafood.domain.model.modelVO.EstadoVO;
 public class EstadoVOdisassembler {
 	
 	@Autowired
-	ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 	
 	public Estado estadoVOconverter(EstadoVO estadoVO) {
 		return modelMapper.map(estadoVO, Estado.class);

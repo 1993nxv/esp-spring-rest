@@ -22,7 +22,7 @@ public class GrupoDTOassembler {
 	
 	public List<GrupoDTO> toListDTO(List<Grupo> grupos){
 		return grupos.stream()
-				.map(Grupo -> grupoDTOConverter(Grupo))
+				.map(grupo -> grupoDTOConverter(grupo))
 				.collect(Collectors.toList());
 	}
 }

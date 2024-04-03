@@ -14,7 +14,7 @@ import com.algaworks.algafood.domain.model.modelDTO.FormaPagamentoDTO;
 public class FormaPagementoDTOassembler {
 	
 	@Autowired
-	ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 	
 	public FormaPagamentoDTO formaPagamentoDTOassembler(FormaPagamento formaPagamento) {
 		return modelMapper.map(formaPagamento, FormaPagamentoDTO.class);

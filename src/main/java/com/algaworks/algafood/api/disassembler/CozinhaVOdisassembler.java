@@ -10,7 +10,7 @@ import com.algaworks.algafood.domain.model.modelVO.CozinhaVO;
 @Component
 public class CozinhaVOdisassembler {
 	@Autowired
-	ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 	
 	public Cozinha cozinhaVOConverter(CozinhaVO cozinhaVO) {
 		return modelMapper.map(cozinhaVO, Cozinha.class);

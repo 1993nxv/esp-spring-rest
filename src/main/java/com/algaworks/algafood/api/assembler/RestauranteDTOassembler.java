@@ -23,6 +23,7 @@ public class RestauranteDTOassembler {
 	public List<RestauranteDTO> toListDTO(List<Restaurante> restaurantes){
 		return restaurantes.stream()
 				.map(restaurante -> restauranteDTOConverter(restaurante))
-				.collect(Collectors.toList());
+				.collect(Collectors.toList()
+				);
 	}
 }
