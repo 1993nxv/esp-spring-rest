@@ -13,6 +13,7 @@ public class UsuarioVO {
 	@NotBlank
 	private String nome;
 	
+	@NotBlank
 	@Email
 	private String email;
 	
