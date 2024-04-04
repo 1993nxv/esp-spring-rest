@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.algaworks.algafood.domain.exception.SenhaAtualIncorretaException;
 import com.algaworks.algafood.domain.exception.UsuarioNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Usuario;
+import com.algaworks.algafood.domain.model.modelVO.SenhaVO;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
 
 @Service
@@ -31,10 +33,15 @@ public class UsuarioService {
 	}
 	
 	@Transactional
-	public Usuario updateSenha(Long id, Usuario usuario) {
-		String senhaAtual = findById(id).getSenha();
-		usuario.setId(id);
-		return save(usuario);
+	public Usuario updateSenha(Long id, SenhaVO senhaVO) {
+		Usuario usuario = findById(id);
+		if(usuario.getSenha().equals(senhaVO.getSenhaAtual())) {
+			usuario.setId(id);
+			usuario.setSenha(senhaVO.getNovaSenha());
+			return save(usuario);
+		}else {
+			throw new SenhaAtualIncorretaException("Senha atual incorreta");
+		}		
 	}
 	
 	@Transactional

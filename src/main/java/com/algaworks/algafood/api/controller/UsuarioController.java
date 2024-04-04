@@ -22,8 +22,10 @@ import com.algaworks.algafood.api.assembler.UsuarioDTOassembler;
 import com.algaworks.algafood.api.disassembler.UsuarioVOdisassembler;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
+import com.algaworks.algafood.domain.exception.SenhaAtualIncorretaException;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.model.modelDTO.UsuarioDTO;
+import com.algaworks.algafood.domain.model.modelVO.SenhaVO;
 import com.algaworks.algafood.domain.model.modelVO.UsuarioComSenhaVO;
 import com.algaworks.algafood.domain.model.modelVO.UsuarioVO;
 import com.algaworks.algafood.domain.service.UsuarioService;
@@ -79,11 +81,14 @@ public class UsuarioController {
 		}
 	}
 	
-	@PatchMapping("/{id}")
-	public UsuarioDTO updatePartially(@PathVariable Long id, @RequestBody UsuarioVO usuarioVO){						
-		Usuario usuario = usuarioVOdisassembler.usuarioVOConverter(usuarioVO);	
-		return usuarioDTOassembler.usuarioDTOConverter(
-				usuarioService.updatePartially(id, usuario));			
+	@PatchMapping("/{id}/senha")
+	public UsuarioDTO updateSenha(@PathVariable Long id, @RequestBody @Valid SenhaVO senhaVO){
+		try {
+			Usuario usuario = usuarioService.updateSenha(id, senhaVO);
+			return usuarioDTOassembler.usuarioDTOConverter(usuario);
+		} catch (SenhaAtualIncorretaException e) {
+			throw new NegocioException(e.getMessage(), e);
+		} 			
 	}
 	
 	@DeleteMapping("/{id}")
