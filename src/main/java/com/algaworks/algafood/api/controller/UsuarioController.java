@@ -24,6 +24,7 @@ import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.model.modelDTO.UsuarioDTO;
+import com.algaworks.algafood.domain.model.modelVO.UsuarioComSenhaVO;
 import com.algaworks.algafood.domain.model.modelVO.UsuarioVO;
 import com.algaworks.algafood.domain.service.UsuarioService;
 
@@ -41,7 +42,7 @@ public class UsuarioController {
 	
 	@Autowired 
 	private UsuarioVOdisassembler usuarioVOdisassembler;
-	
+		
 	@GetMapping
 	public List<UsuarioDTO> findAll(){
 		return usuarioDTOassembler.toListDTO(
@@ -68,6 +69,18 @@ public class UsuarioController {
 	
 	@PutMapping("/{id}")
 	public UsuarioDTO update(@PathVariable Long id, @RequestBody @Valid UsuarioVO usuarioVO){		
+		Usuario usuarioAtual = usuarioService.findById(id);
+		usuarioVOdisassembler.copyToDomainObj(usuarioVO, usuarioAtual);
+		try {
+			return usuarioDTOassembler.usuarioDTOConverter(
+					usuarioService.save(usuarioAtual));
+		} catch (EstadoNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+	}
+	
+	@PutMapping("/{id}/senha")
+	public UsuarioDTO updateSenha(@PathVariable Long id, @RequestBody @Valid UsuarioComSenhaVO usuarioVO){		
 		Usuario usuarioAtual = usuarioService.findById(id);
 		usuarioVOdisassembler.copyToDomainObj(usuarioVO, usuarioAtual);
 		try {
