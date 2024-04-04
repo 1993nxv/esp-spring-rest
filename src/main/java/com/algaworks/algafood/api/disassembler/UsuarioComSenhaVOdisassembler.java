@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.domain.model.Usuario;
+import com.algaworks.algafood.domain.model.modelVO.UsuarioComSenhaVO;
 
 @Component
 public class UsuarioComSenhaVOdisassembler {
