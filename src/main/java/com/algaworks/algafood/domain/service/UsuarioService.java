@@ -31,8 +31,8 @@ public class UsuarioService {
 	}
 	
 	@Transactional
-	public Usuario updatePartially(Long id, Usuario usuario) {
-		findById(id);
+	public Usuario updateSenha(Long id, Usuario usuario) {
+		String senhaAtual = findById(id).getSenha();
 		usuario.setId(id);
 		return save(usuario);
 	}

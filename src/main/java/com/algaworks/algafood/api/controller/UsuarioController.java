@@ -57,7 +57,7 @@ public class UsuarioController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public UsuarioDTO save(@RequestBody @Valid UsuarioVO usuarioVO){
+	public UsuarioDTO save(@RequestBody @Valid UsuarioComSenhaVO usuarioVO){
 		try {
 			return usuarioDTOassembler.usuarioDTOConverter(
 					usuarioService.save(
@@ -69,18 +69,6 @@ public class UsuarioController {
 	
 	@PutMapping("/{id}")
 	public UsuarioDTO update(@PathVariable Long id, @RequestBody @Valid UsuarioVO usuarioVO){		
-		Usuario usuarioAtual = usuarioService.findById(id);
-		usuarioVOdisassembler.copyToDomainObj(usuarioVO, usuarioAtual);
-		try {
-			return usuarioDTOassembler.usuarioDTOConverter(
-					usuarioService.save(usuarioAtual));
-		} catch (EstadoNaoEncontradoException e) {
-			throw new NegocioException(e.getMessage(), e);
-		}
-	}
-	
-	@PutMapping("/{id}/senha")
-	public UsuarioDTO updateSenha(@PathVariable Long id, @RequestBody @Valid UsuarioComSenhaVO usuarioVO){		
 		Usuario usuarioAtual = usuarioService.findById(id);
 		usuarioVOdisassembler.copyToDomainObj(usuarioVO, usuarioAtual);
 		try {
