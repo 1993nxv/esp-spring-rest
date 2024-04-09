@@ -21,6 +21,7 @@ import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -37,6 +38,9 @@ public class RestauranteService {
 	
 	@Autowired
 	CidadeService cidadeService;
+	
+	@Autowired
+	FormaPagamentoService formaPagamentoService;
 	
 	@Autowired
 	private SmartValidator validator;
@@ -96,6 +100,21 @@ public class RestauranteService {
 		}
 		validate(restaurante, "restaurante");
 		return restauranteRepository.save(restaurante);
+	}
+	
+	@Transactional
+	public void removeFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = findById(restauranteId);
+		FormaPagamento formasPagamento = formaPagamentoService.findById(formaPagamentoId);
+		restaurante.getFormasPagamento().remove(formasPagamento);
+	}
+	
+	@Transactional
+	public List<FormaPagamento> adicionaFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = findById(restauranteId);
+		FormaPagamento formasPagamento = formaPagamentoService.findById(formaPagamentoId);
+		restaurante.getFormasPagamento().add(formasPagamento);
+		return formaPagamentoService.findAll();
 	}
 	
 	@Transactional
