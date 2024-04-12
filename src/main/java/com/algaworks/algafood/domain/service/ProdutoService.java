@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.ProdutoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Produto;
+import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.ProdutoRepository;
 
 @Service
@@ -20,6 +21,9 @@ public class ProdutoService {
 	
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private RestauranteService restauranteService;
 	
 	public List<Produto> findAll(){	
 		return produtoRepository.findAll();
@@ -32,8 +36,16 @@ public class ProdutoService {
 	}
 	
 	@Transactional
-	public Produto save(Produto produto){
+	public Produto save(Produto produto, Long restauranteId){
+		Restaurante restaurante = restauranteService.findById(restauranteId);
+		produto.setRestaurante(restaurante);
 		return produtoRepository.save(produto);
+	}
+	
+	public Produto findProdutoByIdAndRestaurante(Long produtoId, Long restauranteId) {
+		Restaurante restaurante = restauranteService.findById(restauranteId);
+		return produtoRepository.findProdutoByIdAndRestaurante(produtoId, restaurante)
+				.orElseThrow(() -> new ProdutoNaoEncontradoException(produtoId, restauranteId));
 	}
 	
 	@Transactional

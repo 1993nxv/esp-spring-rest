@@ -122,19 +122,6 @@ public class RestauranteService {
 		return formaPagamentoService.findAll();
 	}
 	
-	public Produto findProdutoByIdAndRestaurante(Long produtoId, Long restauranteId) {
-		Restaurante restaurante = findById(restauranteId);
-		return restauranteRepository.findProdutoByIdAndRestaurante(produtoId, restaurante)
-				.orElseThrow(() -> new ProdutoNaoEncontradoException(produtoId));
-	}
-	
-	@Transactional
-	public Produto saveProduto(Produto produto, Long restauranteId) {
-		Restaurante restaurante = findById(restauranteId);
-		produto.setRestaurante(restaurante);
-		return produtoService.save(produto);
-	}
-	
 	@Transactional
 	public void ativacao(Long id) {
 		Restaurante restaurante = findById(id);
