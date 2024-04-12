@@ -3,14 +3,20 @@ package com.algaworks.algafood.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.ProdutoDTOassembler;
 import com.algaworks.algafood.api.disassembler.ProdutoVOdisassembler;
+import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.model.modelDTO.ProdutoDTO;
+import com.algaworks.algafood.domain.model.modelVO.ProdutoVO;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
 @RestController
@@ -21,22 +27,29 @@ public class RestauranteProdutoController {
 	RestauranteService restauranteService;
 	
 	@Autowired
-	ProdutoDTOassembler protudoDTOAssembler;
+	ProdutoDTOassembler produtoDTOAssembler;
 	
 	@Autowired
 	ProdutoVOdisassembler produtoVOdisassembler;
 	
 	@GetMapping
 	public List<ProdutoDTO> findAll(@PathVariable Long restauranteId){
-		return protudoDTOAssembler.toListDTO(restauranteService.findById(restauranteId).getProdutos());
+		return produtoDTOAssembler.toListDTO(restauranteService.findById(restauranteId).getProdutos());
 	}
 	
 	
 	@GetMapping("/{produtoId}")
 	public ProdutoDTO findById(@PathVariable Long produtoId, @PathVariable Long restauranteId) {
-		return protudoDTOAssembler.produtoDTOConverter(
+		return produtoDTOAssembler.produtoDTOConverter(
 				restauranteService.findProdutoByIdAndRestaurante(produtoId, restauranteId)
 				);
+	}
+	
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public ProdutoDTO save(@RequestBody ProdutoVO produtoVO, @PathVariable Long restauranteId) {
+		Produto produto = restauranteService.saveProduto(produtoVOdisassembler.produtoVOConverter(produtoVO), restauranteId);
+		return produtoDTOAssembler.produtoDTOConverter(produto);
 	}
 //
 //	@PostMapping

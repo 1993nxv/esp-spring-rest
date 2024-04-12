@@ -45,6 +45,9 @@ public class RestauranteService {
 	FormaPagamentoService formaPagamentoService;
 	
 	@Autowired
+	ProdutoService produtoService;
+	
+	@Autowired
 	private SmartValidator validator;
 	
 	public List<Restaurante> findAll(){
@@ -123,6 +126,13 @@ public class RestauranteService {
 		Restaurante restaurante = findById(restauranteId);
 		return restauranteRepository.findProdutoByIdAndRestaurante(produtoId, restaurante)
 				.orElseThrow(() -> new ProdutoNaoEncontradoException(produtoId));
+	}
+	
+	@Transactional
+	public Produto saveProduto(Produto produto, Long restauranteId) {
+		Restaurante restaurante = findById(restauranteId);
+		produto.setRestaurante(restaurante);
+		return produtoService.save(produto);
 	}
 	
 	@Transactional
