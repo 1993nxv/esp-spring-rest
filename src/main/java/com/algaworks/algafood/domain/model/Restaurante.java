@@ -53,6 +53,9 @@ public class Restaurante {
 	@Embedded
 	private Endereco endereco;
 	
+	@Column(name = "aberto")
+	private Boolean aberto = Boolean.FALSE;
+	
 	@Column(name = "ativo")
 	private Boolean ativo = Boolean.TRUE;
 	
