@@ -18,12 +18,10 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 
 import com.algaworks.algafood.core.validation.ValidacaoException;
-import com.algaworks.algafood.domain.exception.ProdutoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.FormaPagamento;
-import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -132,6 +130,18 @@ public class RestauranteService {
 	public void inativacao(Long id) {
 		Restaurante restaurante = findById(id);
 		restaurante.setAtivo(false);
+	}
+	
+	@Transactional
+	public void abrirRestaurante(Long id) {
+		Restaurante restaurante = findById(id);
+		restaurante.setAberto(true);
+	}
+	
+	@Transactional
+	public void fecharRestaurante(Long id) {
+		Restaurante restaurante = findById(id);
+		restaurante.setAberto(false);
 	}
 
 	private void validate(Restaurante restaurante, String objectName) {

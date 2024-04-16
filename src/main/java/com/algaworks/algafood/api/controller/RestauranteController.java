@@ -109,6 +109,18 @@ public class RestauranteController {
 		restauranteService.inativacao(id);
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PutMapping("/{id}/abertura")
+	public void abrirRestaurante(@PathVariable Long id) {
+		restauranteService.abrirRestaurante(id);
+	}
+	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PutMapping("/{id}/fechamento")
+	public void fecharRestaurante(@PathVariable Long id) {
+		restauranteService.fecharRestaurante(id);
+	}
+	
 	@GetMapping("/por-taxa")
 	public List<RestauranteDTO> findByTaxaFreteBetween
 		(@RequestParam BigDecimal taxaInicial, @RequestParam BigDecimal taxaFinal){		
