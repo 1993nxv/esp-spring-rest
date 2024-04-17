@@ -22,6 +22,7 @@ import com.algaworks.algafood.api.disassembler.GrupoVOdisassembler;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Grupo;
+import com.algaworks.algafood.domain.model.Permissao;
 import com.algaworks.algafood.domain.model.modelDTO.GrupoDTO;
 import com.algaworks.algafood.domain.model.modelVO.GrupoVO;
 import com.algaworks.algafood.domain.service.GrupoService;
@@ -47,6 +48,11 @@ public class GrupoController {
 	@GetMapping("/{id}")
 	public GrupoDTO findById(@PathVariable Long id) {
 		return grupoDTOassembler.grupoDTOConverter(grupoService.findById(id));
+	}
+	
+	@GetMapping("/{id}/permissoes")
+	public List<Permissao> findPermissoes(@PathVariable Long id) {
+		return grupoService.findPermissoes(id);
 	}
 
 	@PostMapping

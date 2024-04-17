@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.GrupoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Grupo;
+import com.algaworks.algafood.domain.model.Permissao;
 import com.algaworks.algafood.domain.repository.GrupoRepository;
 
 @Service
@@ -20,7 +21,6 @@ public class GrupoService {
 	@Autowired
 	private GrupoRepository grupoRepository;
 	
-	
 	public List<Grupo> findAll(){	
 		return grupoRepository.findAll();
 	}
@@ -28,6 +28,11 @@ public class GrupoService {
 	public Grupo findById(Long id){		
 			return grupoRepository.findById(id)
 					.orElseThrow(() -> new GrupoNaoEncontradoException(id));	
+	}
+	
+	public List<Permissao> findPermissoes(Long grupoId) {
+		Grupo grupo = findById(grupoId);
+		return grupo.getPermissoes();
 	}
 	
 	@Transactional
