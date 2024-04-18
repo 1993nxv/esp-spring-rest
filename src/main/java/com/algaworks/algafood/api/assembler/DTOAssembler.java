@@ -14,13 +14,13 @@ public class DTOAssembler<T, U> {
 	@Autowired
     private ModelMapper modelMapper;
 	
-    public U toDTO(T entity, Class<U> dto) {
-        return modelMapper.map(entity, dto);
+    public U toDTO(T entity, Class<U> dtoClass) {
+        return modelMapper.map(entity, dtoClass);
     }
     
-    public List<U> toListDTO(List<T> entities, Class<U> dto) {
+    public List<U> toListDTO(List<T> entities, Class<U> dtoClass) {
         return entities.stream()
-                .map(entity -> toDTO(entity, dto))
+                .map(entity -> toDTO(entity, dtoClass))
                 .collect(Collectors.toList());
     }
 }
