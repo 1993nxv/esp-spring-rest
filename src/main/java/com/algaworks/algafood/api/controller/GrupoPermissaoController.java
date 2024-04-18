@@ -19,9 +19,12 @@ public class GrupoPermissaoController {
 	@Autowired
 	private GrupoService grupoService;
 	
+	@Autowired
+	private DTOAssembler assembler;
+	
 	@GetMapping
 	public List<PermissaoDTO> findPermissoes(@PathVariable Long id) {
-		return DTOAssembler.toListDTO(
+		return assembler.toListDTO(
 				grupoService.findPermissoes(id), 
 				PermissaoDTO.class);
 	}
