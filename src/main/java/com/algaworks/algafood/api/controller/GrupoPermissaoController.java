@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.DTOAssembler;
+import com.algaworks.algafood.domain.model.Permissao;
 import com.algaworks.algafood.domain.model.modelDTO.PermissaoDTO;
 import com.algaworks.algafood.domain.service.GrupoService;
 
@@ -20,13 +21,11 @@ public class GrupoPermissaoController {
 	private GrupoService grupoService;
 	
 	@Autowired
-	private DTOAssembler assembler;
+	private DTOAssembler<Permissao, PermissaoDTO> assemblerDTO;
 	
 	@GetMapping
 	public List<PermissaoDTO> findPermissoes(@PathVariable Long id) {
-		return assembler.toListDTO(
-				grupoService.findPermissoes(id), 
-				PermissaoDTO.class);
+		return assemblerDTO.toListDTO(grupoService.findPermissoes(id), PermissaoDTO.class);
 	}
 
 }

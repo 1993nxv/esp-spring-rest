@@ -7,19 +7,20 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
 @Component
-public class DTOAssembler {
+public class DTOAssembler<T, U> {
     
 	@Autowired
     private ModelMapper modelMapper;
-    
-    public <T, U> U toDTO(T entity, Class<U> dtoClass) {
-        return modelMapper.map(entity, dtoClass);
+	
+    public U toDTO(T entity, Class<U> dto) {
+        return modelMapper.map(entity, dto);
     }
     
-    public <T, U> List<U> toListDTO(List<T> entities, Class<U> dtoClass) {
+    public List<U> toListDTO(List<T> entities, Class<U> dto) {
         return entities.stream()
-                .map(entity -> toDTO(entity, dtoClass))
+                .map(entity -> toDTO(entity, dto))
                 .collect(Collectors.toList());
     }
 }
