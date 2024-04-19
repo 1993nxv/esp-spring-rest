@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.assembler.DTOAssembler;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Permissao;
+import com.algaworks.algafood.domain.model.modelDTO.PermissaoDTO;
 import com.algaworks.algafood.domain.service.PermissaoService;
 
 
@@ -29,16 +31,19 @@ public class PermissaoController {
 	@Autowired
 	private PermissaoService permissaoService;
 	
+	@Autowired 
+	private DTOAssembler<Permissao, PermissaoDTO> assemblerDTO;
+	
 	@GetMapping
-	public List<Permissao> findAll(){
-		return permissaoService.findAll();
+	public List<PermissaoDTO> findAll(){
+		return assemblerDTO.toListDTO(permissaoService.findAll(), PermissaoDTO.class);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id){
 		try {			
 			Permissao permissao = permissaoService.findById(id);
-			return ResponseEntity.ok(permissao);			
+			return ResponseEntity.ok(assemblerDTO.toDTO(permissao, PermissaoDTO.class));			
 		} catch (EntidadeNaoEncontradaException e) {			
 			return ResponseEntity
 					.badRequest()
@@ -48,12 +53,12 @@ public class PermissaoController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Permissao save(@RequestBody Permissao permissao){
-		return permissaoService.save(permissao);
+	public PermissaoDTO save(@RequestBody Permissao permissao){
+		return assemblerDTO.toDTO(permissaoService.save(permissao), PermissaoDTO.class);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Permissao> deleteById(@PathVariable Long id){
+	public ResponseEntity<?> deleteById(@PathVariable Long id){
 		try {			
 			permissaoService.deleteById(id);
 			return ResponseEntity.noContent().build();		

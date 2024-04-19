@@ -19,7 +19,7 @@ public class DTOAssembler<T, U> {
         return modelMapper.map(entity, dtoClass);
     }
     
-    public List<U> toSetDTO(Collection<T> entities, Class<U> dtoClass) {
+    public List<U> toListDTO(Collection<T> entities, Class<U> dtoClass) {
         return entities.stream()
                 .map(entity -> toDTO(entity, dtoClass))
                 .collect(Collectors.toList());
