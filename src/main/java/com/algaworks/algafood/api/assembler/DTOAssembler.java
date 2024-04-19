@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.assembler;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -19,9 +19,9 @@ public class DTOAssembler<T, U> {
         return modelMapper.map(entity, dtoClass);
     }
     
-    public Set<U> toListDTO(Collection<T> entities, Class<U> dtoClass) {
+    public List<U> toSetDTO(Collection<T> entities, Class<U> dtoClass) {
         return entities.stream()
                 .map(entity -> toDTO(entity, dtoClass))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }

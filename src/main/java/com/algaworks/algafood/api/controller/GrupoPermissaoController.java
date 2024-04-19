@@ -1,6 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +24,8 @@ public class GrupoPermissaoController {
 	private DTOAssembler<Permissao, PermissaoDTO> assemblerDTO;
 	
 	@GetMapping
-	public Set<PermissaoDTO> findPermissoes(@PathVariable Long id) {
-		return assemblerDTO.toListDTO(grupoService.findPermissoes(id), PermissaoDTO.class);
+	public List<PermissaoDTO> findPermissoes(@PathVariable Long id) {
+		return assemblerDTO.toSetDTO(grupoService.findPermissoes(id), PermissaoDTO.class);
 	}
 	
 
