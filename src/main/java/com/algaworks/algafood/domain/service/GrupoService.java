@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,7 +31,7 @@ public class GrupoService {
 					.orElseThrow(() -> new GrupoNaoEncontradoException(id));	
 	}
 	
-	public List<Permissao> findPermissoes(Long grupoId) {
+	public Set<Permissao> findPermissoes(Long grupoId) {
 		Grupo grupo = findById(grupoId);
 		return grupo.getPermissoes();
 	}
