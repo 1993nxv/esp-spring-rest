@@ -22,6 +22,9 @@ public class GrupoService {
 	@Autowired
 	private GrupoRepository grupoRepository;
 	
+	@Autowired
+	private PermissaoService permissaoService;
+	
 	public List<Grupo> findAll(){	
 		return grupoRepository.findAll();
 	}
@@ -34,6 +37,21 @@ public class GrupoService {
 	public Set<Permissao> findPermissoes(Long grupoId) {
 		Grupo grupo = findById(grupoId);
 		return grupo.getPermissoes();
+	}
+	
+	@Transactional
+	public Set<Permissao> adicionaPermissao(Long grupoId, Long permissaoId) {
+		Grupo grupo = findById(grupoId);
+		Permissao permissao = permissaoService.findById(permissaoId);
+		grupo.getPermissoes().add(permissao);
+		return grupo.getPermissoes();
+	}
+	
+	@Transactional
+	public void removePermissao(Long grupoId, Long permissaoId) {
+		Grupo grupo = findById(grupoId);
+		Permissao permissao = permissaoService.findById(permissaoId);
+		grupo.getPermissoes().remove(permissao);
 	}
 	
 	@Transactional
