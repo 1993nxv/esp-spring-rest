@@ -71,3 +71,9 @@ insert into usuario (id, nome, email, senha, data_cadastro) values (1, 'Wellingt
 insert into usuario (id, nome, email, senha, data_cadastro) values (2, 'Bruna Franco', 'bruna@email.com', '123', utc_timestamp);
 insert into usuario (id, nome, email, senha, data_cadastro) values (3, 'Sandramar Delmondes', 'sandramar@email.com', '123', utc_timestamp);
 insert into usuario (id, nome, email, senha, data_cadastro) values (4, 'Lourrana Delmondes', 'lourrana@email.com', '123', utc_timestamp);
+
+insert into usuario_grupo (usuario_id, grupo_id) values (1, 1);
+insert into usuario_grupo (usuario_id, grupo_id) values (1, 2);
+insert into usuario_grupo (usuario_id, grupo_id) values (2, 2);
+insert into usuario_grupo (usuario_id, grupo_id) values (3, 3);
+insert into usuario_grupo (usuario_id, grupo_id) values (4, 4);
