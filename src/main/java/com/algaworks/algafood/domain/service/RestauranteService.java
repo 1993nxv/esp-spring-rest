@@ -127,9 +127,19 @@ public class RestauranteService {
 	}
 	
 	@Transactional
+	public void ativacaoEmMassa(List<Long> ids) {
+		ids.forEach(this::ativacao);
+	}
+	
+	@Transactional
 	public void inativacao(Long id) {
 		Restaurante restaurante = findById(id);
 		restaurante.setAtivo(false);
+	}
+	
+	@Transactional
+	public void inativacaoEmMassa(List<Long> ids) {
+		ids.forEach(this::inativacao);
 	}
 	
 	@Transactional

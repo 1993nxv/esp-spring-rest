@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -99,14 +100,30 @@ public class RestauranteController {
 					restauranteService.updatePartially(restaurante, campos, request));			
 	}
 	
-	@PutMapping("/{id}/ativacao")
+	@PutMapping("/{id}/ativar")
 	public void ativacao(@PathVariable Long id) {
 		restauranteService.ativacao(id);
 	}
 	
-	@DeleteMapping("/{id}/inativacao")
+	@PutMapping("/ativar/todos")
+	@ResponseStatus(HttpStatus.OK)
+	public void ativacaoEmMassa() {
+		List<Long> ids = new ArrayList<>();
+		findAll().forEach(restaurante -> ids.add(restaurante.getId()));
+		restauranteService.ativacaoEmMassa(ids);
+	}
+	
+	@DeleteMapping("/{id}/inativar")
 	public void inativacao(@PathVariable Long id) {
 		restauranteService.inativacao(id);
+	}
+	
+	@DeleteMapping("/inativar/todos")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void inativacaoEmMassa() {
+		List<Long> ids = new ArrayList<>();
+		findAll().forEach(restaurante -> ids.add(restaurante.getId()));
+		restauranteService.inativacaoEmMassa(ids);
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
