@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,27 @@ public class PedidoService {
 //			throw new EntidadeEmUsoException(String.format(MSG_GRUPO_EM_USO, id));
 //		}	
 //	}
+	
+	public Pedido calcularValorTotal(Pedido pedido) {
+	    pedido.setSubTotal(
+	    	pedido.getItens().stream()
+	        .map(item -> item.getPrecoTotal())
+	        .reduce(BigDecimal.ZERO, BigDecimal::add)
+	    	);
+	    
+	    pedido.setValorTotal(pedido.getSubTotal().add(pedido.getTaxaFrete()));
+	    return pedido;
+	}
+
+	public Pedido definirFrete(Pedido pedido) {
+	    pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
+	    return pedido;
+	}
+
+	public Pedido atribuirPedidoAosItens(Pedido pedido) {
+	    pedido.getItens().forEach(item -> item.setPedido(pedido));
+	    return pedido;
+	}
 
 }
 	
