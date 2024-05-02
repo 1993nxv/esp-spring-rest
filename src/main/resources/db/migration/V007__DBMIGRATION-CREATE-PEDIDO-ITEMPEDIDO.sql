@@ -8,7 +8,8 @@ create table pedido (
     endereco_cep varchar(255), 
     endereco_complemento varchar(255), 
     endereco_logradouro varchar(255), 
-    endereco_numero varchar(255), status integer,
+    endereco_numero varchar(255), 
+    status varchar(15) not null,
     sub_total decimal(19,2), taxa_frete decimal(19,2), 
     valor_total decimal(19,2), 
     usuario_cliente_id bigint not null, 
@@ -31,6 +32,7 @@ create table item_pedido (
 	preco_unitario decimal(19,2), 
 	pedido_id bigint not null, 
 	produto_id bigint not null, 
+    quantidade bigint not null,
 
 	primary key (id),
 	unique key uk_item_pedido_produto (pedido_id, produto_id),
