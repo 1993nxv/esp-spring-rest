@@ -26,12 +26,15 @@ public class PedidoService {
 	@Autowired
 	private UsuarioService usuarioService;
 	
+	@Autowired
+	private ProdutoService produtoService;
 	
-	public List<Pedido> findAll(){	
+	
+	public List<Pedido> findAll(){
 		return pedidoRepository.findAll();
 	}
 	
-	public Pedido findById(Long id){		
+	public Pedido findById(Long id){
 			return pedidoRepository.findById(id)
 					.orElseThrow(() -> new PedidoNaoEncontradoException(id));	
 	}
@@ -88,10 +91,11 @@ public class PedidoService {
 	
 	public void validaProdutos(Pedido pedido) {
 		pedido.getItens().forEach(item -> {
-	        Produto produto = restauranteService.produtoService
+	        Produto produto = produtoService
 	                .findProdutoByIdAndRestaurante(
-	                        pedido.getRestaurante().getId(), 
-	                        item.getProduto().getId());
+	                		item.getProduto().getId(),
+	                        pedido.getRestaurante().getId() 
+	                );
 		});
 	}
 
