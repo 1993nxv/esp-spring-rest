@@ -5,18 +5,26 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.PedidoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
 
 @Service
 public class PedidoService {
 	
-	private static final String MSG_PEDIDO_EM_USO = "Pedido com id:%d não pode ser removido, pois está em uso.";
+	//private static final String MSG_PEDIDO_EM_USO = "Pedido com id:%d não pode ser removido, pois está em uso.";
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private RestauranteService restauranteService;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	
 	public List<Pedido> findAll(){	
@@ -27,32 +35,18 @@ public class PedidoService {
 			return pedidoRepository.findById(id)
 					.orElseThrow(() -> new PedidoNaoEncontradoException(id));	
 	}
-//	
-//	public Set<Permissao> findPermissoes(Long grupoId) {
-//		Grupo grupo = findById(grupoId);
-//		return grupo.getPermissoes();
-//	}
-//	
-//	@Transactional
-//	public Set<Permissao> adicionaPermissao(Long grupoId, Long permissaoId) {
-//		Grupo grupo = findById(grupoId);
-//		Permissao permissao = permissaoService.findById(permissaoId);
-//		grupo.getPermissoes().add(permissao);
-//		return grupo.getPermissoes();
-//	}
-//	
-//	@Transactional
-//	public void removePermissao(Long grupoId, Long permissaoId) {
-//		Grupo grupo = findById(grupoId);
-//		Permissao permissao = permissaoService.findById(permissaoId);
-//		grupo.getPermissoes().remove(permissao);
-//	}
-//	
-//	@Transactional
-//	public Grupo save(Grupo Grupo){	
-//		return grupoRepository.save(Grupo);
-//	}
-//	
+
+	@Transactional
+	public Pedido save(Pedido pedido) {
+		usuarioService.findById(pedido.getCliente().getId());
+		restauranteService.findById(pedido.getRestaurante().getId());
+		validaProdutos(pedido);
+		pedido = definirFrete(pedido);
+		pedido = calcularValorTotal(pedido);
+		
+		return pedidoRepository.save(pedido);
+	}
+	
 //	@Transactional
 //	public Grupo updatePartially(Long id, Grupo grupo) {
 //		findById(id);
@@ -71,6 +65,11 @@ public class PedidoService {
 //		}	
 //	}
 	
+	public Pedido definirFrete(Pedido pedido) {
+	    pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
+	    return pedido;
+	}
+	
 	public Pedido calcularValorTotal(Pedido pedido) {
 	    pedido.setSubTotal(
 	    	pedido.getItens().stream()
@@ -82,14 +81,18 @@ public class PedidoService {
 	    return pedido;
 	}
 
-	public Pedido definirFrete(Pedido pedido) {
-	    pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
-	    return pedido;
-	}
-
 	public Pedido atribuirPedidoAosItens(Pedido pedido) {
 	    pedido.getItens().forEach(item -> item.setPedido(pedido));
 	    return pedido;
+	}
+	
+	public void validaProdutos(Pedido pedido) {
+		pedido.getItens().forEach(item -> {
+	        Produto produto = restauranteService.produtoService
+	                .findProdutoByIdAndRestaurante(
+	                        pedido.getRestaurante().getId(), 
+	                        item.getProduto().getId());
+		});
 	}
 
 }

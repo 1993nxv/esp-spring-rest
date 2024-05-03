@@ -44,11 +44,11 @@ public class PedidoController {
 					.body(e.getMessage());			
 		}			
 	}
-//	
+	
 //	@PostMapping
 //	@ResponseStatus(HttpStatus.CREATED)
-//	public PermissaoDTO save(@RequestBody Permissao permissao){
-//		return assemblerDTO.toDTO(permissaoService.save(permissao), PermissaoDTO.class);
+//	public PedidoDTO save(@RequestBody PedidoVO pedidoVO){
+//		return assemblerDTO.toDTO(pedidoService.save(pedidoVO), PedidoDTO.class);
 //	}
 //	
 //	@DeleteMapping("/{id}")
