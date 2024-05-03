@@ -2,12 +2,14 @@ package com.algaworks.algafood.domain.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.PedidoNaoEncontradoException;
+import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
@@ -97,6 +99,13 @@ public class PedidoService {
 	                        pedido.getRestaurante().getId() 
 	                );
 		});
+	}
+	
+	public Boolean validaFormaDePagamento(Pedido pedido) {
+		Set<FormaPagamento> formasPagamento = restauranteService.findById(
+				pedido.getRestaurante().getId())
+					.getFormasPagamento();
+		return formasPagamento.contains(pedido.getFormaPagamento());
 	}
 
 }
