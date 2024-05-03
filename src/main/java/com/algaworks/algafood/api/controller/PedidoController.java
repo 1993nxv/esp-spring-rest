@@ -14,6 +14,7 @@ import com.algaworks.algafood.api.assembler.DTOAssembler;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.modelDTO.PedidoDTO;
+import com.algaworks.algafood.domain.model.modelDTO.PedidoResumoDTO;
 import com.algaworks.algafood.domain.service.PedidoService;
 
 
@@ -28,9 +29,12 @@ public class PedidoController {
 	@Autowired 
 	private DTOAssembler<Pedido, PedidoDTO> assemblerDTO;
 	
+	@Autowired 
+	private DTOAssembler<Pedido, PedidoResumoDTO> assemblerResumoDTO;
+	
 	@GetMapping
-	public List<PedidoDTO> findAll(){
-		return assemblerDTO.toListDTO(pedidoService.findAll(), PedidoDTO.class);
+	public List<PedidoResumoDTO> findAll(){
+		return assemblerResumoDTO.toListDTO(pedidoService.findAll(), PedidoResumoDTO.class);
 	}
 	
 	@GetMapping("/{id}")
