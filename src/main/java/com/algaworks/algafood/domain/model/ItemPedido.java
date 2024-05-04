@@ -36,7 +36,12 @@ public class ItemPedido {
 	@JoinColumn(nullable = false)
 	private Produto produto;
 	
+	public void setPrecoUnitario() {
+		this.precoUnitario = produto.getPreco();
+	}
+	
 	public void setPrecoTotal() {
+		this.setPrecoUnitario();
 		this.precoTotal = precoUnitario.multiply(quantidade);
 	}
 }

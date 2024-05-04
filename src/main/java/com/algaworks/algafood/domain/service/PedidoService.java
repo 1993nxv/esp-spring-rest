@@ -1,6 +1,5 @@
 package com.algaworks.algafood.domain.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -44,11 +43,11 @@ public class PedidoService {
 
 	@Transactional
 	public Pedido save(Pedido pedido) {
-		usuarioService.findById(pedido.getCliente().getId());
-		restauranteService.findById(pedido.getRestaurante().getId());
-		pedido = definirFrete(pedido);
+		pedido.setCliente(usuarioService.findById(pedido.getCliente().getId()));
+		pedido.setRestaurante(restauranteService.findById(pedido.getRestaurante().getId()));
+		pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
 		pedido = validaProdutos(pedido);
-		pedido = calcularValorTotal(pedido);
+		pedido.calcularValorTotal();
 		pedido = atribuirPedidoAosItens(pedido);
 		validaFormaDePagamento(pedido);
 		
@@ -73,22 +72,11 @@ public class PedidoService {
 //		}	
 //	}
 	
-	public Pedido definirFrete(Pedido pedido) {
-	    pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
-	    return pedido;
-	}
+//	public Pedido definirFrete(Pedido pedido) {
+//	    pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
+//	    return pedido;
+//	}
 	
-	public Pedido calcularValorTotal(Pedido pedido) {
-		pedido.getItens().forEach(item -> item.setPrecoTotal());
-		pedido.setSubTotal(
-	    	pedido.getItens().stream()
-	        .map(item -> item.getPrecoTotal())
-	        .reduce(BigDecimal.ZERO, BigDecimal::add)
-	    	);
-	    
-	    pedido.setValorTotal(pedido.getSubTotal().add(pedido.getTaxaFrete()));
-	    return pedido;
-	}
 
 	public Pedido atribuirPedidoAosItens(Pedido pedido) {
 	    pedido.getItens().forEach(item -> item.setPedido(pedido));
@@ -103,6 +91,7 @@ public class PedidoService {
 	                        pedido.getRestaurante().getId() 
 	                );
 	        item.setProduto(produto);
+	        item.setPrecoTotal();
 		});
 		return pedido;
 	}

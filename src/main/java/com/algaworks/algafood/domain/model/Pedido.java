@@ -64,4 +64,14 @@ public class Pedido {
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	private List<ItemPedido> itens;
 	
+	public void calcularValorTotal() {
+		this.setSubTotal(
+	    	this.getItens().stream()
+	        .map(item -> item.getPrecoTotal())
+	        .reduce(BigDecimal.ZERO, BigDecimal::add)
+	    	);
+	    
+	    this.setValorTotal(this.getSubTotal().add(this.getTaxaFrete()));
+	}
+	
 }
