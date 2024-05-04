@@ -55,9 +55,9 @@ public class PedidoController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public PedidoDTO save(@RequestBody @Valid PedidoVO pedidoVO){
-		Pedido pedido = disassemblerVO.converterVO(pedidoVO, Pedido.class);
-		return assemblerDTO.toDTO(pedidoService.save(pedido), PedidoDTO.class);
+	public PedidoResumoDTO save(@Valid @RequestBody PedidoVO pedidoVO){
+		Pedido pedido = disassemblerVO.toEntity(pedidoVO, Pedido.class);
+		return assemblerResumoDTO.toDTO(pedidoService.save(pedido), PedidoResumoDTO.class);
 	}
 //	
 //	@DeleteMapping("/{id}")

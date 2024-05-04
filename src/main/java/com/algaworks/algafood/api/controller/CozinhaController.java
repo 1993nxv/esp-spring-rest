@@ -60,7 +60,7 @@ public class CozinhaController {
 			@RequestBody 
 			@Valid
 			CozinhaVO cozinhaVO){
-		Cozinha cozinha = cozinhaVOdisassembler.converterVO(cozinhaVO, Cozinha.class);
+		Cozinha cozinha = cozinhaVOdisassembler.toEntity(cozinhaVO, Cozinha.class);
 		return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinha));
 	}
 	
@@ -68,7 +68,7 @@ public class CozinhaController {
 	public CozinhaDTO update(@PathVariable Long id, 
 				@RequestBody @Valid CozinhaVO cozinhaVO){		
 			Cozinha cozinhaAtual = cozinhaService.findById(id);
-			cozinhaVOdisassembler.copyToDomainObj(cozinhaVO, cozinhaAtual);
+			cozinhaVOdisassembler.copyToEntity(cozinhaVO, cozinhaAtual);
 			return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinhaAtual));	
 	}
 	

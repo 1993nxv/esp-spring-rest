@@ -43,16 +43,11 @@ public class PedidoService {
 
 	@Transactional
 	public Pedido save(Pedido pedido) {
-		usuarioService.findById(pedido.getCliente().getId());
-		pedido.setRestaurante(restauranteService.findById(pedido.getRestaurante().getId()));
-		pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
-		pedido = validaProdutos(pedido);
-		pedido.calcularValorTotal();
-		pedido = atribuirPedidoAosItens(pedido);
-		validaFormaDePagamento(pedido);
-		
+		pedido = validarPedido(pedido);
 		return pedidoRepository.save(pedido);
 	}
+
+
 	
 //	@Transactional
 //	public Grupo updatePartially(Long id, Grupo grupo) {
@@ -77,12 +72,17 @@ public class PedidoService {
 //	    return pedido;
 //	}
 	
-
-	public Pedido atribuirPedidoAosItens(Pedido pedido) {
-	    pedido.getItens().forEach(item -> item.setPedido(pedido));
-	    return pedido;
+	private Pedido validarPedido(Pedido pedido) {
+		pedido.setCliente(usuarioService.findById(pedido.getCliente().getId()));
+		pedido.setRestaurante(restauranteService.findById(pedido.getRestaurante().getId()));
+		pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
+		pedido = validaProdutos(pedido);
+		pedido.calcularValorTotal();
+		pedido = atribuirPedidoAosItens(pedido);
+		validaFormaDePagamento(pedido);
+		return pedido;
 	}
-	
+
 	public Pedido validaProdutos(Pedido pedido) {
 		pedido.getItens().forEach(item -> {
 	        Produto produto = produtoService
@@ -96,9 +96,13 @@ public class PedidoService {
 		return pedido;
 	}
 	
+	public Pedido atribuirPedidoAosItens(Pedido pedido) {
+	    pedido.getItens().forEach(item -> item.setPedido(pedido));
+	    return pedido;
+	}	
+	
 	public void validaFormaDePagamento(Pedido pedido) {
-		Set<FormaPagamento> formasPagamento = restauranteService.findById(
-				pedido.getRestaurante().getId())
+		Set<FormaPagamento> formasPagamento = restauranteService.findById(pedido.getRestaurante().getId())
 					.getFormasPagamento();
 		
 		Boolean containsFormaPamento =  formasPagamento.contains(pedido.getFormaPagamento());
@@ -110,7 +114,7 @@ public class PedidoService {
 					+ pedido.getRestaurante().getId());
 		}
 	}
-
+	
 }
 	
 
