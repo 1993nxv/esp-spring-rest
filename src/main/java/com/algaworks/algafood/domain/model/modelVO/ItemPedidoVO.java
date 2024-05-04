@@ -2,7 +2,6 @@ package com.algaworks.algafood.domain.model.modelVO;
 
 import java.math.BigDecimal;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -12,9 +11,8 @@ import lombok.Setter;
 @Setter
 public class ItemPedidoVO {
 	
-	@Valid
 	@NotNull
-	private ProdutoIdVO produto;
+	private String produtoId;
 	
 	@NotNull
 	private BigDecimal quantidade;
