@@ -3,6 +3,8 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +55,7 @@ public class PedidoController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public PedidoDTO save(@RequestBody PedidoVO pedidoVO){
+	public PedidoDTO save(@RequestBody @Valid PedidoVO pedidoVO){
 		Pedido pedido = disassemblerVO.converterVO(pedidoVO, Pedido.class);
 		return assemblerDTO.toDTO(pedidoService.save(pedido), PedidoDTO.class);
 	}

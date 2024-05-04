@@ -43,7 +43,7 @@ public class PedidoService {
 
 	@Transactional
 	public Pedido save(Pedido pedido) {
-		pedido.setCliente(usuarioService.findById(pedido.getCliente().getId()));
+		usuarioService.findById(pedido.getCliente().getId());
 		pedido.setRestaurante(restauranteService.findById(pedido.getRestaurante().getId()));
 		pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
 		pedido = validaProdutos(pedido);
