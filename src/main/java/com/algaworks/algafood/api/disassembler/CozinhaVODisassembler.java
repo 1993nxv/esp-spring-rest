@@ -8,7 +8,7 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.modelVO.CozinhaVO;
 
 @Component
-public class CozinhaVOdisassembler {
+public class CozinhaVODisassembler {
 	@Autowired
 	private ModelMapper modelMapper;
 	

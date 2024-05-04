@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.CozinhaDTOassembler;
-import com.algaworks.algafood.api.disassembler.CozinhaVOdisassembler;
+import com.algaworks.algafood.api.disassembler.VODisassembler;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.modelDTO.CozinhaDTO;
 import com.algaworks.algafood.domain.model.modelVO.CozinhaVO;
@@ -40,7 +40,7 @@ public class CozinhaController {
 	private CozinhaDTOassembler cozinhaDTOassembler;
 	
 	@Autowired
-	private CozinhaVOdisassembler cozinhaVOdisassembler;
+	private VODisassembler<CozinhaVO, Cozinha> cozinhaVOdisassembler;
 	
 	@GetMapping
 	public List<CozinhaDTO> findAll(){
@@ -60,7 +60,7 @@ public class CozinhaController {
 			@RequestBody 
 			@Valid
 			CozinhaVO cozinhaVO){
-		Cozinha cozinha = cozinhaVOdisassembler.cozinhaVOConverter(cozinhaVO);
+		Cozinha cozinha = cozinhaVOdisassembler.converterVO(cozinhaVO, Cozinha.class);
 		return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinha));
 	}
 	

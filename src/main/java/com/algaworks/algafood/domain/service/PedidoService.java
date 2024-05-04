@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.algaworks.algafood.domain.exception.FormaPagamentoNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.PedidoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.model.Pedido;
@@ -45,9 +46,11 @@ public class PedidoService {
 	public Pedido save(Pedido pedido) {
 		usuarioService.findById(pedido.getCliente().getId());
 		restauranteService.findById(pedido.getRestaurante().getId());
-		validaProdutos(pedido);
 		pedido = definirFrete(pedido);
+		pedido = validaProdutos(pedido);
 		pedido = calcularValorTotal(pedido);
+		pedido = atribuirPedidoAosItens(pedido);
+		validaFormaDePagamento(pedido);
 		
 		return pedidoRepository.save(pedido);
 	}
@@ -76,7 +79,8 @@ public class PedidoService {
 	}
 	
 	public Pedido calcularValorTotal(Pedido pedido) {
-	    pedido.setSubTotal(
+		pedido.getItens().forEach(item -> item.setPrecoTotal());
+		pedido.setSubTotal(
 	    	pedido.getItens().stream()
 	        .map(item -> item.getPrecoTotal())
 	        .reduce(BigDecimal.ZERO, BigDecimal::add)
@@ -91,21 +95,31 @@ public class PedidoService {
 	    return pedido;
 	}
 	
-	public void validaProdutos(Pedido pedido) {
+	public Pedido validaProdutos(Pedido pedido) {
 		pedido.getItens().forEach(item -> {
 	        Produto produto = produtoService
 	                .findProdutoByIdAndRestaurante(
 	                		item.getProduto().getId(),
 	                        pedido.getRestaurante().getId() 
 	                );
+	        item.setProduto(produto);
 		});
+		return pedido;
 	}
 	
-	public Boolean validaFormaDePagamento(Pedido pedido) {
+	public void validaFormaDePagamento(Pedido pedido) {
 		Set<FormaPagamento> formasPagamento = restauranteService.findById(
 				pedido.getRestaurante().getId())
 					.getFormasPagamento();
-		return formasPagamento.contains(pedido.getFormaPagamento());
+		
+		Boolean containsFormaPamento =  formasPagamento.contains(pedido.getFormaPagamento());
+		if(!containsFormaPamento) {
+			throw new FormaPagamentoNaoEncontradaException(
+					"Forma de pagamento " 
+					+ pedido.getFormaPagamento().getDescricao() 
+					+ " não disponivel para o restaurante de id: " 
+					+ pedido.getRestaurante().getId());
+		}
 	}
 
 }
