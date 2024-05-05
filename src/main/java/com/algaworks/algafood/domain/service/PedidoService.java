@@ -31,6 +31,9 @@ public class PedidoService {
 	@Autowired
 	private ProdutoService produtoService;
 	
+	@Autowired
+	private CidadeService cidadeService;
+	
 	
 	public List<Pedido> findAll(){
 		return pedidoRepository.findAll();
@@ -75,6 +78,7 @@ public class PedidoService {
 	private Pedido validarPedido(Pedido pedido) {
 		pedido.setCliente(usuarioService.findById(pedido.getCliente().getId()));
 		pedido.setRestaurante(restauranteService.findById(pedido.getRestaurante().getId()));
+		pedido.getEnderecoEntrega().setCidade(cidadeService.findById(pedido.getEnderecoEntrega().getCidade().getId()));
 		pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
 		pedido = validaProdutos(pedido);
 		pedido.calcularValorTotal();
