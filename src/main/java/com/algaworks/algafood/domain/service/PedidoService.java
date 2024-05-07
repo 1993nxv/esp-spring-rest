@@ -49,45 +49,20 @@ public class PedidoService {
 		pedido = validarPedido(pedido);
 		return pedidoRepository.save(pedido);
 	}
-
-
-	
-//	@Transactional
-//	public Grupo updatePartially(Long id, Grupo grupo) {
-//		findById(id);
-//		grupo.setId(id);
-//		return save(grupo);
-//	}
-//	
-//	@Transactional
-//	public void deleteById(Long id) {
-//		grupoRepository.findById(id);
-//		grupoRepository.flush();
-//		try {
-//			grupoRepository.deleteById(id);
-//		} catch (DataIntegrityViolationException e) {
-//			throw new EntidadeEmUsoException(String.format(MSG_GRUPO_EM_USO, id));
-//		}	
-//	}
-	
-//	public Pedido definirFrete(Pedido pedido) {
-//	    pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
-//	    return pedido;
-//	}
 	
 	private Pedido validarPedido(Pedido pedido) {
 		pedido.setCliente(usuarioService.findById(pedido.getCliente().getId()));
 		pedido.setRestaurante(restauranteService.findById(pedido.getRestaurante().getId()));
 		pedido.getEnderecoEntrega().setCidade(cidadeService.findById(pedido.getEnderecoEntrega().getCidade().getId()));
 		pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
-		pedido = validaProdutos(pedido);
+		pedido = validarProdutos(pedido);
 		pedido.calcularValorTotal();
 		pedido = atribuirPedidoAosItens(pedido);
 		validaFormaDePagamento(pedido);
 		return pedido;
 	}
 
-	public Pedido validaProdutos(Pedido pedido) {
+	public Pedido validarProdutos(Pedido pedido) {
 		pedido.getItens().forEach(item -> {
 	        Produto produto = produtoService
 	                .findProdutoByIdAndRestaurante(

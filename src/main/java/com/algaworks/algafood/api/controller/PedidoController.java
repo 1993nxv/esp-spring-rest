@@ -59,16 +59,5 @@ public class PedidoController {
 		Pedido pedido = disassemblerVO.toEntity(pedidoVO, Pedido.class);
 		return assemblerResumoDTO.toDTO(pedidoService.save(pedido), PedidoResumoDTO.class);
 	}
-//	
-//	@DeleteMapping("/{id}")
-//	public ResponseEntity<?> deleteById(@PathVariable Long id){
-//		try {			
-//			permissaoService.deleteById(id);
-//			return ResponseEntity.noContent().build();		
-//		} catch (EntidadeNaoEncontradaException e) {			
-//			return ResponseEntity.notFound().build();	
-//		} catch (EntidadeEmUsoException e) {		
-//			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//		}
-//	}
+
 }
