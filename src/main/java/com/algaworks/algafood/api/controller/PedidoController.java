@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,6 +22,7 @@ import com.algaworks.algafood.api.disassembler.VODisassembler;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.modelDTO.PedidoDTO;
 import com.algaworks.algafood.domain.model.modelDTO.PedidoResumoDTO;
+import com.algaworks.algafood.domain.model.modelDTO.PedidoStatusDTO;
 import com.algaworks.algafood.domain.model.modelVO.PedidoVO;
 import com.algaworks.algafood.domain.service.PedidoService;
 
@@ -40,24 +42,37 @@ public class PedidoController {
 	private DTOAssembler<Pedido, PedidoResumoDTO> assemblerResumoDTO;
 	
 	@Autowired 
+	private DTOAssembler<Pedido, PedidoStatusDTO> assemblerStatusDTO;
+	
+	@Autowired 
 	private VODisassembler<PedidoVO, Pedido> disassemblerVO;
 	
 	@GetMapping
 	public List<PedidoResumoDTO> findAll(){
-		return assemblerResumoDTO.toListDTO(pedidoService.findAll(), PedidoResumoDTO.class);
+		return assemblerResumoDTO.toListDTO(
+				pedidoService.findAll(), PedidoResumoDTO.class);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id){		
 		Pedido pedido = pedidoService.findById(id);
-		return ResponseEntity.ok(assemblerDTO.toDTO(pedido, PedidoDTO.class));						
+		return ResponseEntity.ok(
+				assemblerDTO.toDTO(pedido, PedidoDTO.class));						
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoResumoDTO save(@Valid @RequestBody PedidoVO pedidoVO){
 		Pedido pedido = disassemblerVO.toEntity(pedidoVO, Pedido.class);
-		return assemblerResumoDTO.toDTO(pedidoService.save(pedido), PedidoResumoDTO.class);
+		return assemblerResumoDTO.toDTO(
+				pedidoService.save(pedido), PedidoResumoDTO.class);
+	}
+	
+	@PutMapping("/{id}/status/confirmar-pedido")
+	@ResponseStatus(HttpStatus.OK)
+	public PedidoStatusDTO confirmarPedido(@Valid @PathVariable Long id) {
+		return assemblerStatusDTO.toDTO(
+				pedidoService.confirmarPedido(id), PedidoStatusDTO.class);
 	}
 
 }

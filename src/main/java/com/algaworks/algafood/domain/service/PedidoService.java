@@ -1,5 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 
@@ -8,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.FormaPagamentoNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.PedidoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Produto;
+import com.algaworks.algafood.domain.model.StatusPedido;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
 
 @Service
@@ -48,6 +52,25 @@ public class PedidoService {
 	public Pedido save(Pedido pedido) {
 		pedido = validarPedido(pedido);
 		return pedidoRepository.save(pedido);
+	}
+	
+	@Transactional
+	public Pedido confirmarPedido(Long id) {
+		Pedido pedido = findById(id);
+		if(pedido.getStatus() == StatusPedido.CRIADO) {
+			pedido.setStatus(StatusPedido.CONFIRMADO);
+			pedido.setDataConfirmacao(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+			return findById(id);
+		} else {
+			throw new NegocioException(
+					"Não é possível alterar o status do pedido com id: "
+					+ id
+					+ " do estatus: "
+					+ pedido.getStatus()
+					+ " para: "
+					+ StatusPedido.CONFIRMADO
+			);
+		}
 	}
 	
 	private Pedido validarPedido(Pedido pedido) {
@@ -93,7 +116,7 @@ public class PedidoService {
 					+ pedido.getRestaurante().getId());
 		}
 	}
-	
+
 }
 	
 
