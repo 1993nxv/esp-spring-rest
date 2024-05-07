@@ -57,22 +57,9 @@ public class PedidoService {
 	@Transactional
 	public Pedido confirmarPedido(Long id) {
 		Pedido pedido = findById(id);
-		if(pedido.getStatus() == StatusPedido.CRIADO) {
-			pedido.setStatus(StatusPedido.CONFIRMADO);
-			pedido.setDataConfirmacao(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-			return findById(id);
-		} else {
-			throw new NegocioException(
-					"Não é possível alterar o status do pedido com id: "
-					+ id
-					+ " do estatus: "
-					+ pedido.getStatus()
-					+ " para: "
-					+ StatusPedido.CONFIRMADO
-			);
-		}
+		return validarConfirmacaoPedido(id, pedido);
 	}
-	
+
 	private Pedido validarPedido(Pedido pedido) {
 		pedido.setCliente(usuarioService.findById(pedido.getCliente().getId()));
 		pedido.setRestaurante(restauranteService.findById(pedido.getRestaurante().getId()));
@@ -114,6 +101,23 @@ public class PedidoService {
 					+ pedido.getFormaPagamento().getDescricao() 
 					+ " não disponivel para o restaurante de id: " 
 					+ pedido.getRestaurante().getId());
+		}
+	}
+	
+	private Pedido validarConfirmacaoPedido(Long id, Pedido pedido) {
+		if(pedido.getStatus() == StatusPedido.CRIADO) {
+			pedido.setStatus(StatusPedido.CONFIRMADO);
+			pedido.setDataConfirmacao(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+			return findById(id);
+		} else {
+			throw new NegocioException(
+					"Não é possível alterar o status do pedido com id: "
+					+ id
+					+ " do estatus: "
+					+ pedido.getStatus()
+					+ " para: "
+					+ StatusPedido.CONFIRMADO
+			);
 		}
 	}
 
