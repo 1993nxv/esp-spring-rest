@@ -65,6 +65,12 @@ public class PedidoService {
 		Pedido pedido = findById(id);
 		return validarPedidoEntregue(id, pedido);
 	}
+	
+	@Transactional
+	public Pedido cancelarPedido(Long id) {
+		Pedido pedido = findById(id);
+		return validarCancelarPedido(id, pedido);
+	}
 
 	private Pedido validarPedido(Pedido pedido) {
 		pedido.setCliente(usuarioService.findById(pedido.getCliente().getId()));
@@ -143,6 +149,24 @@ public class PedidoService {
 					+ pedido.getStatus()
 					+ " para: "
 					+ StatusPedido.ENTREGUE
+			);
+		}
+	}
+	
+	private Pedido validarCancelarPedido(Long id, Pedido pedido) {
+		if(pedido.getStatus() != StatusPedido.ENTREGUE) {
+			pedido.setStatus(StatusPedido.CANCELADO);
+			pedido.setDataCancelamento(
+					OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+			return findById(id);
+		} else {
+			throw new NegocioException(
+					"Não é possível alterar o status do pedido com id: "
+					+ id
+					+ " de: "
+					+ pedido.getStatus()
+					+ " para: "
+					+ StatusPedido.CANCELADO
 			);
 		}
 	}
