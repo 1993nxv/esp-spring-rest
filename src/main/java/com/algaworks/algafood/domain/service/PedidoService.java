@@ -59,6 +59,12 @@ public class PedidoService {
 		Pedido pedido = findById(id);
 		return validarConfirmacaoPedido(id, pedido);
 	}
+	
+	@Transactional
+	public Pedido pedidoEntregue(Long id) {
+		Pedido pedido = findById(id);
+		return validarPedidoEntregue(id, pedido);
+	}
 
 	private Pedido validarPedido(Pedido pedido) {
 		pedido.setCliente(usuarioService.findById(pedido.getCliente().getId()));
@@ -91,10 +97,11 @@ public class PedidoService {
 	}	
 	
 	public void validaFormaDePagamento(Pedido pedido) {
-		Set<FormaPagamento> formasPagamento = restauranteService.findById(pedido.getRestaurante().getId())
-					.getFormasPagamento();
+		Set<FormaPagamento> formasPagamento = restauranteService.findById(
+				pedido.getRestaurante().getId()).getFormasPagamento();
 		
-		Boolean containsFormaPamento =  formasPagamento.contains(pedido.getFormaPagamento());
+		Boolean containsFormaPamento =  formasPagamento.contains(
+				pedido.getFormaPagamento());
 		if(!containsFormaPamento) {
 			throw new FormaPagamentoNaoEncontradaException(
 					"Forma de pagamento " 
@@ -107,16 +114,35 @@ public class PedidoService {
 	private Pedido validarConfirmacaoPedido(Long id, Pedido pedido) {
 		if(pedido.getStatus() == StatusPedido.CRIADO) {
 			pedido.setStatus(StatusPedido.CONFIRMADO);
-			pedido.setDataConfirmacao(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+			pedido.setDataConfirmacao(
+					OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 			return findById(id);
 		} else {
 			throw new NegocioException(
 					"Não é possível alterar o status do pedido com id: "
 					+ id
-					+ " do estatus: "
+					+ " do status: "
 					+ pedido.getStatus()
 					+ " para: "
 					+ StatusPedido.CONFIRMADO
+			);
+		}
+	}
+	
+	private Pedido validarPedidoEntregue(Long id, Pedido pedido) {
+		if(pedido.getStatus() == StatusPedido.CONFIRMADO) {
+			pedido.setStatus(StatusPedido.ENTREGUE);
+			pedido.setDataConfirmacao(
+					OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+			return findById(id);
+		} else {
+			throw new NegocioException(
+					"Não é possível alterar o status do pedido com id: "
+					+ id
+					+ " do status: "
+					+ pedido.getStatus()
+					+ " para: "
+					+ StatusPedido.ENTREGUE
 			);
 		}
 	}

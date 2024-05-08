@@ -74,5 +74,12 @@ public class PedidoController {
 		return assemblerStatusDTO.toDTO(
 				pedidoService.confirmarPedido(id), PedidoStatusDTO.class);
 	}
+	
+	@PutMapping("/{id}/status/pedido-entregue")
+	@ResponseStatus(HttpStatus.OK)
+	public PedidoStatusDTO pedidoEntregue(@Valid @PathVariable Long id) {
+		return assemblerStatusDTO.toDTO(
+				pedidoService.confirmarPedido(id), PedidoStatusDTO.class);
+	}
 
 }
