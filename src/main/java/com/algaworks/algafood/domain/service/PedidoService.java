@@ -121,7 +121,7 @@ public class PedidoService {
 			throw new NegocioException(
 					"Não é possível alterar o status do pedido com id: "
 					+ id
-					+ " do status: "
+					+ " de: "
 					+ pedido.getStatus()
 					+ " para: "
 					+ StatusPedido.CONFIRMADO
@@ -132,14 +132,14 @@ public class PedidoService {
 	private Pedido validarPedidoEntregue(Long id, Pedido pedido) {
 		if(pedido.getStatus() == StatusPedido.CONFIRMADO) {
 			pedido.setStatus(StatusPedido.ENTREGUE);
-			pedido.setDataConfirmacao(
+			pedido.setDataEntrega(
 					OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 			return findById(id);
 		} else {
 			throw new NegocioException(
 					"Não é possível alterar o status do pedido com id: "
 					+ id
-					+ " do status: "
+					+ " de: "
 					+ pedido.getStatus()
 					+ " para: "
 					+ StatusPedido.ENTREGUE
