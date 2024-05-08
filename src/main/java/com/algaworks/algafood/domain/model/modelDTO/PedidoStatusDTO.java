@@ -18,7 +18,7 @@ public class PedidoStatusDTO {
 	
 	private OffsetDateTime dataCriacao;
 	private OffsetDateTime dataConfirmacao;
-	private OffsetDateTime dataCancelamento;
 	private OffsetDateTime dataEntrega;
+	private OffsetDateTime dataCancelamento;
 	
 }
