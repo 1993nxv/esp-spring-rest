@@ -2,6 +2,7 @@ package com.algaworks.algafood.domain.model;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -19,6 +20,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.algaworks.algafood.domain.exception.NegocioException;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -76,4 +79,33 @@ public class Pedido {
 	    this.setValorTotal(this.getSubTotal().add(this.getTaxaFrete()));
 	}
 	
+	public void confirmado() {
+		setStatus(StatusPedido.CONFIRMADO);
+		setDataConfirmacao(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+	}
+	
+	public void entregue() {
+		setStatus(StatusPedido.ENTREGUE);
+		setDataEntrega(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+	}
+	
+	public void cancelado() {
+		setStatus(StatusPedido.CANCELADO);
+		setDataCancelamento(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+	}
+	
+	private void setStatus(StatusPedido novoStatus) {
+		if(getStatus().naoPodeAlterarPara(novoStatus)){
+			this.status = novoStatus;
+		}else {
+			throw new NegocioException(
+				"Não é possível alterar o status do pedido com id: "
+				+ id
+				+ " de: "
+				+ this.getStatus().getDescricao()
+				+ " para: "
+				+ novoStatus.getDescricao()
+			);
+		}
+	}
 }
