@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class PedidoStatusDTO {
 	
-	private Long id;
+	private String codigo;
 	
 	private StatusPedido status;
 

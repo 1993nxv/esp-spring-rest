@@ -1,7 +1,5 @@
 package com.algaworks.algafood.domain.service;
 
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 
@@ -10,20 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.FormaPagamentoNaoEncontradaException;
-import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.PedidoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Produto;
-import com.algaworks.algafood.domain.model.StatusPedido;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
-
-import ch.qos.logback.core.status.Status;
 
 @Service
 public class PedidoService {
-	
-	//private static final String MSG_PEDIDO_EM_USO = "Pedido com id:%d não pode ser removido, pois está em uso.";
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;
@@ -45,9 +37,9 @@ public class PedidoService {
 		return pedidoRepository.findAll();
 	}
 	
-	public Pedido findById(Long id){
-			return pedidoRepository.findById(id)
-					.orElseThrow(() -> new PedidoNaoEncontradoException(id));	
+	public Pedido findByCodigo(String codigo){
+			return pedidoRepository.findByCodigo(codigo)
+					.orElseThrow(() -> new PedidoNaoEncontradoException(codigo));	
 	}
 
 	@Transactional
@@ -57,24 +49,24 @@ public class PedidoService {
 	}
 	
 	@Transactional
-	public Pedido confirmarPedido(Long id) {
-		Pedido pedido = findById(id);
+	public Pedido confirmarPedido(String codigo) {
+		Pedido pedido = findByCodigo(codigo);
 		pedido.confirmado();
-		return findById(id);
+		return findByCodigo(codigo);
 	}
 	
 	@Transactional
-	public Pedido pedidoEntregue(Long id) {
-		Pedido pedido = findById(id);
+	public Pedido pedidoEntregue(String codigo) {
+		Pedido pedido = findByCodigo(codigo);
 		pedido.entregue();
-		return findById(id);
+		return findByCodigo(codigo);
 	}
 	
 	@Transactional
-	public Pedido cancelarPedido(Long id) {
-		Pedido pedido = findById(id);
+	public Pedido cancelarPedido(String codigo) {
+		Pedido pedido = findByCodigo(codigo);
 		pedido.cancelado();
-		return findById(id);
+		return findByCodigo(codigo);
 	}
 
 	private Pedido validarPedido(Pedido pedido) {

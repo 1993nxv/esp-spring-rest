@@ -54,9 +54,9 @@ public class PedidoController {
 				pedidoService.findAll(), PedidoResumoDTO.class);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<?> findById(@PathVariable Long id){		
-		Pedido pedido = pedidoService.findById(id);
+	@GetMapping("/{pedidoCodigo}")
+	public ResponseEntity<?> findByCodigo(@PathVariable String pedidoCodigo){		
+		Pedido pedido = pedidoService.findByCodigo(pedidoCodigo);
 		return ResponseEntity.ok(
 				assemblerDTO.toDTO(pedido, PedidoDTO.class));						
 	}
@@ -69,25 +69,25 @@ public class PedidoController {
 				pedidoService.save(pedido), PedidoResumoDTO.class);
 	}
 	
-	@PutMapping("/{id}/status/confirmar-pedido")
+	@PutMapping("/{pedidoCodigo}/status/confirmar-pedido")
 	@ResponseStatus(HttpStatus.OK)
-	public PedidoStatusDTO confirmarPedido(@Valid @PathVariable Long id) {
+	public PedidoStatusDTO confirmarPedido(@Valid @PathVariable String pedidoCodigo) {
 		return assemblerStatusDTO.toDTO(
-				pedidoService.confirmarPedido(id), PedidoStatusDTO.class);
+				pedidoService.confirmarPedido(pedidoCodigo), PedidoStatusDTO.class);
 	}
 	
-	@PutMapping("/{id}/status/pedido-entregue")
+	@PutMapping("/{pedidoCodigo}/status/pedido-entregue")
 	@ResponseStatus(HttpStatus.OK)
-	public PedidoStatusDTO pedidoEntregue(@Valid @PathVariable Long id) {
+	public PedidoStatusDTO pedidoEntregue(@Valid @PathVariable String pedidoCodigo) {
 		return assemblerStatusDTO.toDTO(
-				pedidoService.pedidoEntregue(id), PedidoStatusDTO.class);
+				pedidoService.pedidoEntregue(pedidoCodigo), PedidoStatusDTO.class);
 	}
 	
-	@DeleteMapping("/{id}/status/cancelar-pedido")
+	@DeleteMapping("/{pedidoCodigo}/status/cancelar-pedido")
 	@ResponseStatus(HttpStatus.OK)
-	public PedidoStatusDTO canelarPedido(@Valid @PathVariable Long id) {
+	public PedidoStatusDTO canelarPedido(@Valid @PathVariable String pedidoCodigo) {
 		return assemblerStatusDTO.toDTO(
-				pedidoService.cancelarPedido(id), PedidoStatusDTO.class);
+				pedidoService.cancelarPedido(pedidoCodigo), PedidoStatusDTO.class);
 	}
 
 }

@@ -17,6 +17,18 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 			+ "join fetch r.cozinha")
 	List<Pedido> findAll();
 	
+//	@Query("select p from Pedido p "
+//		    + "join fetch p.cliente "
+//		    + "join fetch p.restaurante r "
+//		    + "join fetch r.cozinha "
+//		    + "join fetch r.endereco e "
+//		    + "join fetch e.cidade c "
+//		    + "join fetch c.estado "
+//		    + "join fetch p.itens " 
+//		    + "join fetch p.formaPagamento "
+//		    + "where p.id = :id")
+//	Optional<Pedido> findById(@Param("id") Long id);
+	
 	@Query("select p from Pedido p "
 		    + "join fetch p.cliente "
 		    + "join fetch p.restaurante r "
@@ -26,6 +38,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 		    + "join fetch c.estado "
 		    + "join fetch p.itens " 
 		    + "join fetch p.formaPagamento "
-		    + "where p.id = :id")
-	Optional<Pedido> findById(@Param("id") Long id);
+		    + "where p.codigo = :codigo")
+	Optional<Pedido> findByCodigo(@Param("codigo") String codigo);
 }
