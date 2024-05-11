@@ -30,7 +30,9 @@ import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
 import com.algaworks.algafood.domain.model.modelVO.RestauranteVO;
+import com.algaworks.algafood.domain.model.view.RestauranteView;
 import com.algaworks.algafood.domain.service.RestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -44,6 +46,7 @@ public class RestauranteController {
 	@Autowired
 	RestauranteVOdisassembler restauranteVOdisassembler;
 	
+	@JsonView(RestauranteView.Resumo.class)
 	@GetMapping
 	public List<RestauranteDTO> findAll(){
 		return restauranteDTOAssembler.toListDTO(restauranteService.findAll());
