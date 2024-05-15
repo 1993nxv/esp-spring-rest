@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +29,11 @@ import com.algaworks.algafood.domain.model.modelDTO.PedidoResumoDTO;
 import com.algaworks.algafood.domain.model.modelDTO.PedidoStatusDTO;
 import com.algaworks.algafood.domain.model.modelVO.PedidoVO;
 import com.algaworks.algafood.domain.service.PedidoService;
+import com.fasterxml.jackson.databind.ser.BeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
+import groovyjarjarantlr4.v4.runtime.atn.SemanticContext.AND;
 
 
 
@@ -52,6 +60,28 @@ public class PedidoController {
 	public List<PedidoResumoDTO> findAll(){
 		return assemblerResumoDTO.toListDTO(
 				pedidoService.findAll(), PedidoResumoDTO.class);
+	}
+	
+	@GetMapping("/projecao")
+	public MappingJacksonValue findAllWhitProjecao(@RequestParam(required = false) String campos){
+		List<Pedido> pedidos = pedidoService.findAll();
+		List<PedidoResumoDTO> pedidosDTO = assemblerResumoDTO.toListDTO(pedidos, PedidoResumoDTO.class);
+		
+		MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosDTO);
+		
+		SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+		filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
+		
+		if(StringUtils.isNotBlank(campos)) {
+			filterProvider.addFilter("pedidoFilter",
+					SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(","))
+				);
+		}
+		
+		pedidosWrapper.setFilters(filterProvider);
+		
+		return pedidosWrapper;
+		
 	}
 	
 	@GetMapping("/{pedidoCodigo}")

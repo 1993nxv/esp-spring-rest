@@ -12,19 +12,10 @@ import lombok.Setter;
 @Setter
 public class RestauranteDTO {
 	
-	@JsonView(RestauranteView.Resumo.class)
 	private Long id;
-	
-	@JsonView(RestauranteView.Resumo.class)
 	private String nome;
-	
-	@JsonView(RestauranteView.Resumo.class)
 	private BigDecimal taxaFrete;
-	
-	@JsonView(RestauranteView.Resumo.class)
 	private CozinhaDTO cozinha;
-	
-	@JsonView(RestauranteView.Resumo.class)
 	private Boolean aberto;
 	private Boolean ativo;
 	private EnderecoDTO endereco;
