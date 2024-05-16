@@ -29,11 +29,8 @@ import com.algaworks.algafood.domain.model.modelDTO.PedidoResumoDTO;
 import com.algaworks.algafood.domain.model.modelDTO.PedidoStatusDTO;
 import com.algaworks.algafood.domain.model.modelVO.PedidoVO;
 import com.algaworks.algafood.domain.service.PedidoService;
-import com.fasterxml.jackson.databind.ser.BeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-
-import groovyjarjarantlr4.v4.runtime.atn.SemanticContext.AND;
 
 
 

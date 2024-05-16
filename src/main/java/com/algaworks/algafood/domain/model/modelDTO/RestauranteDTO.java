@@ -1,8 +1,6 @@
 package com.algaworks.algafood.domain.model.modelDTO;
 
 import java.math.BigDecimal;
-
-import com.algaworks.algafood.domain.model.view.RestauranteView;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Getter;
