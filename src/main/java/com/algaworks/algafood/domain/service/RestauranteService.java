@@ -31,19 +31,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class RestauranteService {
 	
 	@Autowired
-	RestauranteRepository restauranteRepository;
+	private RestauranteRepository restauranteRepository;
 	
 	@Autowired
-	CozinhaService cozinhaService;
+	private CozinhaService cozinhaService;
 	
 	@Autowired
-	CidadeService cidadeService;
+	private CidadeService cidadeService;
 	
 	@Autowired
-	FormaPagamentoService formaPagamentoService;
+	private FormaPagamentoService formaPagamentoService;
 	
 	@Autowired
-	ProdutoService produtoService;
+	private ProdutoService produtoService;
 	
 	@Autowired
 	private SmartValidator validator;
