@@ -47,8 +47,7 @@ public class RestauranteProdutoController {
 	@GetMapping("/{produtoId}")
 	public ProdutoDTO findById(@PathVariable Long produtoId, @PathVariable Long restauranteId) {
 		return produtoDTOAssembler.produtoDTOConverter(
-				produtoService.findProdutoByIdAndRestaurante(produtoId, restauranteId)
-				);
+				produtoService.findProdutoByIdAndRestaurante(produtoId, restauranteId));
 	}
 	
 	@PostMapping
