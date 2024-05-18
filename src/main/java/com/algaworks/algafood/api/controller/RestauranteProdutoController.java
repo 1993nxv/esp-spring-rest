@@ -27,9 +27,6 @@ import com.algaworks.algafood.domain.service.RestauranteService;
 public class RestauranteProdutoController {
 	
 	@Autowired
-	private RestauranteService restauranteService;
-	
-	@Autowired
 	private ProdutoService produtoService;
 	
 	@Autowired
@@ -39,8 +36,8 @@ public class RestauranteProdutoController {
 	private ProdutoVOdisassembler produtoVOdisassembler;
 	
 	@GetMapping
-	public List<ProdutoDTO> findAll(@PathVariable Long restauranteId){
-		return produtoDTOAssembler.toListDTO(restauranteService.findById(restauranteId).getProdutos());
+	public List<ProdutoDTO> findAllAtivos(@PathVariable Long restauranteId){
+		return produtoDTOAssembler.toListDTO(produtoService.findAtivosByRestaurante(restauranteId));
 	}
 	
 	

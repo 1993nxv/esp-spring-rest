@@ -42,6 +42,11 @@ public class ProdutoService {
 		return produtoRepository.save(produto);
 	}
 	
+	public List<Produto> findAtivosByRestaurante(Long restauranteId) {
+		Restaurante restaurante = restauranteService.findById(restauranteId);
+		return produtoRepository.findAtivosByRestaurante(restaurante);
+	}
+	
 	public Produto findProdutoByIdAndRestaurante(Long produtoId, Long restauranteId) {
 		Restaurante restaurante = restauranteService.findById(restauranteId);
 		return produtoRepository.findProdutoByIdAndRestaurante(produtoId, restaurante)
