@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +28,9 @@ import com.algaworks.algafood.domain.service.RestauranteService;
 public class RestauranteProdutoController {
 	
 	@Autowired
+	private RestauranteService restauranteService;
+	
+	@Autowired
 	private ProdutoService produtoService;
 	
 	@Autowired
@@ -36,8 +40,15 @@ public class RestauranteProdutoController {
 	private ProdutoVOdisassembler produtoVOdisassembler;
 	
 	@GetMapping
-	public List<ProdutoDTO> findAllAtivos(@PathVariable Long restauranteId){
-		return produtoDTOAssembler.toListDTO(produtoService.findAtivosByRestaurante(restauranteId));
+	public List<ProdutoDTO> findAll(
+			@PathVariable Long restauranteId, 
+			@RequestParam(required = false) boolean incluirInativos){
+		if(incluirInativos) {
+			return produtoDTOAssembler.toListDTO(restauranteService.findById(restauranteId).getProdutos());
+		} else {
+			return produtoDTOAssembler.toListDTO(produtoService.findAtivosByRestaurante(restauranteId));
+		}
+		
 	}
 	
 	
