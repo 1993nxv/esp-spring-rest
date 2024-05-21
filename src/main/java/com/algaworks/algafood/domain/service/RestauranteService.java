@@ -43,9 +43,6 @@ public class RestauranteService {
 	private FormaPagamentoService formaPagamentoService;
 	
 	@Autowired
-	private ProdutoService produtoService;
-	
-	@Autowired
 	private SmartValidator validator;
 	
 	public List<Restaurante> findAll(){
