@@ -25,7 +25,10 @@ import com.algaworks.algafood.domain.model.modelDTO.PedidoDTO;
 import com.algaworks.algafood.domain.model.modelDTO.PedidoResumoDTO;
 import com.algaworks.algafood.domain.model.modelDTO.PedidoStatusDTO;
 import com.algaworks.algafood.domain.model.modelVO.PedidoVO;
+import com.algaworks.algafood.domain.repository.PedidoRepository;
+import com.algaworks.algafood.domain.repository.filter.PedidoFilter;
 import com.algaworks.algafood.domain.service.PedidoService;
+import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
 
 
 
@@ -35,6 +38,9 @@ public class PedidoController {
 		
 	@Autowired
 	private PedidoService pedidoService;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
 	
 	@Autowired 
 	private DTOAssembler<Pedido, PedidoDTO> assemblerDTO;
@@ -49,9 +55,9 @@ public class PedidoController {
 	private VODisassembler<PedidoVO, Pedido> disassemblerVO;
 	
 	@GetMapping
-	public List<PedidoResumoDTO> findAll(){
+	public List<PedidoResumoDTO> findAll(PedidoFilter filter){
 		return assemblerResumoDTO.toListDTO(
-				pedidoService.findAll(), PedidoResumoDTO.class);
+				pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter)), PedidoResumoDTO.class);
 	}
 	
 //	@GetMapping("/projecao")
