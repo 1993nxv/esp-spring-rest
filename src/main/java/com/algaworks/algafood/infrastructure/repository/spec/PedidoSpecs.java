@@ -20,6 +20,19 @@ public class PedidoSpecs {
 				predicates.add(builder.equal(root.get("cliente"), filter.getClienteId()));
 			}
 			
+			if(filter.getRestauranteId() != null) {
+				predicates.add(builder.equal(root.get("restaurante"), filter.getRestauranteId()));
+			}
+			
+			if(filter.getDataCriacaoInicio() != null) {
+				predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), filter.getDataCriacaoInicio()));
+			}
+			
+			if(filter.getDataCriacaoFim() != null) {
+				predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), filter.getDataCriacaoFim()));
+			}
+			
+			
 			return builder.and(predicates.toArray(new Predicate[0]));
 		};
 			
