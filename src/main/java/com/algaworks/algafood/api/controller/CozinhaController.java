@@ -7,6 +7,9 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,8 +46,14 @@ public class CozinhaController {
 	private VODisassembler<CozinhaVO, Cozinha> cozinhaVOdisassembler;
 	
 	@GetMapping
-	public List<CozinhaDTO> findAll(){
-		return cozinhaDTOassembler.toListDTO(cozinhaService.findAll());
+	public Page<CozinhaDTO> findAll(Pageable pageable){
+		Page<Cozinha> cozinhasPage = cozinhaService.findAll(pageable);
+		List<CozinhaDTO> cozinhasDTO = cozinhaDTOassembler.toListDTO(cozinhasPage.getContent());
+		Page<CozinhaDTO> pageCozinhasDTO = new PageImpl<>(
+				cozinhasDTO, 
+				pageable, 
+				cozinhasPage.getTotalElements());
+		return pageCozinhasDTO;
 	}
 	
 	@GetMapping("/{id}")

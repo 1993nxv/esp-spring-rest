@@ -103,8 +103,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 							.name(name)
 							.userMessage(message)
 							.build();
-				})
-				.collect(Collectors.toList());
+				}).collect(Collectors.toList());
 		return problemObjects;
 	}
 	
