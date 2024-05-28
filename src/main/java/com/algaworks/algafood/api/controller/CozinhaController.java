@@ -93,8 +93,8 @@ public class CozinhaController {
 	}
 	
 	@GetMapping("/nomelike")
-	public List<Cozinha> findByNomeContaining(@RequestParam("nome") String nome) {
-		return cozinhaService.findByNomeContaining(nome);
+	public List<Cozinha> findByNomeContaining(@RequestParam("nome") String nome, Pageable pageable) {
+		return cozinhaService.findByNomeContaining(nome, pageable).getContent();
 	}
 	
 	@GetMapping("/primeiro")

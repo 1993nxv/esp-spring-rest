@@ -53,8 +53,8 @@ public class CozinhaService {
 		return cozinhaRepository.findByNome(nome);	
 	}
 	
-	public List<Cozinha> findByNomeContaining(String nome) {	
-		return cozinhaRepository.findByNomeContaining(nome);
+	public Page<Cozinha> findByNomeContaining(String nome, Pageable pageable) {	
+		return cozinhaRepository.findByNomeContaining(nome, pageable);
 	}
 
 	public Optional<Cozinha> buscarPrimeiro() {	
