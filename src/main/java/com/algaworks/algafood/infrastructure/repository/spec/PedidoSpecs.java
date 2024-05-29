@@ -16,9 +16,10 @@ public class PedidoSpecs {
 		return (root, query, builder) -> {
 			
 			// Resolvendo problema n+1
-			
-			root.fetch("restaurante").fetch("cozinha");
-			root.fetch("cliente");
+			if(Pedido.class.equals(query.getResultType())) {
+				root.fetch("restaurante").fetch("cozinha");
+				root.fetch("cliente");
+			}
 			
 			var predicates = new ArrayList<Predicate>();
 			

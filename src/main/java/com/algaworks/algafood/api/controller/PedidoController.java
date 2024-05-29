@@ -6,6 +6,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,9 +59,15 @@ public class PedidoController {
 	private VODisassembler<PedidoVO, Pedido> disassemblerVO;
 	
 	@GetMapping
-	public List<PedidoResumoDTO> findAll(PedidoFilter filter){
-		return assemblerResumoDTO.toListDTO(
-				pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter)), PedidoResumoDTO.class);
+	public Page<PedidoResumoDTO> findAll(@PageableDefault(size = 2) Pageable pageable, PedidoFilter filter){
+		Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
+		List<PedidoResumoDTO> pedidosResumoDTO = assemblerResumoDTO.toListDTO(pedidosPage.getContent(), PedidoResumoDTO.class);
+		Page<PedidoResumoDTO> pedidosResumoDTOpage = new PageImpl<>(
+				pedidosResumoDTO,
+				pageable,
+				pedidosPage.getTotalElements()
+				);
+		return pedidosResumoDTOpage;
 	}
 	
 //	@GetMapping("/projecao")
