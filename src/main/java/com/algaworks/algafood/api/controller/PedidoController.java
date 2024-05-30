@@ -59,14 +59,13 @@ public class PedidoController {
 	private VODisassembler<PedidoVO, Pedido> disassemblerVO;
 	
 	@GetMapping
-	public Page<PedidoResumoDTO> findAll(@PageableDefault(size = 2) Pageable pageable, PedidoFilter filter){
+	public Page<PedidoResumoDTO> findAll(@PageableDefault(size = 5) Pageable pageable, PedidoFilter filter){
 		Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
 		List<PedidoResumoDTO> pedidosResumoDTO = assemblerResumoDTO.toListDTO(pedidosPage.getContent(), PedidoResumoDTO.class);
 		Page<PedidoResumoDTO> pedidosResumoDTOpage = new PageImpl<>(
 				pedidosResumoDTO,
 				pageable,
-				pedidosPage.getTotalElements()
-				);
+				pedidosPage.getTotalElements());
 		return pedidosResumoDTOpage;
 	}
 	
