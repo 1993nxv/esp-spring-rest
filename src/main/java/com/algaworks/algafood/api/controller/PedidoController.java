@@ -134,7 +134,7 @@ public class PedidoController {
 		var mapemento = ImmutableMap.of(
 			"codigo", "codigo",
 			"nomeCliente", "cliente.nome",
-			"restaurante.nome", "restaurente.nome",
+			"restaurante.nome", "restaurante.nome",
 			"valorTotal", "valorTotal"
 		    );
 		

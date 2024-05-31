@@ -11,6 +11,7 @@ public class PageableTranslator {
 	
 	public static Pageable translate(Pageable pageable, Map<String, String> fieldsMapping) {
 		var orders = pageable.getSort().stream()
+			.filter(order -> fieldsMapping.containsKey(order.getProperty()))
 			.map(order -> new Sort.Order(
 					order.getDirection(), 
 					fieldsMapping.get(order.getProperty())
