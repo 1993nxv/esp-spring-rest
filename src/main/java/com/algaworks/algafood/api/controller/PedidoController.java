@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.DTOAssembler;
 import com.algaworks.algafood.api.disassembler.VODisassembler;
+import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.modelDTO.PedidoDTO;
 import com.algaworks.algafood.domain.model.modelDTO.PedidoResumoDTO;
@@ -33,6 +34,7 @@ import com.algaworks.algafood.domain.repository.PedidoRepository;
 import com.algaworks.algafood.domain.repository.filter.PedidoFilter;
 import com.algaworks.algafood.domain.service.PedidoService;
 import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
+import com.google.common.collect.ImmutableMap;
 
 
 
@@ -59,7 +61,8 @@ public class PedidoController {
 	private VODisassembler<PedidoVO, Pedido> disassemblerVO;
 	
 	@GetMapping
-	public Page<PedidoResumoDTO> findAll(@PageableDefault(size = 5) Pageable pageable, PedidoFilter filter){
+	public Page<PedidoResumoDTO> findAll(@PageableDefault(size = 2) Pageable pageable, PedidoFilter filter){
+		pageable = traduzirPageable(pageable);
 		Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
 		List<PedidoResumoDTO> pedidosResumoDTO = assemblerResumoDTO.toListDTO(pedidosPage.getContent(), PedidoResumoDTO.class);
 		Page<PedidoResumoDTO> pedidosResumoDTOpage = new PageImpl<>(
@@ -125,6 +128,17 @@ public class PedidoController {
 	public PedidoStatusDTO canelarPedido(@Valid @PathVariable String pedidoCodigo) {
 		return assemblerStatusDTO.toDTO(
 				pedidoService.cancelarPedido(pedidoCodigo), PedidoStatusDTO.class);
+	}
+	
+	private Pageable traduzirPageable(Pageable pageable) {
+		var mapemento = ImmutableMap.of(
+			"codigo", "codigo",
+			"nomeCliente", "cliente.nome",
+			"restaurante.nome", "restaurente.nome",
+			"valorTotal", "valorTotal"
+		    );
+		
+		return PageableTranslator.translate(pageable, mapemento);
 	}
 
 }

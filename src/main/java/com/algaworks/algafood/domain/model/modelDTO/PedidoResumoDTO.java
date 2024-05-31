@@ -14,7 +14,7 @@ public class PedidoResumoDTO {
 	
 	private String codigo;
 	
-	private UsuarioPedidoDTO cliente;
+	private String nomeCliente;
 	private BigDecimal subTotal;
 	private BigDecimal taxaFrete;
 	private BigDecimal valorTotal;
