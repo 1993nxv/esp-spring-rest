@@ -23,7 +23,8 @@ public class VendasDiariasController {
 	
 	
 	@GetMapping("/vendas-diarias")
-	public List<VendaDiariaDTO> consultarVendasDiarias(VendaDiariaFilter filter){			
+	public List<VendaDiariaDTO> consultarVendasDiarias(VendaDiariaFilter filter){
+			
 			return vendaQueryServiceImpl.consultarVendasDiarias(filter);
 	}
 		
