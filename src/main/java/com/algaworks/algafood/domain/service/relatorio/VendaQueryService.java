@@ -8,6 +8,6 @@ import com.algaworks.algafood.domain.model.relatorioDTO.VendaDiariaDTO;
 
 public interface VendaQueryService {
 	
-	List<VendaDiariaDTO> consultarVendasDiarias(VendaDiariaFilter filter);
+	List<VendaDiariaDTO> consultarVendasDiarias(VendaDiariaFilter filter, String timeOffset);
 	
 }

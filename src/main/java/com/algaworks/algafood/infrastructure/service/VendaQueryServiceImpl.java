@@ -33,16 +33,21 @@ public class VendaQueryServiceImpl implements VendaQueryService{
 //	group by date(p.data_criacao)
 	
     @Override
-    public List<VendaDiariaDTO> consultarVendasDiarias(VendaDiariaFilter filter) {
+    public List<VendaDiariaDTO> consultarVendasDiarias(VendaDiariaFilter filter, String timeOffset) {
     	
         var builder = manager.getCriteriaBuilder();
         var query = builder.createQuery(VendaDiariaDTO.class);
         var root = query.from(Pedido.class);
-
+        
+        var functionConvertTzDataCriacao = builder.function(
+        		"convert_tz", Date.class, root.get("dataCriacao"),
+        		builder.literal("+00:00"), builder.literal(timeOffset)
+        );
+        
         var functionDateDataCriacao = builder.function(
             "date",
             Date.class,
-            root.get("dataCriacao")
+            functionConvertTzDataCriacao
         );
 
         var selection = builder.construct(
@@ -55,7 +60,6 @@ public class VendaQueryServiceImpl implements VendaQueryService{
         query.select(selection);
         query.groupBy(functionDateDataCriacao);
 
-        // Aplicar os filtros
         var predicates = new ArrayList<Predicate>();
         if (filter.getRestauranteId() != null) {
         	restauranteService.findById(filter.getRestauranteId());
@@ -68,14 +72,12 @@ public class VendaQueryServiceImpl implements VendaQueryService{
             predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), filter.getDataCriacaoFim()));
         }
         
-        // Adicionar filtro para status "CONFIRMADO" ou "ENTREGUE"
         var statusPredicate = builder.or(
             builder.equal(root.get("status"), StatusPedido.CONFIRMADO),
             builder.equal(root.get("status"), StatusPedido.ENTREGUE)
         );
         
         predicates.add(statusPredicate);
-        
         query.where(predicates.toArray(new Predicate[0]));
 
         return manager.createQuery(query).getResultList();

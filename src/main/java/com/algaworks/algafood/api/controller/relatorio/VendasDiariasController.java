@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
@@ -23,9 +24,10 @@ public class VendasDiariasController {
 	
 	
 	@GetMapping("/vendas-diarias")
-	public List<VendaDiariaDTO> consultarVendasDiarias(VendaDiariaFilter filter){
-			
-			return vendaQueryServiceImpl.consultarVendasDiarias(filter);
+	public List<VendaDiariaDTO> consultarVendasDiarias(
+			VendaDiariaFilter filter, 
+			@RequestParam(required = false) String timeOffset){
+			return vendaQueryServiceImpl.consultarVendasDiarias(filter, timeOffset);
 	}
 		
 }
