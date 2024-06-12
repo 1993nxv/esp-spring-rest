@@ -7,7 +7,7 @@
 	</queryString>
 	<field name="data" class="java.util.Date"/>
 	<field name="totalVendas" class="java.lang.Long"/>
-	<field name="totalFaturado" class="java.lang.String"/>
+	<field name="totalFaturado" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -80,6 +80,7 @@
 			</textField>
 			<textField>
 				<reportElement x="310" y="0" width="100" height="20" uuid="e45daa1d-f875-4b04-a5e9-8241d02dd94a"/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{totalFaturado}]]></textFieldExpression>
 			</textField>
 		</band>
