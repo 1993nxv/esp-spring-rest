@@ -8,9 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+
+import com.algaworks.algafood.domain.model.modelVO.FotoProdutoVO;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
@@ -20,17 +20,18 @@ public class RestauranteProdutoFotoController {
 	public void atualizarFoto(
 			@PathVariable Long restauranteId,
 			@PathVariable Long produtoId,
-			@RequestParam MultipartFile arquivo) {
+			FotoProdutoVO fotoProdutoVO) {
 		
-		var nomeArquivo = UUID.randomUUID().toString() + "_" + arquivo.getOriginalFilename();
+		var nomeArquivo = UUID.randomUUID().toString() + "_" + fotoProdutoVO.getArquivo().getOriginalFilename();
 		
 		var arquivoFoto = Path.of("/Users/Delmondes/Desktop/catalogo", nomeArquivo);
 		
 		System.out.println(arquivoFoto);
-		System.out.println(arquivo.getContentType());
+		System.out.println(fotoProdutoVO.getArquivo().getContentType());
+		System.out.println(fotoProdutoVO.getDescricao());
 		
 		try {
-			arquivo.transferTo(arquivoFoto);
+			fotoProdutoVO.getArquivo().transferTo(arquivoFoto);
 			System.out.println("Arquivo salvo com sucesso!");
 		} catch (IllegalStateException | IOException e) {
 			e.printStackTrace();
