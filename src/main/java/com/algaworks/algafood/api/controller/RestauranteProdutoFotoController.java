@@ -1,8 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.UUID;
+
+import javax.validation.Valid;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,7 @@ public class RestauranteProdutoFotoController {
 	public void atualizarFoto(
 			@PathVariable Long restauranteId,
 			@PathVariable Long produtoId,
-			FotoProdutoVO fotoProdutoVO) {
+			@Valid FotoProdutoVO fotoProdutoVO) {
 		
 		var nomeArquivo = UUID.randomUUID().toString() + "_" + fotoProdutoVO.getArquivo().getOriginalFilename();
 		
@@ -33,8 +34,8 @@ public class RestauranteProdutoFotoController {
 		try {
 			fotoProdutoVO.getArquivo().transferTo(arquivoFoto);
 			System.out.println("Arquivo salvo com sucesso!");
-		} catch (IllegalStateException | IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new RuntimeException();
 		}
 	}
 }
