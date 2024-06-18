@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
@@ -15,6 +16,7 @@ public class FotoProduto {
 	
 	@EqualsAndHashCode.Include
 	@Id
+	@Column(name = "produto_id")
 	private Long id;
 	
 	@OneToOne
