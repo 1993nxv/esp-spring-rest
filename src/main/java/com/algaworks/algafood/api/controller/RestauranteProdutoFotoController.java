@@ -1,41 +1,51 @@
 package com.algaworks.algafood.api.controller;
 
-import java.nio.file.Path;
-import java.util.UUID;
-
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.algaworks.algafood.api.assembler.DTOAssembler;
+import com.algaworks.algafood.domain.model.FotoProduto;
+import com.algaworks.algafood.domain.model.modelDTO.FotoProdutoDTO;
 import com.algaworks.algafood.domain.model.modelVO.FotoProdutoVO;
+import com.algaworks.algafood.domain.service.FotoProdutoService;
+import com.algaworks.algafood.domain.service.ProdutoService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
 public class RestauranteProdutoFotoController {
 	
+	@Autowired
+	private FotoProdutoService fotoProdutoService;
+	
+	@Autowired
+	private ProdutoService produtoService;
+	
+	@Autowired
+	private DTOAssembler<FotoProduto, FotoProdutoDTO> assemblerDTO;
+	
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public void atualizarFoto(
+	public FotoProdutoDTO atualizarFoto(
 			@PathVariable Long restauranteId,
 			@PathVariable Long produtoId,
 			@Valid FotoProdutoVO fotoProdutoVO) {
 		
-		var nomeArquivo = UUID.randomUUID().toString() + "_" + fotoProdutoVO.getArquivo().getOriginalFilename();
+		MultipartFile file = fotoProdutoVO.getArquivo();
 		
-		var arquivoFoto = Path.of("/Users/Delmondes/Desktop/catalogo", nomeArquivo);
+		FotoProduto foto = new FotoProduto();
+		foto.setContentType(file.getContentType());
+		foto.setDescricao(fotoProdutoVO.getDescricao());
+		foto.setId(produtoId);
+		foto.setProduto(produtoService.findProdutoByIdAndRestaurante(produtoId, restauranteId));
+		foto.setNomeArquivo(file.getOriginalFilename());
+		foto.setTamanho(file.getSize());
 		
-		System.out.println(arquivoFoto);
-		System.out.println(fotoProdutoVO.getArquivo().getContentType());
-		System.out.println(fotoProdutoVO.getDescricao());
-		
-		try {
-			fotoProdutoVO.getArquivo().transferTo(arquivoFoto);
-			System.out.println("Arquivo salvo com sucesso!");
-		} catch (Exception e) {
-			throw new RuntimeException();
-		}
+		return assemblerDTO.toDTO(fotoProdutoService.save(foto), FotoProdutoDTO.class);
 	}
 }
