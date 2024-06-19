@@ -22,7 +22,7 @@ public class FotoProdutoService {
 		
 		Optional<FotoProduto> fotoExistente = produtoRepository.findFotoById(restauranteId, produtoId);
 		if(fotoExistente.isPresent()) {
-			
+			produtoRepository.delete(foto);
 		}
 		return produtoRepository.save(foto);
 	}
