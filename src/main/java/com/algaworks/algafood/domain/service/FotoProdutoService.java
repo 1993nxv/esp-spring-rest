@@ -1,5 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,13 @@ public class FotoProdutoService {
 	
 	@Transactional
 	public FotoProduto save(FotoProduto foto) {
+		Long restauranteId = foto.getRestaurnateId();
+		Long produtoId = foto.getProdutoId();
+		
+		Optional<FotoProduto> fotoExistente = produtoRepository.findFotoById(restauranteId, produtoId);
+		if(fotoExistente.isPresent()) {
+			
+		}
 		return produtoRepository.save(foto);
 	}
 	
