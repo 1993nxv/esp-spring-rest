@@ -13,8 +13,13 @@ public interface FotoStorageService {
 	void armazenar(NovaFoto novaFoto);
 	void excluir(FotoProduto foto);
 	
-	default String gerarNovoNomeArquivo(String nomeOriginal) {
-		return UUID.randomUUID().toString() + "_" + nomeOriginal;
+	default String gerarNovoNomeArquivo(String nomeOriginal, int tamanhoUUID) {
+		String novoNome = UUID.randomUUID()
+				.toString()
+				.replace("-", "")
+				.substring(0, tamanhoUUID) 
+				+ "_" + nomeOriginal;
+		return novoNome;
 	}
 	
 	@Builder

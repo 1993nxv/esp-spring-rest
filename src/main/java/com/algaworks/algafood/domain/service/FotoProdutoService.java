@@ -31,7 +31,7 @@ public class FotoProdutoService {
 			fotoStorageService.excluir(fotoExistente.get());
 		}
 		
-		foto.setNomeArquivo(fotoStorageService.gerarNovoNomeArquivo(foto.getNomeArquivo()));
+		foto.setNomeArquivo(fotoStorageService.gerarNovoNomeArquivo(foto.getNomeArquivo(), 16));
 		foto = produtoRepository.save(foto);
 		produtoRepository.flush();
 		
