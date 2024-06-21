@@ -1,5 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,7 @@ public class RestauranteProdutoFotoController {
 	public FotoProdutoDTO atualizarFoto(
 			@PathVariable Long restauranteId,
 			@PathVariable Long produtoId,
-			@Valid FotoProdutoVO fotoProdutoVO) {
+			@Valid FotoProdutoVO fotoProdutoVO) throws IOException {
 		
 		MultipartFile file = fotoProdutoVO.getArquivo();
 		
@@ -46,6 +48,6 @@ public class RestauranteProdutoFotoController {
 		foto.setNomeArquivo(file.getOriginalFilename());
 		foto.setTamanho(file.getSize());
 		
-		return assemblerDTO.toDTO(fotoProdutoService.save(foto), FotoProdutoDTO.class);
+		return assemblerDTO.toDTO(fotoProdutoService.save(foto, file.getInputStream()), FotoProdutoDTO.class);
 	}
 }
