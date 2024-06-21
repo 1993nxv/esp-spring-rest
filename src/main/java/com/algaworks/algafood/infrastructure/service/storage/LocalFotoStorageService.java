@@ -32,7 +32,7 @@ public class LocalFotoStorageService implements FotoStorageService {
 		
 		try {
 			Path arquivoPath = getArquivoPath(foto.getNomeArquivo());
-			Files.delete(arquivoPath);
+			Files.deleteIfExists(arquivoPath);
 		} catch (Exception e) {
 			throw new StorageException("Não foi possivel excluir o arquivo", e.getCause());
 		}
