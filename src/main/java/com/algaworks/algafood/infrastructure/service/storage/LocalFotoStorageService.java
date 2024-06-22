@@ -1,5 +1,7 @@
 package com.algaworks.algafood.infrastructure.service.storage;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -35,6 +37,15 @@ public class LocalFotoStorageService implements FotoStorageService {
 			Files.deleteIfExists(arquivoPath);
 		} catch (Exception e) {
 			throw new StorageException("Não foi possivel excluir o arquivo", e.getCause());
+		}
+	}
+	
+	@Override
+	public InputStream recuperar(Path localArquivo) {
+		try {
+			return Files.newInputStream(localArquivo);
+		} catch (Exception e) {
+			throw new StorageException("Não foi possivel recuperar o arquivo", e.getCause());
 		}
 	}
 	

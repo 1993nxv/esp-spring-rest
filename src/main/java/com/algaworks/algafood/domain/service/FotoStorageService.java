@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.UUID;
 
 import com.algaworks.algafood.domain.model.FotoProduto;
@@ -12,6 +13,7 @@ public interface FotoStorageService {
 	
 	void armazenar(NovaFoto novaFoto);
 	void excluir(FotoProduto foto);
+	InputStream recuperar(Path localArquivo);
 	
 	default String gerarNovoNomeArquivo(String nomeOriginal, int tamanhoUUID) {
 		String novoNome = UUID.randomUUID()
