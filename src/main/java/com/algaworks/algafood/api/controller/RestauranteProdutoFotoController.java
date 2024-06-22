@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,4 +51,13 @@ public class RestauranteProdutoFotoController {
 		
 		return assemblerDTO.toDTO(fotoProdutoService.save(foto, file.getInputStream()), FotoProdutoDTO.class);
 	}
+	
+	@GetMapping
+	public FotoProdutoDTO findFotoById(
+			@PathVariable Long restauranteId,
+			@PathVariable Long produtoId
+			) {
+		return assemblerDTO.toDTO(fotoProdutoService.findFotoById(restauranteId, produtoId), FotoProdutoDTO.class);
+	}
+	
 }
