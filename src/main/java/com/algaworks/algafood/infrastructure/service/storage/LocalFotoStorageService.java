@@ -19,7 +19,6 @@ public class LocalFotoStorageService implements FotoStorageService {
 	
 	@Override
 	public void armazenar(NovaFoto novaFoto) {
-		
 		try {
 			Path arquivoPath = getArquivoPath(novaFoto.getNomeArquivo());
 			FileCopyUtils.copy(novaFoto.getInputStream(), Files.newOutputStream(arquivoPath));
@@ -30,7 +29,6 @@ public class LocalFotoStorageService implements FotoStorageService {
 	
 	@Override
 	public void excluir(FotoProduto foto) {
-		
 		try {
 			Path arquivoPath = getArquivoPath(foto.getNomeArquivo());
 			Files.deleteIfExists(arquivoPath);
@@ -48,7 +46,7 @@ public class LocalFotoStorageService implements FotoStorageService {
 		}
 	}
 	
-	private Path getArquivoPath(String nomeArquivo) {
+	public Path getArquivoPath(String nomeArquivo) {
 		return diretorioFotos.resolve(Path.of(nomeArquivo));
 	}
 

@@ -1,16 +1,19 @@
 package com.algaworks.algafood.domain.service;
 
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.algaworks.algafood.domain.exception.FotoNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.repository.ProdutoRepository;
 import com.algaworks.algafood.domain.service.FotoStorageService.NovaFoto;
+import com.algaworks.algafood.infrastructure.service.storage.LocalFotoStorageService;
 
 @Service
 public class FotoProdutoService {
@@ -19,7 +22,8 @@ public class FotoProdutoService {
 	private ProdutoRepository produtoRepository;
 	
 	@Autowired
-	private FotoStorageService fotoStorageService;
+	private LocalFotoStorageService fotoStorageService;
+	
 	
 	@Transactional
 	public FotoProduto save(FotoProduto foto, InputStream dadosArquivo) {
@@ -49,6 +53,15 @@ public class FotoProdutoService {
 	public FotoProduto findFotoById(Long restauranteId, Long produtoId) {
 		return produtoRepository.findFotoById(restauranteId, produtoId)
 				.orElseThrow(() -> new FotoNaoEncontradaException(produtoId));
+	}
+	
+	public InputStream servirFoto(
+			@PathVariable Long restauranteId,
+			@PathVariable Long produtoId
+			) {
+		FotoProduto fotoProduto = findFotoById(restauranteId, produtoId);
+		Path path = fotoStorageService.getArquivoPath(fotoProduto.getNomeArquivo());
+		return fotoStorageService.recuperar(path);
 	}
 	
 }

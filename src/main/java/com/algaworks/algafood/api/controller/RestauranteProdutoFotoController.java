@@ -5,7 +5,9 @@ import java.io.IOException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.algaworks.algafood.api.assembler.DTOAssembler;
+import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.model.modelDTO.FotoProdutoDTO;
 import com.algaworks.algafood.domain.model.modelVO.FotoProdutoVO;
@@ -52,12 +55,29 @@ public class RestauranteProdutoFotoController {
 		return assemblerDTO.toDTO(fotoProdutoService.save(foto, file.getInputStream()), FotoProdutoDTO.class);
 	}
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public FotoProdutoDTO findFotoById(
 			@PathVariable Long restauranteId,
 			@PathVariable Long produtoId
 			) {
 		return assemblerDTO.toDTO(fotoProdutoService.findFotoById(restauranteId, produtoId), FotoProdutoDTO.class);
+	}
+	
+	@GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+	public ResponseEntity<InputStreamResource> servirFoto(
+			@PathVariable Long restauranteId,
+			@PathVariable Long produtoId
+			) {
+		try {
+			InputStreamResource foto = new InputStreamResource(fotoProdutoService.servirFoto(restauranteId, produtoId));
+			return ResponseEntity
+					.ok()
+					.contentType(MediaType.IMAGE_JPEG)
+					.body(foto);
+		} catch (EntidadeNaoEncontradaException e) {
+			return ResponseEntity.notFound().build();
+		}
+		
 	}
 	
 }
