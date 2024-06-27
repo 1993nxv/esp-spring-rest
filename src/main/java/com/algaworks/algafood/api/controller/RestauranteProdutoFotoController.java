@@ -63,13 +63,18 @@ public class RestauranteProdutoFotoController {
 		return assemblerDTO.toDTO(fotoProdutoService.findFotoById(restauranteId, produtoId), FotoProdutoDTO.class);
 	}
 	
-	@GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+	@GetMapping
 	public ResponseEntity<InputStreamResource> servirFoto(
 			@PathVariable Long restauranteId,
 			@PathVariable Long produtoId
 			) {
 		try {
+			FotoProduto fotoProduto = fotoProdutoService.findFotoById(restauranteId, produtoId);
+			
+			verificarCompatibilidadeMediaType(MediaType.parseMediaType(fotoProduto.getContentType()));
+			
 			InputStreamResource foto = new InputStreamResource(fotoProdutoService.servirFoto(restauranteId, produtoId));
+			
 			return ResponseEntity
 					.ok()
 					.contentType(MediaType.IMAGE_JPEG)
@@ -77,6 +82,10 @@ public class RestauranteProdutoFotoController {
 		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
 		}
+		
+	}
+
+	private void verificarCompatibilidadeMediaType(MediaType mediaType) {
 		
 	}
 	
