@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -71,7 +72,7 @@ public class RestauranteProdutoFotoController {
 			@PathVariable Long restauranteId,
 			@PathVariable Long produtoId,
 			@RequestHeader(name = "accept") String acceptHeader
-			) {
+			) throws HttpMediaTypeNotAcceptableException {
 		try {
 			FotoProduto fotoProduto = fotoProdutoService.findFotoById(restauranteId, produtoId);
 			InputStreamResource foto = new InputStreamResource(fotoProdutoService.servirFoto(restauranteId, produtoId));
@@ -83,7 +84,7 @@ public class RestauranteProdutoFotoController {
 			
 			return ResponseEntity
 					.ok()
-					.contentType(MediaType.IMAGE_JPEG)
+					.contentType(mediaTypeFoto)
 					.body(foto);
 		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
@@ -91,12 +92,13 @@ public class RestauranteProdutoFotoController {
 		
 	}
 
-	private void verificarCompatibilidadeMediaType(MediaType mediaType, List<MediaType> acceptMediaTypes) {
-		boolean iscompativel = acceptMediaTypes.stream().anyMatch(
-				acceptedMediaType -> acceptedMediaType.isCompatibleWith(mediaType)
-				);
+	private void verificarCompatibilidadeMediaType(MediaType mediaType, List<MediaType> acceptMediaTypes) throws HttpMediaTypeNotAcceptableException {
+		boolean iscompativel = acceptMediaTypes.stream()
+				.anyMatch(acceptedMediaType -> acceptedMediaType.isCompatibleWith(mediaType)
+		);
+		
 		if(!iscompativel) {
-			throw new MediaTypeIncompativel("O tipo de mídia solicitado é incompativel com o arquivo solicitado");
+			throw new HttpMediaTypeNotAcceptableException(acceptMediaTypes);
 		}
 	}
 	
