@@ -10,6 +10,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.algaworks.algafood.api.assembler.DTOAssembler;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.algaworks.algafood.domain.exception.MediaTypeIncompativel;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.model.modelDTO.FotoProdutoDTO;
 import com.algaworks.algafood.domain.model.modelVO.FotoProdutoVO;
@@ -90,6 +90,12 @@ public class RestauranteProdutoFotoController {
 			return ResponseEntity.notFound().build();
 		}
 		
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<?> delete(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+		fotoProdutoService.delete(restauranteId, produtoId);
+		return ResponseEntity.ok().build();
 	}
 
 	private void verificarCompatibilidadeMediaType(MediaType mediaType, List<MediaType> acceptMediaTypes) throws HttpMediaTypeNotAcceptableException {

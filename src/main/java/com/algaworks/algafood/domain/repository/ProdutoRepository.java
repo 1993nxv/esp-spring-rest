@@ -23,4 +23,5 @@ public interface ProdutoRepository extends CustomJpaRepository<Produto, Long>, P
 	        + "and p.id = :produtoId")
 	Optional<FotoProduto> findFotoById(Long restauranteId, Long produtoId);
 	
+	void deleteFotoProduto(FotoProduto fotoProduto);
 }
