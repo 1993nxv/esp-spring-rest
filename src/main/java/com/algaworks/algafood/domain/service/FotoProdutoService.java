@@ -63,10 +63,11 @@ public class FotoProdutoService {
 		Path path = fotoStorageService.getArquivoPath(fotoProduto.getNomeArquivo());
 		return fotoStorageService.recuperar(path);
 	}
-
+	
+	@Transactional
 	public void delete(Long restauranteId, Long produtoId) {
 		FotoProduto fotoProduto = findFotoById(restauranteId, produtoId);
-		produtoRepository.deleteFotoProduto(fotoProduto);
+		produtoRepository.deleteFotoById(fotoProduto.getId());
 		fotoStorageService.excluir(fotoProduto);
 	}
 	

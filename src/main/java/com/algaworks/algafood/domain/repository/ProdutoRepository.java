@@ -3,7 +3,9 @@ package com.algaworks.algafood.domain.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.model.Produto;
@@ -23,5 +25,8 @@ public interface ProdutoRepository extends CustomJpaRepository<Produto, Long>, P
 	        + "and p.id = :produtoId")
 	Optional<FotoProduto> findFotoById(Long restauranteId, Long produtoId);
 	
-	void deleteFotoProduto(FotoProduto fotoProduto);
+	
+	@Modifying
+	@Query("DELETE FROM FotoProduto f WHERE f.produto.id = :produtoId")
+	void deleteFotoById(@Param("produtoId") Long produtoId);
 }
