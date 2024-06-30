@@ -95,7 +95,7 @@ public class RestauranteProdutoFotoController {
 	@DeleteMapping
 	public ResponseEntity<?> delete(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		fotoProdutoService.delete(restauranteId, produtoId);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 
 	private void verificarCompatibilidadeMediaType(MediaType mediaType, List<MediaType> acceptMediaTypes) throws HttpMediaTypeNotAcceptableException {
