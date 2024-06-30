@@ -68,6 +68,7 @@ public class FotoProdutoService {
 	public void delete(Long restauranteId, Long produtoId) {
 		FotoProduto fotoProduto = findFotoById(restauranteId, produtoId);
 		produtoRepository.deleteFotoById(fotoProduto.getId());
+		produtoRepository.flush();
 		fotoStorageService.excluir(fotoProduto);
 	}
 	
