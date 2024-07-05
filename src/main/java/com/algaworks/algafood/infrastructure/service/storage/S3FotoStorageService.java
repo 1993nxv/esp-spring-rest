@@ -12,19 +12,16 @@ public class S3FotoStorageService implements FotoStorageService {
 
 	@Override
 	public void armazenar(NovaFoto novaFoto) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void excluir(FotoProduto foto) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public InputStream recuperar(Path localArquivo) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
