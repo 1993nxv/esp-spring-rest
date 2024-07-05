@@ -31,6 +31,5 @@ public class StorageProperties {
 		private String bucket;
 		private String regiao;
 		private String diretorioFotos;
-//		Resolvendo erro git
 	}
 }
