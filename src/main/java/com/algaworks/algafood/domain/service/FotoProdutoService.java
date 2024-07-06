@@ -14,6 +14,7 @@ import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.repository.ProdutoRepository;
 import com.algaworks.algafood.domain.service.FotoStorageService.NovaFoto;
 import com.algaworks.algafood.infrastructure.service.storage.LocalFotoStorageService;
+import com.algaworks.algafood.infrastructure.service.storage.S3FotoStorageService;
 
 @Service
 public class FotoProdutoService {
@@ -24,6 +25,9 @@ public class FotoProdutoService {
 	@Autowired
 	private LocalFotoStorageService fotoStorageService;
 	
+	@Autowired
+	private S3FotoStorageService s3FotoStorageService;
+	
 	
 	@Transactional
 	public FotoProduto save(FotoProduto foto, InputStream dadosArquivo) {
@@ -33,7 +37,7 @@ public class FotoProdutoService {
 		Optional<FotoProduto> fotoExistente = produtoRepository.findFotoById(restauranteId, produtoId);
 		if(fotoExistente.isPresent()) {
 			produtoRepository.delete(foto);
-			fotoStorageService.excluir(fotoExistente.get());
+//			fotoStorageService.excluir(fotoExistente.get());
 		}
 		
 		foto.setNomeArquivo(fotoStorageService.gerarNovoNomeArquivo(foto.getNomeArquivo(), 16));
@@ -45,7 +49,7 @@ public class FotoProdutoService {
 				.inputStream(dadosArquivo)
 				.build();
 		
-		fotoStorageService.armazenar(novaFoto);
+		s3FotoStorageService.armazenar(novaFoto);
 		
 		return foto;
 	}
