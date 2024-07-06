@@ -10,6 +10,7 @@ import com.algaworks.algafood.core.storage.StorageProperties;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.service.FotoStorageService;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
@@ -27,13 +28,15 @@ public class S3FotoStorageService implements FotoStorageService {
 		try {
 			var caminhoArquivo = getCaminhoArquivo(novaFoto.getNomeArquivo());
 			var objectMetaData = new ObjectMetadata();
+			objectMetaData.setContentType(novaFoto.getContentType());
+			objectMetaData.setContentLength(novaFoto.getTamanho());
 			
 			var putObjectRequest = new PutObjectRequest(
 					storageProperties.getS3().getBucket(),
 					caminhoArquivo,
 					novaFoto.getInputStream(),
-					objectMetaData
-			);
+					objectMetaData)
+				.withCannedAcl(CannedAccessControlList.PublicRead);
 			
 			amazonS3.putObject(putObjectRequest);
 		} catch (Exception e) {

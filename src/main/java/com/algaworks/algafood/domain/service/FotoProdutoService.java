@@ -47,6 +47,8 @@ public class FotoProdutoService {
 		NovaFoto novaFoto = NovaFoto.builder()
 				.nomeArquivo(foto.getNomeArquivo())
 				.inputStream(dadosArquivo)
+				.contentType(foto.getContentType())
+				.tamanho(foto.getTamanho())
 				.build();
 		
 		s3FotoStorageService.armazenar(novaFoto);
