@@ -34,4 +34,5 @@ public class StorageProperties {
 		private Regions regiao;
 		private String diretorioFotos;
 	}
+	
 }

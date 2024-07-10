@@ -68,7 +68,7 @@ public class FotoProdutoService {
 			) {
 		FotoProduto fotoProduto = findFotoById(restauranteId, produtoId);
 		Path path = fotoStorageService.getArquivoPath(fotoProduto.getNomeArquivo());
-		return fotoStorageService.recuperar(path);
+		return fotoStorageService.recuperar(path).getInputStream();
 	}
 	
 	@Transactional

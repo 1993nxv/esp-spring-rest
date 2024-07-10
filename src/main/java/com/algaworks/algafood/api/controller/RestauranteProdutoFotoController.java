@@ -68,7 +68,7 @@ public class RestauranteProdutoFotoController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<InputStreamResource> servirFoto(
+	public ResponseEntity<?> servirFoto(
 			@PathVariable Long restauranteId,
 			@PathVariable Long produtoId,
 			@RequestHeader(name = "accept") String acceptHeader
