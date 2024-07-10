@@ -37,6 +37,7 @@ public class FotoProdutoService {
 		Optional<FotoProduto> fotoExistente = produtoRepository.findFotoById(restauranteId, produtoId);
 		if(fotoExistente.isPresent()) {
 			produtoRepository.delete(foto);
+			s3FotoStorageService.excluir(foto);
 //			fotoStorageService.excluir(fotoExistente.get());
 		}
 		
@@ -75,7 +76,7 @@ public class FotoProdutoService {
 		FotoProduto fotoProduto = findFotoById(restauranteId, produtoId);
 		produtoRepository.deleteFotoById(fotoProduto.getId());
 		produtoRepository.flush();
-		fotoStorageService.excluir(fotoProduto);
+		s3FotoStorageService.excluir(fotoProduto);
 	}
 	
 }
