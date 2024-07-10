@@ -7,6 +7,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -25,7 +27,9 @@ import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.model.modelDTO.FotoProdutoDTO;
 import com.algaworks.algafood.domain.model.modelVO.FotoProdutoVO;
 import com.algaworks.algafood.domain.service.FotoProdutoService;
+import com.algaworks.algafood.domain.service.FotoStorageService.FotoRecuperada;
 import com.algaworks.algafood.domain.service.ProdutoService;
+import com.algaworks.algafood.infrastructure.service.storage.S3FotoStorageService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
@@ -74,18 +78,30 @@ public class RestauranteProdutoFotoController {
 			@RequestHeader(name = "accept") String acceptHeader
 			) throws HttpMediaTypeNotAcceptableException {
 		try {
-			FotoProduto fotoProduto = fotoProdutoService.findFotoById(restauranteId, produtoId);
-			InputStreamResource foto = new InputStreamResource(fotoProdutoService.servirFoto(restauranteId, produtoId));
 			
-			MediaType mediaTypeFoto = MediaType.parseMediaType(fotoProduto.getContentType());
-			List<MediaType> acceptMediaTypes = MediaType.parseMediaTypes(acceptHeader);
+			FotoRecuperada fotoRecuperada = fotoProdutoService.servirFoto(restauranteId, produtoId);
 			
-			verificarCompatibilidadeMediaType(mediaTypeFoto, acceptMediaTypes);
-			
-			return ResponseEntity
-					.ok()
-					.contentType(mediaTypeFoto)
-					.body(foto);
+			if(fotoRecuperada.temUrl()) {
+				return ResponseEntity
+						.status(HttpStatus.FOUND)
+						.header(HttpHeaders.LOCATION, fotoRecuperada.getUrl())
+						.build();
+			} else {
+				
+				FotoProduto fotoProduto = fotoProdutoService.findFotoById(restauranteId, produtoId);
+				InputStreamResource foto = new InputStreamResource(fotoProdutoService.servirFoto(restauranteId, produtoId).getInputStream());
+				
+				MediaType mediaTypeFoto = MediaType.parseMediaType(fotoProduto.getContentType());
+				List<MediaType> acceptMediaTypes = MediaType.parseMediaTypes(acceptHeader);
+				
+				verificarCompatibilidadeMediaType(mediaTypeFoto, acceptMediaTypes);
+				
+				return ResponseEntity
+						.ok()
+						.contentType(mediaTypeFoto)
+						.body(foto);
+			}
+
 		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
 		}
