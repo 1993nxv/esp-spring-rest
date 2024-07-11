@@ -87,15 +87,11 @@ public class RestauranteProdutoFotoController {
 						.header(HttpHeaders.LOCATION, fotoRecuperada.getUrl())
 						.build();
 			} else {
-				
 				FotoProduto fotoProduto = fotoProdutoService.findFotoById(restauranteId, produtoId);
 				InputStreamResource foto = new InputStreamResource(fotoProdutoService.servirFoto(restauranteId, produtoId).getInputStream());
-				
 				MediaType mediaTypeFoto = MediaType.parseMediaType(fotoProduto.getContentType());
 				List<MediaType> acceptMediaTypes = MediaType.parseMediaTypes(acceptHeader);
-				
 				verificarCompatibilidadeMediaType(mediaTypeFoto, acceptMediaTypes);
-				
 				return ResponseEntity
 						.ok()
 						.contentType(mediaTypeFoto)
