@@ -32,6 +32,7 @@ public class FotoProdutoService {
 		if(fotoExistente.isPresent()) {
 			produtoRepository.delete(foto);
 			fotoStorageService.excluir(foto);
+			System.out.println("teste");
 		}
 		
 		foto.setNomeArquivo(fotoStorageService.gerarNovoNomeArquivo(foto.getNomeArquivo(), 16));
