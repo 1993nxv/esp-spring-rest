@@ -29,7 +29,6 @@ import com.algaworks.algafood.domain.model.modelVO.FotoProdutoVO;
 import com.algaworks.algafood.domain.service.FotoProdutoService;
 import com.algaworks.algafood.domain.service.FotoStorageService.FotoRecuperada;
 import com.algaworks.algafood.domain.service.ProdutoService;
-import com.algaworks.algafood.infrastructure.service.storage.S3FotoStorageService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")

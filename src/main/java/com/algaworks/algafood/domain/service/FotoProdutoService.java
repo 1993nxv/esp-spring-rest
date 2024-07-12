@@ -13,8 +13,6 @@ import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.repository.ProdutoRepository;
 import com.algaworks.algafood.domain.service.FotoStorageService.FotoRecuperada;
 import com.algaworks.algafood.domain.service.FotoStorageService.NovaFoto;
-import com.algaworks.algafood.infrastructure.service.storage.LocalFotoStorageService;
-import com.algaworks.algafood.infrastructure.service.storage.S3FotoStorageService;
 
 @Service
 public class FotoProdutoService {
@@ -23,12 +21,8 @@ public class FotoProdutoService {
 	private ProdutoRepository produtoRepository;
 	
 	@Autowired
-	private LocalFotoStorageService fotoStorageService;
-	
-	@Autowired
-	private S3FotoStorageService s3FotoStorageService;
-	
-	
+	private FotoStorageService fotoStorageService;
+			
 	@Transactional
 	public FotoProduto save(FotoProduto foto, InputStream dadosArquivo) {
 		Long restauranteId = foto.getRestaurnateId();
@@ -37,8 +31,7 @@ public class FotoProdutoService {
 		Optional<FotoProduto> fotoExistente = produtoRepository.findFotoById(restauranteId, produtoId);
 		if(fotoExistente.isPresent()) {
 			produtoRepository.delete(foto);
-			s3FotoStorageService.excluir(foto);
-//			fotoStorageService.excluir(fotoExistente.get());
+			fotoStorageService.excluir(foto);
 		}
 		
 		foto.setNomeArquivo(fotoStorageService.gerarNovoNomeArquivo(foto.getNomeArquivo(), 16));
@@ -52,7 +45,7 @@ public class FotoProdutoService {
 				.tamanho(foto.getTamanho())
 				.build();
 		
-		s3FotoStorageService.armazenar(novaFoto);
+		fotoStorageService.armazenar(novaFoto);
 		
 		return foto;
 	}
@@ -68,8 +61,7 @@ public class FotoProdutoService {
 			) {
 		FotoProduto fotoProduto = findFotoById(restauranteId, produtoId);
 		String nomeArquivo = fotoProduto.getNomeArquivo();
-		return s3FotoStorageService.recuperar(nomeArquivo);
-//		return fotoStorageService.recuperar(nomeArquivo).getInputSream();
+		return fotoStorageService.recuperar(nomeArquivo);
 	}
 	
 	@Transactional
@@ -77,7 +69,7 @@ public class FotoProdutoService {
 		FotoProduto fotoProduto = findFotoById(restauranteId, produtoId);
 		produtoRepository.deleteFotoById(fotoProduto.getId());
 		produtoRepository.flush();
-		s3FotoStorageService.excluir(fotoProduto);
+		fotoStorageService.excluir(fotoProduto);
 	}
 	
 }
