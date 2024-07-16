@@ -82,7 +82,7 @@ insert into grupo (id, nome) values (1, 'Gerente'), (2, 'Vendedor'), (3, 'Secret
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1); 
 
 insert into usuario (id, nome, email, senha, data_cadastro) values
-(1, 'Wellington Delmondes', 'delmondes.apk@gmail.com', '123', utc_timestamp),
+(1, 'Wellington Delmondes', 'wellington.apk@gmail.com', '123', utc_timestamp),
 (2, 'Bruna Franco', 'bruna@avanc.com', '123', utc_timestamp),
 (3, 'José Souza', 'jose.aux@avanc.com', '123', utc_timestamp),
 (4, 'Sebastião Martins', 'sebastiao.cad@avanc.com', '123', utc_timestamp),
