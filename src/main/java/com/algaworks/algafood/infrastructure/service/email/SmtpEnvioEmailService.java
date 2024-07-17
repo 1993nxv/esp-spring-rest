@@ -29,7 +29,6 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
 			String corpo = processadorEmailTemplate.processarTemplate(mensagem);
 			MimeMessage mimeMessage = criarMimeMessage(mensagem, corpo);
 			mailSender.send(mimeMessage);
-			System.out.println(mimeMessage.toString());
 		} catch (Exception e) {
 			throw new EmailException("Não foi possível enviar e-mail", e.getCause());
 		}
