@@ -13,7 +13,6 @@ import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
-import com.algaworks.algafood.domain.service.EnvioEmailService.Mensagem;
 
 @Service
 public class PedidoService {
@@ -32,9 +31,6 @@ public class PedidoService {
 	
 	@Autowired
 	private CidadeService cidadeService;
-	
-//	@Autowired
-//	private EnvioEmailService envioEmailService;
 	
 	
 	public List<Pedido> findAll(){
@@ -57,15 +53,6 @@ public class PedidoService {
 		Pedido pedido = findByCodigo(codigo);
 		pedido.confirmado();
 		return pedidoRepository.save(pedido);
-		
-//		var mensagem = Mensagem.builder()
-//				.assunto(pedido.getRestaurante().getNome() + " - Pedido Confirmado")
-//				.corpo("pedido-confirmado.html")
-//				.variavel("pedido", pedido)
-//				.destinatario(pedido.getCliente().getEmail())
-//				.build();
-//		
-//		envioEmailService.enviar(mensagem);
 	}
 	
 	@Transactional
