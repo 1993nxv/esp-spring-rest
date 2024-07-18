@@ -33,8 +33,8 @@ public class PedidoService {
 	@Autowired
 	private CidadeService cidadeService;
 	
-	@Autowired
-	private EnvioEmailService envioEmailService;
+//	@Autowired
+//	private EnvioEmailService envioEmailService;
 	
 	
 	public List<Pedido> findAll(){
@@ -56,15 +56,16 @@ public class PedidoService {
 	public Pedido confirmarPedido(String codigo) {
 		Pedido pedido = findByCodigo(codigo);
 		pedido.confirmado();
-		var mensagem = Mensagem.builder()
-				.assunto(pedido.getRestaurante().getNome() + " - Pedido Confirmado")
-				.corpo("pedido-confirmado.html")
-				.variavel("pedido", pedido)
-				.destinatario(pedido.getCliente().getEmail())
-				.build();
+		return pedidoRepository.save(pedido);
 		
-		envioEmailService.enviar(mensagem);
-		return findByCodigo(codigo);
+//		var mensagem = Mensagem.builder()
+//				.assunto(pedido.getRestaurante().getNome() + " - Pedido Confirmado")
+//				.corpo("pedido-confirmado.html")
+//				.variavel("pedido", pedido)
+//				.destinatario(pedido.getCliente().getEmail())
+//				.build();
+//		
+//		envioEmailService.enviar(mensagem);
 	}
 	
 	@Transactional

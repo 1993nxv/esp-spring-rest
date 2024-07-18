@@ -24,6 +24,7 @@ import javax.persistence.PrePersist;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
+import com.algaworks.algafood.domain.event.PedidoConfirmadoEvent;
 import com.algaworks.algafood.domain.exception.NegocioException;
 
 import lombok.Data;
@@ -86,7 +87,8 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
 	public void confirmado() {
 		setStatus(StatusPedido.CONFIRMADO);
 		setDataConfirmacao(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-		registerEvent(null);
+		
+		registerEvent(new PedidoConfirmadoEvent(this));
 	}
 	
 	public void entregue() {
