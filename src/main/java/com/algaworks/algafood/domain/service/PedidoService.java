@@ -56,7 +56,6 @@ public class PedidoService {
 	public Pedido confirmarPedido(String codigo) {
 		Pedido pedido = findByCodigo(codigo);
 		pedido.confirmado();
-		
 		var mensagem = Mensagem.builder()
 				.assunto(pedido.getRestaurante().getNome() + " - Pedido Confirmado")
 				.corpo("pedido-confirmado.html")
@@ -65,7 +64,6 @@ public class PedidoService {
 				.build();
 		
 		envioEmailService.enviar(mensagem);
-		
 		return findByCodigo(codigo);
 	}
 	
@@ -116,7 +114,6 @@ public class PedidoService {
 	public void validaFormaDePagamento(Pedido pedido) {
 		Set<FormaPagamento> formasPagamento = restauranteService.findById(
 				pedido.getRestaurante().getId()).getFormasPagamento();
-		
 		Boolean containsFormaPamento =  formasPagamento.contains(
 				pedido.getFormaPagamento());
 		if(!containsFormaPamento) {
