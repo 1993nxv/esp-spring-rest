@@ -66,7 +66,7 @@ public class PedidoService {
 	public Pedido cancelarPedido(String codigo) {
 		Pedido pedido = findByCodigo(codigo);
 		pedido.cancelado();
-		return findByCodigo(codigo);
+		return pedidoRepository.save(pedido);
 	}
 
 	private Pedido validarPedido(Pedido pedido) {
