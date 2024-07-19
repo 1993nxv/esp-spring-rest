@@ -2,7 +2,6 @@ package com.algaworks.algafood.domain.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import com.algaworks.algafood.domain.event.PedidoCanceladoEvent;
