@@ -33,6 +33,7 @@ import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
 import com.algaworks.algafood.domain.model.modelVO.RestauranteVO;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
+@CrossOrigin(origins = "http://front.algafoods.local:8000")
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
@@ -46,7 +47,7 @@ public class RestauranteController {
 	@Autowired
 	RestauranteVOdisassembler restauranteVOdisassembler;
 	
-	@CrossOrigin(origins = "http://front.algafoods.local:8000")
+//	@CrossOrigin(origins = "http://front.algafoods.local:8000")
 	@GetMapping
 	public List<RestauranteDTO> findAll(){
 		return restauranteDTOAssembler.toListDTO(restauranteService.findAll());
