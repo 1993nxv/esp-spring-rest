@@ -9,9 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,12 +46,10 @@ public class RestauranteController {
 	@Autowired
 	RestauranteVOdisassembler restauranteVOdisassembler;
 	
+	@CrossOrigin(origins = "http://front.algafoods.local:8000")
 	@GetMapping
-	public ResponseEntity<List<RestauranteDTO>> findAll(){
-		List<RestauranteDTO> restaurantes = restauranteDTOAssembler.toListDTO(restauranteService.findAll());
-		return ResponseEntity.ok()
-				.header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://front.algafoods.local:8000")
-				.body(restaurantes);
+	public List<RestauranteDTO> findAll(){
+		return restauranteDTOAssembler.toListDTO(restauranteService.findAll());
 	}
 	
 	@GetMapping("/{id}")
