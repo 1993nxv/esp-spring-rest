@@ -10,7 +10,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,7 +32,6 @@ import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
 import com.algaworks.algafood.domain.model.modelVO.RestauranteVO;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
-@CrossOrigin(origins = "http://front.algafoods.local:8000") // Padrão * 
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
@@ -47,7 +45,7 @@ public class RestauranteController {
 	@Autowired
 	RestauranteVOdisassembler restauranteVOdisassembler;
 	
-//	@CrossOrigin(origins = "http://front.algafoods.local:8000")
+
 	@GetMapping
 	public List<RestauranteDTO> findAll(){
 		return restauranteDTOAssembler.toListDTO(restauranteService.findAll());
