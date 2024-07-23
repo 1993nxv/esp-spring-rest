@@ -45,7 +45,7 @@ public class RestauranteController {
 	@Autowired
 	RestauranteVOdisassembler restauranteVOdisassembler;
 	
-
+	
 	@GetMapping
 	public List<RestauranteDTO> findAll(){
 		return restauranteDTOAssembler.toListDTO(restauranteService.findAll());
