@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,8 +50,11 @@ public class RestauranteController {
 	
 	
 	@GetMapping
-	public List<RestauranteDTO> findAll(){
-		return restauranteDTOAssembler.toListDTO(restauranteService.findAll());
+	public ResponseEntity<List<RestauranteDTO>> findAll(){
+		List<RestauranteDTO> restaurantes = restauranteDTOAssembler.toListDTO(restauranteService.findAll());
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(20, TimeUnit.SECONDS))
+				.body(restaurantes);
 	}
 	
 	@GetMapping("/{id}")

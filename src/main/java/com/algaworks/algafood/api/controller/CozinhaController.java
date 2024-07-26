@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,14 +49,17 @@ public class CozinhaController {
 	private VODisassembler<CozinhaVO, Cozinha> cozinhaVOdisassembler;
 	
 	@GetMapping
-	public Page<CozinhaDTO> findAll(@PageableDefault(size = 2) Pageable pageable){
+	public ResponseEntity<Page<CozinhaDTO> > findAll(@PageableDefault(size = 2) Pageable pageable){
 		Page<Cozinha> cozinhasPage = cozinhaService.findAll(pageable);
 		List<CozinhaDTO> cozinhasDTO = cozinhaDTOassembler.toListDTO(cozinhasPage.getContent());
 		Page<CozinhaDTO> pageCozinhasDTO = new PageImpl<>(
 				cozinhasDTO, 
 				pageable, 
 				cozinhasPage.getTotalElements());
-		return pageCozinhasDTO;
+
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(20, TimeUnit.SECONDS))
+				.body(pageCozinhasDTO);
 	}
 	
 	@GetMapping("/{id}")
