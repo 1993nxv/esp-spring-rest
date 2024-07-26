@@ -2,11 +2,14 @@ package com.algaworks.algafood.api.controller;
 
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,9 +43,13 @@ public class FormaPagamentoController {
 	private FormaPagamentoVOdisassembler formaPagamentoVOdisassembler;
 	
 	@GetMapping
-	public List<FormaPagamentoDTO> findAll(){
-		return formaPagementoDTOassembler
+	public ResponseEntity<List<FormaPagamentoDTO>> findAll(){
+		List<FormaPagamentoDTO> formasPagamento = formaPagementoDTOassembler
 				.toListDTO(formaPagamentoService.findAll());
+		
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(20, TimeUnit.SECONDS))
+				.body(formasPagamento);
 	}
 	
 	@GetMapping("/{id}")
