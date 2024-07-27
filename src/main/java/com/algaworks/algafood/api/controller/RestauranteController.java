@@ -116,7 +116,7 @@ public class RestauranteController {
 	@ResponseStatus(HttpStatus.OK)
 	public void ativacaoEmMassa() {
 		List<Long> ids = new ArrayList<>();
-		findAll().forEach(restaurante -> ids.add(restaurante.getId()));
+		findAll().getBody().forEach(restaurante -> ids.add(restaurante.getId()));
 		restauranteService.ativacaoEmMassa(ids);
 	}
 	
@@ -129,7 +129,7 @@ public class RestauranteController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inativacaoEmMassa() {
 		List<Long> ids = new ArrayList<>();
-		findAll().forEach(restaurante -> ids.add(restaurante.getId()));
+		findAll().getBody().forEach(restaurante -> ids.add(restaurante.getId()));
 		restauranteService.inativacaoEmMassa(ids);
 	}
 	
