@@ -48,11 +48,7 @@ public class FormaPagamentoController {
 				.toListDTO(formaPagamentoService.findAll());
 		
 		return ResponseEntity.ok()
-//				.cacheControl(CacheControl.maxAge(20, TimeUnit.SECONDS))
-//				.cacheControl(CacheControl.maxAge(20, TimeUnit.SECONDS).cachePrivate())
 				.cacheControl(CacheControl.maxAge(20, TimeUnit.SECONDS).cachePublic())
-//				.cacheControl(CacheControl.noCache())
-//				.cacheControl(CacheControl.noStore())
 				.body(formasPagamento);
 	}
 	
