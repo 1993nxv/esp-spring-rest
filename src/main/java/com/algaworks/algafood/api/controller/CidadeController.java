@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,11 +31,13 @@ import com.algaworks.algafood.domain.service.CidadeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 
 
 @Api(tags = "Cidades")
 @RestController
 @RequestMapping("/cidades")
+@Import(BeanValidatorPluginsConfiguration.class)
 public class CidadeController {
 		
 	@Autowired
