@@ -28,6 +28,7 @@ import com.algaworks.algafood.domain.model.modelVO.CidadeVO;
 import com.algaworks.algafood.domain.service.CidadeService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 
 @Api(tags = "Cidades")
@@ -43,18 +44,21 @@ public class CidadeController {
 	
 	@Autowired CidadeVOdisassembler cidadeVOdisassembler;
 	
+	@ApiOperation("Lista as cidades")
 	@GetMapping
 	public List<CidadeDTO> findAll(){
 		return cidadeDTOassembler.toListDTO(
 				cidadeService.findAll());
 	}
 	
+	@ApiOperation("Busca a cidade por id")
 	@GetMapping("/{id}")
 	public CidadeDTO findById(@PathVariable Long id){			
 			return cidadeDTOassembler.cidadeDTOConverter(
 					cidadeService.findById(id));		
 	}
 	
+	@ApiOperation("Cadastra uma cidade")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CidadeDTO save(@RequestBody @Valid CidadeVO cidadeVO){
@@ -67,6 +71,7 @@ public class CidadeController {
 		}
 	}
 	
+	@ApiOperation("Atualiza uma cidade por id")
 	@PutMapping("/{id}")
 	public CidadeDTO update(@PathVariable Long id, @RequestBody @Valid CidadeVO cidadeVO){		
 		Cidade cidadeAtual = cidadeService.findById(id);
@@ -79,6 +84,7 @@ public class CidadeController {
 		}
 	}
 	
+	@ApiOperation("Atualiza uma cidade parcialmente por id")
 	@PatchMapping("/{id}")
 	public CidadeDTO updatePartially(@PathVariable Long id, @RequestBody CidadeVO cidadeVO){						
 		Cidade cidade = cidadeVOdisassembler.cidadeVOConverter(cidadeVO);	
@@ -86,6 +92,7 @@ public class CidadeController {
 					cidadeService.updatePartially(id, cidade));			
 	}
 	
+	@ApiOperation("Exclui uma cidade por id")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteById(@PathVariable Long id){		
