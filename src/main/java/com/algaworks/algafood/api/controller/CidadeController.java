@@ -29,6 +29,7 @@ import com.algaworks.algafood.domain.service.CidadeService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 
 @Api(tags = "Cidades")
@@ -53,7 +54,10 @@ public class CidadeController {
 	
 	@ApiOperation("Busca a cidade por id")
 	@GetMapping("/{id}")
-	public CidadeDTO findById(@PathVariable Long id){			
+	public CidadeDTO findById(
+			@ApiParam(value = "ID de uma cidade", example = "1") 
+			@PathVariable Long id){	
+		
 			return cidadeDTOassembler.cidadeDTOConverter(
 					cidadeService.findById(id));		
 	}
@@ -61,7 +65,10 @@ public class CidadeController {
 	@ApiOperation("Cadastra uma cidade")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CidadeDTO save(@RequestBody @Valid CidadeVO cidadeVO){
+	public CidadeDTO save(
+			@ApiParam(name = "corpo", value = "Representação de uma cidade") 
+			@RequestBody @Valid CidadeVO cidadeVO){
+		
 		try {
 			return cidadeDTOassembler.cidadeDTOConverter(
 					cidadeService.save(
@@ -73,7 +80,12 @@ public class CidadeController {
 	
 	@ApiOperation("Atualiza uma cidade por id")
 	@PutMapping("/{id}")
-	public CidadeDTO update(@PathVariable Long id, @RequestBody @Valid CidadeVO cidadeVO){		
+	public CidadeDTO update(
+			@ApiParam(value = "ID de uma cidade", example = "1") 
+			@PathVariable Long id, 
+			@ApiParam(name = "corpo", value = "Representação de uma cidade") 
+			@RequestBody @Valid CidadeVO cidadeVO){	
+		
 		Cidade cidadeAtual = cidadeService.findById(id);
 		cidadeVOdisassembler.copyToDomainObj(cidadeVO, cidadeAtual);
 		try {
@@ -86,7 +98,12 @@ public class CidadeController {
 	
 	@ApiOperation("Atualiza uma cidade parcialmente por id")
 	@PatchMapping("/{id}")
-	public CidadeDTO updatePartially(@PathVariable Long id, @RequestBody CidadeVO cidadeVO){						
+	public CidadeDTO updatePartially(
+			@ApiParam(value = "ID de uma cidade", example = "1") 
+			@PathVariable Long id, 
+			@ApiParam(name = "corpo", value = "Representação de uma cidade") 
+			@RequestBody CidadeVO cidadeVO){
+		
 		Cidade cidade = cidadeVOdisassembler.cidadeVOConverter(cidadeVO);	
 		return cidadeDTOassembler.cidadeDTOConverter(
 					cidadeService.updatePartially(id, cidade));			
@@ -95,7 +112,10 @@ public class CidadeController {
 	@ApiOperation("Exclui uma cidade por id")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable Long id){		
+	public void deleteById(
+			@ApiParam(value = "ID de uma cidade", example = "1") 
+			@PathVariable Long id){		
+		
 			cidadeService.deleteById(id);
 	}
 	
