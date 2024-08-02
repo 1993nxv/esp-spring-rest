@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.CidadeDTOassembler;
 import com.algaworks.algafood.api.disassembler.CidadeVOdisassembler;
+import com.algaworks.algafood.api.exceptionhendler.Problem;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Cidade;
@@ -31,6 +32,8 @@ import com.algaworks.algafood.domain.service.CidadeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 
 
@@ -56,6 +59,10 @@ public class CidadeController {
 	}
 	
 	@ApiOperation("Busca a cidade por id")
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Id da cidade inválido", response = Problem.class),
+		@ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
+	})
 	@GetMapping("/{id}")
 	public CidadeDTO findById(
 			@ApiParam(value = "ID de uma cidade", example = "1") 
