@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.GrupoDTOassembler;
 import com.algaworks.algafood.api.disassembler.GrupoVOdisassembler;
+import com.algaworks.algafood.api.exceptionhendler.Problem;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Grupo;
@@ -26,6 +27,12 @@ import com.algaworks.algafood.domain.model.modelDTO.GrupoDTO;
 import com.algaworks.algafood.domain.model.modelVO.GrupoVO;
 import com.algaworks.algafood.domain.service.GrupoService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
+@Api(tags = "Grupos")
 @RestController
 @RequestMapping("/grupos")
 public class GrupoController {
@@ -38,12 +45,18 @@ public class GrupoController {
 
 	@Autowired
 	private GrupoVOdisassembler grupoVOdisassembler;
-
+	
+	@ApiOperation("Lista os grupos")
 	@GetMapping
 	public List<GrupoDTO> findAll() {
 		return grupoDTOassembler.toListDTO(grupoService.findAll());
 	}
-
+	
+	@ApiOperation("Busca o grupo por id")
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Id do grupo inválido", response = Problem.class),
+		@ApiResponse(code = 404, message = "Grupo não encontrado", response = Problem.class)
+	})
 	@GetMapping("/{id}")
 	public GrupoDTO findById(@PathVariable Long id) {
 		return grupoDTOassembler.grupoDTOConverter(grupoService.findById(id));
