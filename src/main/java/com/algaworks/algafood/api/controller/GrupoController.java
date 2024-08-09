@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +30,15 @@ import com.algaworks.algafood.domain.service.GrupoService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 
 @Api(tags = "Grupos")
 @RestController
 @RequestMapping("/grupos")
+@Import(BeanValidatorPluginsConfiguration.class)
 public class GrupoController {
 
 	@Autowired
@@ -58,13 +62,18 @@ public class GrupoController {
 		@ApiResponse(code = 404, message = "Grupo não encontrado", response = Problem.class)
 	})
 	@GetMapping("/{id}")
-	public GrupoDTO findById(@PathVariable Long id) {
+	public GrupoDTO findById(
+			@ApiParam(value = "ID de um grupo", example = "1")
+			@PathVariable Long id) {
 		return grupoDTOassembler.grupoDTOConverter(grupoService.findById(id));
 	}
 	
+	@ApiOperation("Cadastra um grupo")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public GrupoDTO save(@RequestBody @Valid GrupoVO grupoVO) {
+	public GrupoDTO save(
+			@ApiParam(name = "corpo", value = "Representação de um grupo")
+			@RequestBody @Valid GrupoVO grupoVO) {
 		try {
 			return grupoDTOassembler
 					.grupoDTOConverter(grupoService.save(grupoVOdisassembler.grupoVOConverter(grupoVO)));
@@ -72,9 +81,14 @@ public class GrupoController {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
-
+	
+	@ApiOperation("Atualiza um grupo por Id")
 	@PutMapping("/{id}")
-	public GrupoDTO update(@PathVariable Long id, @RequestBody @Valid GrupoVO grupoVO) {
+	public GrupoDTO update(
+			@ApiParam(value = "ID de um grupo", example = "1")
+			@PathVariable Long id,
+			@ApiParam(name = "corpo", value = "Representação de um grupo")
+			@RequestBody @Valid GrupoVO grupoVO) {
 		Grupo grupoAtual = grupoService.findById(id);
 		grupoVOdisassembler.copyToDomainObj(grupoVO, grupoAtual);
 		try {
@@ -83,16 +97,24 @@ public class GrupoController {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
-
+	
+	@ApiOperation("Atualiza um grupo parcialmente por Id")
 	@PatchMapping("/{id}")
-	public GrupoDTO updatePartially(@PathVariable Long id, @RequestBody GrupoVO grupoVO) {
+	public GrupoDTO updatePartially(
+			@ApiParam(value = "ID de um grupo", example = "1")
+			@PathVariable Long id, 
+			@ApiParam(name = "corpo", value = "Representação de um grupo")
+			@RequestBody GrupoVO grupoVO) {
 		Grupo grupo = grupoVOdisassembler.grupoVOConverter(grupoVO);
 		return grupoDTOassembler.grupoDTOConverter(grupoService.updatePartially(id, grupo));
 	}
-
+	
+	@ApiOperation("Exclui um grupo por Id")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable Long id) {
+	public void deleteById(
+			@ApiParam(value = "ID de um grupo", example = "1")
+			@PathVariable Long id) {
 		grupoService.deleteById(id);
 	}
 
