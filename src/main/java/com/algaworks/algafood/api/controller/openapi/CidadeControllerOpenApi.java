@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -16,8 +17,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 
 @Api(tags = "Cidades")
+@Import(BeanValidatorPluginsConfiguration.class)
 public interface CidadeControllerOpenApi {
 	
 	@ApiOperation("Lista as cidades")

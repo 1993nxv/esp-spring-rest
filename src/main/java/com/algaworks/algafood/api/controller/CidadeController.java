@@ -6,8 +6,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,12 +29,9 @@ import com.algaworks.algafood.domain.model.modelDTO.CidadeDTO;
 import com.algaworks.algafood.domain.model.modelVO.CidadeVO;
 import com.algaworks.algafood.domain.service.CidadeService;
 
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-
 
 @RestController
-@RequestMapping("/cidades")
-@Import(BeanValidatorPluginsConfiguration.class)
+@RequestMapping(path = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 		
 	@Autowired
