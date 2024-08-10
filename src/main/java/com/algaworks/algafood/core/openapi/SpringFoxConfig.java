@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.HttpStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -41,6 +42,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.build()
 			.apiInfo(apiInfo())
 			.additionalModels(typeResolver.resolve(Problem.class))
+			.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
 			.useDefaultResponseMessages(false)
 			.globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
 			.globalResponseMessage(RequestMethod.POST, globalPostPutResponseMessages())
