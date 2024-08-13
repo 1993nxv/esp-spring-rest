@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.CozinhaDTOassembler;
 import com.algaworks.algafood.api.disassembler.VODisassembler;
+import com.algaworks.algafood.api.openapi.controller.CozinhaControllerOpenApi;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.modelDTO.CozinhaDTO;
 import com.algaworks.algafood.domain.model.modelVO.CozinhaVO;
@@ -37,7 +38,7 @@ import com.algaworks.algafood.domain.service.CozinhaService;
 
 @RestController
 @RequestMapping("/cozinhas")
-public class CozinhaController {
+public class CozinhaController implements CozinhaControllerOpenApi{
 		
 	@Autowired
 	private CozinhaService cozinhaService;
