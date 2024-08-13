@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.algaworks.algafood.api.exceptionhendler.Problem;
+import com.algaworks.algafood.api.openapi.model.PageableModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.documentation.builders.ApiInfoBuilder;

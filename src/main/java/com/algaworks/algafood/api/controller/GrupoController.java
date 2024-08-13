@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.GrupoDTOassembler;
-import com.algaworks.algafood.api.controller.openapi.GrupoControllerOpenApi;
 import com.algaworks.algafood.api.disassembler.GrupoVOdisassembler;
+import com.algaworks.algafood.api.openapi.controller.GrupoControllerOpenApi;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Grupo;
