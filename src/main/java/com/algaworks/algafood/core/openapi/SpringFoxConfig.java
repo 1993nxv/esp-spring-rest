@@ -59,7 +59,8 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 			.globalResponseMessage(RequestMethod.PATCH, globalPostPutResponseMessages())
 			.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
 			.tags(new Tag("Cidades", "Gerencia as cidades"))
-			.tags(new Tag("Grupos", "Gerencia os grupos de usuários"));
+			.tags(new Tag("Grupos", "Gerencia os grupos de usuários"))
+			.tags(new Tag("Cozinhas", "Gerencia as cozinhas"));
 	}
 	
 	private List<ResponseMessage> globalGetResponseMessages() {
