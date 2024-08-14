@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -52,6 +53,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 					typeResolver.resolve(Page.class, CozinhaDTO.class), 
 					CozinhasModelOpenApi.class)
 			)
+			.ignoredParameterTypes(ServletWebRequest.class)
 			.useDefaultResponseMessages(false)
 			.globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
 			.globalResponseMessage(RequestMethod.POST, globalPostPutResponseMessages())
