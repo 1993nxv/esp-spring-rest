@@ -72,28 +72,6 @@ public class PedidoController {
 		return pedidosResumoDTOpage;
 	}
 	
-//	@GetMapping("/projecao")
-//	public MappingJacksonValue findAllWhitProjecao(@RequestParam(required = false) String campos){
-//		List<Pedido> pedidos = pedidoService.findAll();
-//		List<PedidoResumoDTO> pedidosDTO = assemblerResumoDTO.toListDTO(pedidos, PedidoResumoDTO.class);
-//		
-//		MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosDTO);
-//		
-//		SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-//		filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
-//		
-//		if(StringUtils.isNotBlank(campos)) {
-//			filterProvider.addFilter("pedidoFilter",
-//					SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(","))
-//				);
-//		}
-//		
-//		pedidosWrapper.setFilters(filterProvider);
-//		
-//		return pedidosWrapper;
-//		
-//	}
-	
 	@GetMapping("/{pedidoCodigo}")
 	public ResponseEntity<?> findByCodigo(@PathVariable String pedidoCodigo){		
 		Pedido pedido = pedidoService.findByCodigo(pedidoCodigo);
