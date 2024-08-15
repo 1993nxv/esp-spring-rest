@@ -29,8 +29,14 @@ import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.model.modelDTO.RestauranteDTO;
+import com.algaworks.algafood.domain.model.modelDTO.RestauranteNomesDTO;
 import com.algaworks.algafood.domain.model.modelVO.RestauranteVO;
 import com.algaworks.algafood.domain.service.RestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -45,10 +51,28 @@ public class RestauranteController {
 	@Autowired
 	RestauranteVOdisassembler restauranteVOdisassembler;
 	
-	
+	@ApiOperation(value = "Lista restaurantes")
+	@ApiImplicitParams({
+		@ApiImplicitParam(
+				value = "Nome da projeção de pedidos",
+				name = "projecao",
+				paramType = "query",
+				type = "String",
+				allowableValues = "apenas-nomes",
+				required = false
+		)
+	})
 	@GetMapping
 	public List<RestauranteDTO> findAll(){
 		List<RestauranteDTO> restaurantes = restauranteDTOAssembler.toListDTO(restauranteService.findAll());
+		return restaurantes;
+	}
+	
+	@ApiOperation(value = "Lista restaurantes", hidden = true)
+	@JsonView(RestauranteNomesDTO.class)
+	@GetMapping(params = "projecao=apenas-nomes")
+	public List<Restaurante> findAllNomes(){
+		List<Restaurante> restaurantes = restauranteService.findAll();
 		return restaurantes;
 	}
 	
