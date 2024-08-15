@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class RestauranteNomesDTO {
 	
-	@JsonView({Restaurante.class, RestauranteNomesDTO.class})
+	@JsonView(Restaurante.class)
 	private String nome;
 
 }
