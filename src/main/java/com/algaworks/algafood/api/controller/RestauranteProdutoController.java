@@ -23,6 +23,9 @@ import com.algaworks.algafood.domain.model.modelVO.ProdutoVO;
 import com.algaworks.algafood.domain.service.ProdutoService;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
+import io.swagger.annotations.Api;
+
+@Api(tags = "Produtos")
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos")
 public class RestauranteProdutoController {

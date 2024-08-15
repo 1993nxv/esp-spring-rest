@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.algaworks.algafood.api.assembler.DTOAssembler;
+import com.algaworks.algafood.api.openapi.controller.RestauranteProdutoControllerOpenApi;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.model.modelDTO.FotoProdutoDTO;
@@ -32,7 +34,7 @@ import com.algaworks.algafood.domain.service.ProdutoService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+public class RestauranteProdutoFotoController implements RestauranteProdutoControllerOpenApi {
 	
 	@Autowired
 	private FotoProdutoService fotoProdutoService;
@@ -47,9 +49,10 @@ public class RestauranteProdutoFotoController {
 	public FotoProdutoDTO atualizarFoto(
 			@PathVariable Long restauranteId,
 			@PathVariable Long produtoId,
-			@Valid FotoProdutoVO fotoProdutoVO) throws IOException {
+			@Valid FotoProdutoVO fotoProdutoVO,
+			@RequestPart(required = true) MultipartFile arquivo) throws IOException {
 		
-		MultipartFile file = fotoProdutoVO.getArquivo();
+		MultipartFile file = arquivo;
 		
 		FotoProduto foto = new FotoProduto();
 		foto.setContentType(file.getContentType());
