@@ -1,13 +1,20 @@
 package com.algaworks.algafood.core.openapi;
 
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLStreamHandler;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.http.HttpStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -53,7 +60,10 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 					typeResolver.resolve(Page.class, CozinhaDTO.class), 
 					CozinhasModelOpenApi.class)
 			)
-			.ignoredParameterTypes(ServletWebRequest.class)
+			.ignoredParameterTypes(
+					ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
+					Resource.class, InputStream.class, Sort.class, Optional.class, Page.class
+			)
 			.useDefaultResponseMessages(false)
 //			.globalOperationParameters(Arrays.asList(
 //					new ParameterBuilder()
