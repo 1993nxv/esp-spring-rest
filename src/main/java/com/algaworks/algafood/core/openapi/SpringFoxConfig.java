@@ -62,7 +62,8 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 			)
 			.ignoredParameterTypes(
 					ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
-					Resource.class, InputStream.class, Sort.class, Optional.class, Page.class
+					Resource.class, InputStream.class, Sort.class, Optional.class, 
+					Page.class
 			)
 			.useDefaultResponseMessages(false)
 //			.globalOperationParameters(Arrays.asList(
