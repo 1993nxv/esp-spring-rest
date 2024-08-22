@@ -151,6 +151,12 @@
 		<groupId>io.springfox</groupId>
 	    <artifactId>springfox-bean-validators</artifactId>
 	    <version>${spring-fox.version}</version>
+	    <exclusions>
+			<exclusion>
+			<groupId>org.springframework.plugin</groupId>
+			<artifactId>spring-plugin-core</artifactId>
+	    </exclusion>
+		</exclusions>
 	</dependency>
 <!-- Documentação -->  
 </dependencies>
