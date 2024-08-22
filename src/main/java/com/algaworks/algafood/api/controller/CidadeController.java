@@ -6,6 +6,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,9 +53,12 @@ public class CidadeController implements CidadeControllerOpenApi {
 	
 	@GetMapping("/{id}")
 	public CidadeDTO findById(@PathVariable Long id){	
-		
-			return cidadeDTOassembler.cidadeDTOConverter(
-					cidadeService.findById(id));		
+		CidadeDTO cidadeDTO = cidadeDTOassembler.cidadeDTOConverter(
+				cidadeService.findById(id));
+		cidadeDTO.add(new Link("http://api.algafoods.local:8080/cidades/1"));
+		cidadeDTO.add(new Link("http://api.algafoods.local:8080/cidades", IanaLinkRelations.COLLECTION));
+		cidadeDTO.getEstado().add(new Link("http://api.algafoods.local:8080/estados/1"));
+		return cidadeDTO;
 	}
 	
 	@PostMapping
@@ -62,9 +67,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		try {
 			CidadeDTO cidadeDTO = cidadeDTOassembler.cidadeDTOConverter(
 					cidadeService.save(cidadeVOdisassembler.cidadeVOConverter(cidadeVO)));
-			
 			ResourceUriHelper.addUriInResponseHeader(cidadeDTO.getId());
-			
 			return cidadeDTO;
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
@@ -75,7 +78,6 @@ public class CidadeController implements CidadeControllerOpenApi {
 	public CidadeDTO update(
 			@PathVariable Long id, 
 			@RequestBody @Valid CidadeVO cidadeVO){	
-		
 		Cidade cidadeAtual = cidadeService.findById(id);
 		cidadeVOdisassembler.copyToDomainObj(cidadeVO, cidadeAtual);
 		try {
@@ -90,7 +92,6 @@ public class CidadeController implements CidadeControllerOpenApi {
 	public CidadeDTO updatePartially(
 			@PathVariable Long id, 
 			@RequestBody CidadeVO cidadeVO){
-		
 		Cidade cidade = cidadeVOdisassembler.cidadeVOConverter(cidadeVO);	
 		return cidadeDTOassembler.cidadeDTOConverter(
 					cidadeService.updatePartially(id, cidade));			
