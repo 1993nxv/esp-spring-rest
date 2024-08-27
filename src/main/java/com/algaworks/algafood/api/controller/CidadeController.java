@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -46,9 +47,22 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@Autowired CidadeVOdisassembler cidadeVOdisassembler;
 	
 	@GetMapping
-	public List<CidadeDTO> findAll(){
-		return cidadeDTOassembler.toListDTO(
-				cidadeService.findAll());
+	public CollectionModel<CidadeDTO> findAll(){
+		List<CidadeDTO> cidades = cidadeDTOassembler.toListDTO(cidadeService.findAll());
+		
+		CollectionModel<CidadeDTO> collectionModel = new CollectionModel<>(cidades);
+		
+		collectionModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+				.withSelfRel());
+		
+		cidades.forEach(cidadeDTO -> {
+			cidadeDTO.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+					.slash(cidadeDTO.getId()).withSelfRel());
+			cidadeDTO.getEstado().add(WebMvcLinkBuilder.linkTo(EstadoController.class)
+					.slash(cidadeDTO.getEstado().getId()).withSelfRel());
+		});
+		
+		return collectionModel;
 	}
 	
 	@GetMapping("/{id}")

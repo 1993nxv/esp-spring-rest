@@ -1,10 +1,9 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.context.annotation.Import;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -24,7 +23,7 @@ import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 public interface CidadeControllerOpenApi {
 	
 	@ApiOperation("Lista as cidades")
-	public List<CidadeDTO> findAll();
+	public CollectionModel<CidadeDTO> findAll();
 	
 	@ApiOperation("Busca a cidade por id")
 	@ApiResponses({
