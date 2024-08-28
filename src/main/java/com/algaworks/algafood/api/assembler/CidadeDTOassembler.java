@@ -41,12 +41,6 @@ public class CidadeDTOassembler extends RepresentationModelAssemblerSupport<Cida
 				.withSelfRel());
 	}
 	
-//	public List<CidadeDTO> toListDTO(List<Cidade> cidades){
-//		return cidades.stream()
-//				.map(cidade -> cidadeDTOConverter(cidade))
-//				.collect(Collectors.toList());
-//	}
-
 	@Override
 	public CidadeDTO toModel(Cidade cidade) {
 		return cidadeDTOConverter(cidade);
