@@ -20,7 +20,7 @@ public class LocalFotoStorageService implements FotoStorageService {
 	public void armazenar(NovaFoto novaFoto) {
 		try {
 			Path arquivoPath = getArquivoPath(novaFoto.getNomeArquivo());
-			FileCopyUtils.copy(novaFoto.getInputStream(), Files.newOutputStream(arquivoPath));
+			FileCopyUtils.copy(novaFoto.getInputStream(), Files.newOutputStream(arquivoPath));;
 		} catch (Exception e) {
 			throw new StorageException("Não foi possivel armazenar o arquivo", e.getCause());
 		}
