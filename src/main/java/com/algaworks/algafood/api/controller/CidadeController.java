@@ -49,8 +49,8 @@ public class CidadeController implements CidadeControllerOpenApi {
 	
 	@GetMapping("/{id}")
 	public CidadeDTO findById(@PathVariable Long id){	
-		CidadeDTO cidadeDTO = cidadeDTOassembler.cidadeDTOConverter(
-				cidadeService.findById(id));
+		CidadeDTO cidadeDTO = cidadeDTOassembler
+				.cidadeDTOConverter(cidadeService.findById(id));
 		return cidadeDTO;
 	}
 	
