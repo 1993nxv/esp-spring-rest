@@ -40,7 +40,8 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@Autowired
 	private CidadeDTOassembler cidadeDTOassembler;
 	
-	@Autowired CidadeVOdisassembler cidadeVOdisassembler;
+	@Autowired 
+	private CidadeVOdisassembler cidadeVOdisassembler;
 	
 	@GetMapping
 	public CollectionModel<CidadeDTO> findAll(){

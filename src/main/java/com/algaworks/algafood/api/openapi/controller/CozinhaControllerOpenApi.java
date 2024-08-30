@@ -6,9 +6,9 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +31,7 @@ import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 public interface CozinhaControllerOpenApi {
 	
 	@ApiOperation("Lista as cozinhas com paginação")
-	public ResponseEntity<Page<CozinhaDTO> > findAll(@PageableDefault(size = 2) Pageable pageable);
+	public PagedModel<CozinhaDTO> findAll(@PageableDefault(size = 2) Pageable pageable);
 	
 	@ApiOperation("Busca uma cozinha por ID")
 	@ApiResponses({
