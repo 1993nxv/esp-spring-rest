@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -51,14 +52,17 @@ public class PedidoController {
 	@Autowired
 	private PedidoRepository pedidoRepository;
 	
-	@Autowired 
-	private DTOAssembler<Pedido, PedidoDTO> assemblerDTO;
-	
-	@Autowired 
-	private DTOAssembler<Pedido, PedidoResumoDTO> assemblerResumoDTO;
-	
-	@Autowired 
-	private DTOAssembler<Pedido, PedidoStatusDTO> assemblerStatusDTO;
+	@Autowired
+	@Qualifier("pedidoDTOAssembler")
+	private DTOAssembler<Pedido, PedidoDTO, PedidoController> assemblerDTO;
+
+	@Autowired
+	@Qualifier("pedidoResumoDTOAssembler")
+	private DTOAssembler<Pedido, PedidoResumoDTO, PedidoController> assemblerResumoDTO;
+
+	@Autowired
+	@Qualifier("pedidoStatusDTOAssembler")
+	private DTOAssembler<Pedido, PedidoStatusDTO, PedidoController> assemblerStatusDTO;
 	
 	@Autowired 
 	private VODisassembler<PedidoVO, Pedido> disassemblerVO;

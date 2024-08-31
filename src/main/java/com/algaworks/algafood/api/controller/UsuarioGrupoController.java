@@ -24,7 +24,7 @@ public class UsuarioGrupoController {
 	private UsuarioService usuarioService;
 	
 	@Autowired
-	private DTOAssembler<Grupo, GrupoDTO> assemblerDTO;
+	private DTOAssembler<Grupo, GrupoDTO, UsuarioGrupoController> assemblerDTO;
 	
 	@GetMapping
 	public List<GrupoDTO> findAll(@PathVariable Long usuarioId){

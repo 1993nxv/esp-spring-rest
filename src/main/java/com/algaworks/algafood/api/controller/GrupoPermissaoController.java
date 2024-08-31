@@ -25,7 +25,7 @@ public class GrupoPermissaoController {
 	private GrupoService grupoService;
 	
 	@Autowired
-	private DTOAssembler<Permissao, PermissaoDTO> assemblerDTO;
+	private DTOAssembler<Permissao, PermissaoDTO, GrupoPermissaoController> assemblerDTO;
 	
 	@GetMapping
 	public List<PermissaoDTO> findPermissoes(@PathVariable Long grupoId) {

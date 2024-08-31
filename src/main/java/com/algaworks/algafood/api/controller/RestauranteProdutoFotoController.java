@@ -43,7 +43,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoContr
 	private ProdutoService produtoService;
 	
 	@Autowired
-	private DTOAssembler<FotoProduto, FotoProdutoDTO> assemblerDTO;
+	private DTOAssembler<FotoProduto, FotoProdutoDTO, RestauranteProdutoFotoController> assemblerDTO;
 	
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoProdutoDTO atualizarFoto(

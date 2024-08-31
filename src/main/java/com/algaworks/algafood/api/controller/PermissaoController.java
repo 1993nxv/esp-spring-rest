@@ -32,7 +32,7 @@ public class PermissaoController {
 	private PermissaoService permissaoService;
 	
 	@Autowired 
-	private DTOAssembler<Permissao, PermissaoDTO> assemblerDTO;
+	private DTOAssembler<Permissao, PermissaoDTO, PermissaoController> assemblerDTO;
 	
 	@GetMapping
 	public List<PermissaoDTO> findAll(){
