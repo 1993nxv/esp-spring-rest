@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -52,17 +52,16 @@ public class PedidoController {
 	@Autowired
 	private PedidoRepository pedidoRepository;
 	
-	@Autowired
-	@Qualifier("pedidoDTOAssembler")
-	private DTOAssembler<Pedido, PedidoDTO, PedidoController> assemblerDTO;
+	private ModelMapper modelMapper = new ModelMapper();
+	
+	private DTOAssembler<Pedido, PedidoDTO, PedidoController> assemblerDTO = 
+			new DTOAssembler<>(PedidoDTO.class, PedidoController.class, modelMapper);
 
-	@Autowired
-	@Qualifier("pedidoResumoDTOAssembler")
-	private DTOAssembler<Pedido, PedidoResumoDTO, PedidoController> assemblerResumoDTO;
+	private DTOAssembler<Pedido, PedidoResumoDTO, PedidoController> assemblerResumoDTO = 
+			new DTOAssembler<>(PedidoResumoDTO.class, PedidoController.class, modelMapper);
 
-	@Autowired
-	@Qualifier("pedidoStatusDTOAssembler")
-	private DTOAssembler<Pedido, PedidoStatusDTO, PedidoController> assemblerStatusDTO;
+	private DTOAssembler<Pedido, PedidoStatusDTO, PedidoController> assemblerStatusDTO = 
+			new DTOAssembler<>(PedidoStatusDTO.class, PedidoController.class, modelMapper);
 	
 	@Autowired 
 	private VODisassembler<PedidoVO, Pedido> disassemblerVO;
@@ -74,6 +73,7 @@ public class PedidoController {
 		type = "String",
 		example = "name,asc")
 	})
+	
 	@GetMapping
 	public Page<PedidoResumoDTO> findAll(@PageableDefault(size = 2) Pageable pageable, PedidoFilter filter){
 		pageable = traduzirPageable(pageable);

@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +32,10 @@ public class PermissaoController {
 	@Autowired
 	private PermissaoService permissaoService;
 	
-	@Autowired 
-	private DTOAssembler<Permissao, PermissaoDTO, PermissaoController> assemblerDTO;
+	private ModelMapper modelMapper = new ModelMapper();
+	
+	private DTOAssembler<Permissao, PermissaoDTO, PermissaoController> assemblerDTO = 
+		new DTOAssembler<>(PermissaoDTO.class, PermissaoController.class, modelMapper);
 	
 	@GetMapping
 	public List<PermissaoDTO> findAll(){

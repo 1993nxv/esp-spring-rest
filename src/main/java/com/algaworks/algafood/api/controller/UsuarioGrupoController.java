@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +24,10 @@ public class UsuarioGrupoController {
 	@Autowired
 	private UsuarioService usuarioService;
 	
-	@Autowired
-	private DTOAssembler<Grupo, GrupoDTO, UsuarioGrupoController> assemblerDTO;
+	private ModelMapper modelMapper = new ModelMapper();
+	
+	private DTOAssembler<Grupo, GrupoDTO, UsuarioGrupoController> assemblerDTO = 
+		new DTOAssembler<>(GrupoDTO.class, UsuarioGrupoController.class, modelMapper);
 	
 	@GetMapping
 	public List<GrupoDTO> findAll(@PathVariable Long usuarioId){

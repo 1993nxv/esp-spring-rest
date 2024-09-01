@@ -5,19 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
-import org.springframework.stereotype.Component;
 
-
-@Component
 public class DTOAssembler<T, U extends RepresentationModel<U>, C> extends RepresentationModelAssemblerSupport<T, U>{
     
-	@Autowired
     private ModelMapper modelMapper;
 	
-    public DTOAssembler(Class<T> entityClass, Class<U> dtoClass, Class<C> controllerClass, ModelMapper modelMapper) {
+    public DTOAssembler(Class<U> dtoClass, Class<C> controllerClass, ModelMapper modelMapper) {
         super(controllerClass, dtoClass);
         this.modelMapper = modelMapper;
     }

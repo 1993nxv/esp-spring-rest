@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,8 +25,10 @@ public class GrupoPermissaoController {
 	@Autowired
 	private GrupoService grupoService;
 	
-	@Autowired
-	private DTOAssembler<Permissao, PermissaoDTO, GrupoPermissaoController> assemblerDTO;
+	private ModelMapper modelMapper = new ModelMapper();
+
+	private DTOAssembler<Permissao, PermissaoDTO, GrupoPermissaoController> assemblerDTO = 
+		new DTOAssembler<>(PermissaoDTO.class, GrupoPermissaoController.class, modelMapper);
 	
 	@GetMapping
 	public List<PermissaoDTO> findPermissoes(@PathVariable Long grupoId) {

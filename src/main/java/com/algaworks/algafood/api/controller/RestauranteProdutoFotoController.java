@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -42,8 +43,10 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoContr
 	@Autowired
 	private ProdutoService produtoService;
 	
-	@Autowired
-	private DTOAssembler<FotoProduto, FotoProdutoDTO, RestauranteProdutoFotoController> assemblerDTO;
+	private ModelMapper modelMapper = new ModelMapper();
+	
+	private DTOAssembler<FotoProduto, FotoProdutoDTO, RestauranteProdutoFotoController> assemblerDTO = 
+		new DTOAssembler<>(FotoProdutoDTO.class, RestauranteProdutoFotoController.class, modelMapper);
 	
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoProdutoDTO atualizarFoto(
