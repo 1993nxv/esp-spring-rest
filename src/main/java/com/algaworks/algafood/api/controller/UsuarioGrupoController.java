@@ -1,10 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
 
-import java.util.List;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +29,9 @@ public class UsuarioGrupoController {
 		new DTOAssembler<>(GrupoDTO.class, UsuarioGrupoController.class, modelMapper);
 	
 	@GetMapping
-	public List<GrupoDTO> findAll(@PathVariable Long usuarioId){
-		return assemblerDTO.toListDTO(
-				usuarioService.findById(usuarioId).getGrupos(), 
-				GrupoDTO.class);
+	public CollectionModel<GrupoDTO> findAll(@PathVariable Long usuarioId){
+		return assemblerDTO.toCollectionModel(
+				usuarioService.findById(usuarioId).getGrupos());
 	}
 		
 }

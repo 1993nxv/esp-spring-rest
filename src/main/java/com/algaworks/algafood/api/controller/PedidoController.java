@@ -1,8 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -11,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -78,9 +77,9 @@ public class PedidoController {
 	public Page<PedidoResumoDTO> findAll(@PageableDefault(size = 2) Pageable pageable, PedidoFilter filter){
 		pageable = traduzirPageable(pageable);
 		Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
-		List<PedidoResumoDTO> pedidosResumoDTO = assemblerResumoDTO.toListDTO(pedidosPage.getContent(), PedidoResumoDTO.class);
+		CollectionModel<PedidoResumoDTO> pedidosResumoDTO = assemblerResumoDTO.toCollectionModel(pedidosPage.getContent());
 		Page<PedidoResumoDTO> pedidosResumoDTOpage = new PageImpl<>(
-				pedidosResumoDTO,
+				pedidosResumoDTO.getContent().stream().toList(),
 				pageable,
 				pedidosPage.getTotalElements());
 		return pedidosResumoDTOpage;
