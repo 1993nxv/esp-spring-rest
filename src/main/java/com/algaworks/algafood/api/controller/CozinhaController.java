@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,12 +35,16 @@ import com.algaworks.algafood.domain.model.modelDTO.CozinhaDTO;
 import com.algaworks.algafood.domain.model.modelVO.CozinhaVO;
 import com.algaworks.algafood.domain.service.CozinhaService;
 
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/cozinhas")
 public class CozinhaController implements CozinhaControllerOpenApi{
-		
+	
+//	private static final  Logger logger = LoggerFactory.getLogger(CozinhaController.class);
+	
 	@Autowired
 	private CozinhaService cozinhaService;
 	
@@ -53,22 +59,15 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 	
 	@GetMapping
 	public PagedModel<CozinhaDTO> findAll(@PageableDefault(size = 2) Pageable pageable){
+		
+		log.info("Listando cozinhas...");
+		
 		Page<Cozinha> cozinhasPage = cozinhaService.findAll(pageable);
 		
 		PagedModel<CozinhaDTO> cozinhaPagedDTO = pagedResourcesAssembler
 				.toModel(cozinhasPage, cozinhaDTOassembler);
 		
 		return cozinhaPagedDTO;
-		
-//		CollectionModel<CozinhaDTO> cozinhasDTO = cozinhaDTOassembler.toCollectionModel(cozinhasPage.getContent());
-//		Page<CozinhaDTO> pageCozinhasDTO = new PageImpl<>(
-//				cozinhasDTO, 
-//				pageable, 
-//				cozinhasPage.getTotalElements());
-//
-//		return ResponseEntity.ok()
-//				.cacheControl(CacheControl.maxAge(20, TimeUnit.SECONDS))
-//				.body(pageCozinhasDTO);
 	}
 	
 	@GetMapping("/{id}")
