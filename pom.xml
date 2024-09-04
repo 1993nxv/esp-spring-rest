@@ -22,6 +22,7 @@
     <jasperreports.version>6.21.3</jasperreports.version>
     <aws-s3.version>1.12.756</aws-s3.version>
     <spring-fox.version>2.9.2</spring-fox.version>
+    <logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
   </properties>
 
   <dependencies>
@@ -158,7 +159,16 @@
 	    </exclusion>
 		</exclusions>
 	</dependency>
-<!-- Documentação -->  
+<!-- Documentação --> 
+
+<!--Log-->
+	<dependency>
+	   <groupId>org.logback-extensions</groupId>
+	   <artifactId>logback-ext-loggly</artifactId>
+	   <version>0.1.2</version>
+	</dependency>
+<!--Log-->
+
 </dependencies>
     
 
