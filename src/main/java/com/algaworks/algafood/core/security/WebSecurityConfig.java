@@ -20,6 +20,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //		Retirando o uso de sessions/cookies
 		.and()
 			.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				
+		.and()
+			.csrf().disable();
 	}
 }
