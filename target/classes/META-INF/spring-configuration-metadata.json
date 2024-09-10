@@ -1,0 +1,47 @@
+{
+  "groups": [
+    {
+      "name": "algafood.email",
+      "type": "com.algaworks.algafood.core.email.EmailProperties",
+      "sourceType": "com.algaworks.algafood.core.email.EmailProperties"
+    },
+    {
+      "name": "algafood.email.sandbox",
+      "type": "com.algaworks.algafood.core.email.EmailProperties$Sandbox",
+      "sourceType": "com.algaworks.algafood.core.email.EmailProperties"
+    },
+    {
+      "name": "algafood.storage",
+      "type": "com.algaworks.algafood.core.storage.StorageProperties",
+      "sourceType": "com.algaworks.algafood.core.storage.StorageProperties"
+    },
+    {
+      "name": "algafood.storage.local",
+      "type": "com.algaworks.algafood.core.storage.StorageProperties$Local",
+      "sourceType": "com.algaworks.algafood.core.storage.StorageProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "algafood.email.impl",
+      "type": "com.algaworks.algafood.core.email.EmailProperties$Implementacao",
+      "sourceType": "com.algaworks.algafood.core.email.EmailProperties"
+    },
+    {
+      "name": "algafood.email.remetente",
+      "type": "java.lang.String",
+      "sourceType": "com.algaworks.algafood.core.email.EmailProperties"
+    },
+    {
+      "name": "algafood.storage.local.diretorio-fotos",
+      "type": "java.lang.String",
+      "description": "A description for 'algafood.storage.local.diretorio-fotos'"
+    },
+    {
+      "name": "algafood.storage.tipo",
+      "type": "com.algaworks.algafood.core.storage.StorageProperties$TipoStorage",
+      "sourceType": "com.algaworks.algafood.core.storage.StorageProperties"
+    }
+  ],
+  "hints": []
+}

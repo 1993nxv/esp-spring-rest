@@ -39,6 +39,7 @@ import com.google.common.collect.ImmutableMap;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -79,7 +80,7 @@ public class PedidoController {
 		Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
 		CollectionModel<PedidoResumoDTO> pedidosResumoDTO = assemblerResumoDTO.toCollectionModel(pedidosPage.getContent());
 		Page<PedidoResumoDTO> pedidosResumoDTOpage = new PageImpl<>(
-				pedidosResumoDTO.getContent().stream().toList(),
+				pedidosResumoDTO.getContent().stream().collect(Collectors.toList()),
 				pageable,
 				pedidosPage.getTotalElements());
 		return pedidosResumoDTOpage;

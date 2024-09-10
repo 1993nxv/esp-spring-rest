@@ -1,0 +1,4 @@
+com/algaworks/algafood/CadastroCozinhaIT.class
+com/algaworks/algafood/util/ResourceUtils.class
+com/algaworks/algafood/CadastroRestauranteIT.class
+com/algaworks/algafood/util/DatabaseCleaner.class
