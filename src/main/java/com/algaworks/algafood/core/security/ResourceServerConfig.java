@@ -8,21 +8,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic()
-			.and()
-			.authorizeRequests()
-				.antMatchers("/restaurantes/**").permitAll()
+		http
+				.authorizeRequests()
 				.anyRequest().authenticated()
-//		Retirando o uso de sessions/cookies
-		.and()
-			.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				
-		.and()
-			.csrf().disable();
+				.and()
+				.oauth2ResourceServer()
+				.opaqueToken();
 	}
 }
