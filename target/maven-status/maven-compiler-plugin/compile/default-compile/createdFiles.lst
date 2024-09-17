@@ -128,7 +128,6 @@ com/algaworks/algafood/domain/model/modelDTO/ItemPedidoDTO.class
 com/algaworks/algafood/core/email/EmailConfig.class
 com/algaworks/algafood/api/assembler/FormaPagementoDTOassembler.class
 com/algaworks/algafood/domain/model/Usuario.class
-com/algaworks/algafood/core/storage/StorageProperties$S3.class
 com/algaworks/algafood/infrastructure/service/report/PdfVendaReportServiceImpl.class
 com/algaworks/algafood/core/validation/Multiplo.class
 com/algaworks/algafood/infrastructure/service/query/VendaQueryServiceImpl.class
