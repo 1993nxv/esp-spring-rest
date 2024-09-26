@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,9 @@ public class UsuarioService {
 	
 	@Autowired
 	UsuarioRepository usuarioRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	public List<Usuario> findAll(){
 		return usuarioRepository.findAll();
@@ -39,18 +43,19 @@ public class UsuarioService {
 			throw new NegocioException(
 					String.format("Já existe um usuário com o e-mail %s", usuario.getEmail()));
 		}
+		usuario.setSenha(encryptSenha(usuario.getSenha()));
 		return usuarioRepository.save(usuario);
 	}
 	
 	@Transactional
 	public Usuario updateSenha(Long id, SenhaVO senhaVO) {
 		Usuario usuario = findById(id);
-		if(usuario.getSenha().equals(senhaVO.getSenhaAtual())) {
+		if(!passwordEncoder.matches(senhaVO.getSenhaAtual(), usuario.getSenha())) {
+			throw new SenhaAtualIncorretaException("Senha atual incorreta");
+		}else {
 			usuario.setId(id);
 			usuario.setSenha(senhaVO.getNovaSenha());
 			return save(usuario);
-		}else {
-			throw new SenhaAtualIncorretaException("Senha atual incorreta");
 		}		
 	}
 	
@@ -58,6 +63,10 @@ public class UsuarioService {
 	public void deleteById(Long id) {		
 			findById(id);
 			usuarioRepository.deleteById(id);		
+	}
+
+	public String encryptSenha(String senha) {
+		return passwordEncoder.encode(senha);
 	}
 
 }

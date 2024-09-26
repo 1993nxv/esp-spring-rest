@@ -16,12 +16,14 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Usuario {
-	
+
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,5 +47,5 @@ public class Usuario {
 				joinColumns = @JoinColumn(name = "usuario_id"),
 				inverseJoinColumns = @JoinColumn(name ="grupo_id"))
 	private List<Grupo> grupos;
-	
+
 }
