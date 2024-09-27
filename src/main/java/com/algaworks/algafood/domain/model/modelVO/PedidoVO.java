@@ -1,22 +1,17 @@
 package com.algaworks.algafood.domain.model.modelVO;
 
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.util.List;
 
 @Setter
 @Getter
 public class PedidoVO {
-	
-	@Valid
-	@NotNull
-	private ClienteIdVO cliente;
-	
+
 	@Valid
 	@NotNull
 	private RestauranteIdVO restaurante;
