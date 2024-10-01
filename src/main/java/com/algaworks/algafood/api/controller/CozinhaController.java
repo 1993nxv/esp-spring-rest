@@ -14,6 +14,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,27 +55,25 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 	
 	@Autowired
 	private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
-	
+
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping
 	public PagedModel<CozinhaDTO> findAll(@PageableDefault(size = 2) Pageable pageable){
-		
-		log.info("Listando cozinhas...");
-		
 		Page<Cozinha> cozinhasPage = cozinhaService.findAll(pageable);
-		
 		PagedModel<CozinhaDTO> cozinhaPagedDTO = pagedResourcesAssembler
 				.toModel(cozinhasPage, cozinhaDTOassembler);
-		
 		return cozinhaPagedDTO;
 	}
-	
+
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/{id}")
 	public ResponseEntity<CozinhaDTO> findById(@PathVariable Long id){		
 			CozinhaDTO cozinhaDTO = cozinhaDTOassembler
 					.cozinhaDTOConverter(cozinhaService.findById(id));
 			return ResponseEntity.ok(cozinhaDTO);					
 	}
-	
+
+	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CozinhaDTO save(
@@ -84,7 +83,8 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 		Cozinha cozinha = cozinhaVOdisassembler.toEntity(cozinhaVO, Cozinha.class);
 		return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinha));
 	}
-	
+
+	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
 	@PutMapping("/{id}")
 	public CozinhaDTO update(@PathVariable Long id, 
 				@RequestBody @Valid CozinhaVO cozinhaVO){		
@@ -92,23 +92,27 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 			cozinhaVOdisassembler.copyToEntity(cozinhaVO, cozinhaAtual);
 			return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinhaAtual));	
 	}
-	
+
+	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteById(@PathVariable Long id){
 		cozinhaService.deleteById(id);
 	}
-	
+
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/nome")
 	public List<Cozinha> findByNome(@RequestParam("nome") String nome) {
 		return cozinhaService.findByNome(nome);
 	}
-	
+
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/nomelike")
 	public List<Cozinha> findByNomeContaining(@RequestParam("nome") String nome, Pageable pageable) {
 		return cozinhaService.findByNomeContaining(nome, pageable).getContent();
 	}
-	
+
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/primeiro")
 	public Optional<Cozinha> buscarPrimeiro(){		
 		return cozinhaService.buscarPrimeiro();	
