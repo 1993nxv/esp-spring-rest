@@ -68,9 +68,9 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/{id}")
 	public ResponseEntity<CozinhaDTO> findById(@PathVariable Long id){		
-			CozinhaDTO cozinhaDTO = cozinhaDTOassembler
-					.cozinhaDTOConverter(cozinhaService.findById(id));
-			return ResponseEntity.ok(cozinhaDTO);					
+		CozinhaDTO cozinhaDTO = cozinhaDTOassembler
+				.cozinhaDTOConverter(cozinhaService.findById(id));
+		return ResponseEntity.ok(cozinhaDTO);
 	}
 
 	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
@@ -88,9 +88,9 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 	@PutMapping("/{id}")
 	public CozinhaDTO update(@PathVariable Long id, 
 				@RequestBody @Valid CozinhaVO cozinhaVO){		
-			Cozinha cozinhaAtual = cozinhaService.findById(id);
-			cozinhaVOdisassembler.copyToEntity(cozinhaVO, cozinhaAtual);
-			return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinhaAtual));	
+		Cozinha cozinhaAtual = cozinhaService.findById(id);
+		cozinhaVOdisassembler.copyToEntity(cozinhaVO, cozinhaAtual);
+		return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinhaAtual));
 	}
 
 	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
@@ -115,6 +115,6 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/primeiro")
 	public Optional<Cozinha> buscarPrimeiro(){		
-		return cozinhaService.buscarPrimeiro();	
+		return cozinhaService.buscarPrimeiro();
 	}
 }
