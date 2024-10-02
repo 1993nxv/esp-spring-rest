@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.api.exceptionhendler.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +57,7 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 	@Autowired
 	private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@GetMapping
 	public PagedModel<CozinhaDTO> findAll(@PageableDefault(size = 2) Pageable pageable){
 		Page<Cozinha> cozinhasPage = cozinhaService.findAll(pageable);
@@ -65,7 +66,7 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 		return cozinhaPagedDTO;
 	}
 
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@GetMapping("/{id}")
 	public ResponseEntity<CozinhaDTO> findById(@PathVariable Long id){		
 		CozinhaDTO cozinhaDTO = cozinhaDTOassembler
@@ -73,7 +74,7 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 		return ResponseEntity.ok(cozinhaDTO);
 	}
 
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.PodeEditar
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CozinhaDTO save(
@@ -84,7 +85,7 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 		return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinha));
 	}
 
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.PodeEditar
 	@PutMapping("/{id}")
 	public CozinhaDTO update(@PathVariable Long id, 
 				@RequestBody @Valid CozinhaVO cozinhaVO){		
@@ -93,26 +94,26 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 		return cozinhaDTOassembler.cozinhaDTOConverter(cozinhaService.save(cozinhaAtual));
 	}
 
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.PodeEditar
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteById(@PathVariable Long id){
 		cozinhaService.deleteById(id);
 	}
 
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@GetMapping("/nome")
 	public List<Cozinha> findByNome(@RequestParam("nome") String nome) {
 		return cozinhaService.findByNome(nome);
 	}
 
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@GetMapping("/nomelike")
 	public List<Cozinha> findByNomeContaining(@RequestParam("nome") String nome, Pageable pageable) {
 		return cozinhaService.findByNomeContaining(nome, pageable).getContent();
 	}
 
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@GetMapping("/primeiro")
 	public Optional<Cozinha> buscarPrimeiro(){		
 		return cozinhaService.buscarPrimeiro();
