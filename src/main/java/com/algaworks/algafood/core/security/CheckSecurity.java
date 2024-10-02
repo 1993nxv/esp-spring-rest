@@ -1,4 +1,4 @@
-package com.algaworks.algafood.api.exceptionhendler;
+package com.algaworks.algafood.core.security;
 
 
 import org.springframework.security.access.prepost.PreAuthorize;

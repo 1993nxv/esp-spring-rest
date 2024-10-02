@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.algaworks.algafood.api.exceptionhendler.CheckSecurity;
+import ch.qos.logback.core.net.SyslogOutputStream;
+import com.algaworks.algafood.core.security.CheckSecurity;
+import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +17,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,6 +62,10 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 	@CheckSecurity.Cozinhas.PodeConsultar
 	@GetMapping
 	public PagedModel<CozinhaDTO> findAll(@PageableDefault(size = 2) Pageable pageable){
+
+		// Debug autorizações
+		System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+
 		Page<Cozinha> cozinhasPage = cozinhaService.findAll(pageable);
 		PagedModel<CozinhaDTO> cozinhaPagedDTO = pagedResourcesAssembler
 				.toModel(cozinhasPage, cozinhaDTOassembler);
