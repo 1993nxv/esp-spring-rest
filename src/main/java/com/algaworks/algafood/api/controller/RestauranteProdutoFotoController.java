@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.core.security.CheckSecurity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -47,7 +48,8 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoContr
 	
 	private DTOAssembler<FotoProduto, FotoProdutoDTO, RestauranteProdutoFotoController> assemblerDTO = 
 		new DTOAssembler<>(FotoProdutoDTO.class, RestauranteProdutoFotoController.class, modelMapper);
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoProdutoDTO atualizarFoto(
 			@PathVariable Long restauranteId,
@@ -67,7 +69,8 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoContr
 		
 		return assemblerDTO.toDTO(fotoProdutoService.save(foto, file.getInputStream()), FotoProdutoDTO.class);
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public FotoProdutoDTO findFotoById(
 			@PathVariable Long restauranteId,
@@ -75,7 +78,8 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoContr
 			) {
 		return assemblerDTO.toDTO(fotoProdutoService.findFotoById(restauranteId, produtoId), FotoProdutoDTO.class);
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping
 	public ResponseEntity<?> servirFoto(
 			@PathVariable Long restauranteId,
@@ -108,13 +112,14 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoContr
 		}
 		
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@DeleteMapping
 	public ResponseEntity<?> delete(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		fotoProdutoService.delete(restauranteId, produtoId);
 		return ResponseEntity.noContent().build();
 	}
-
+	
 	private void verificarCompatibilidadeMediaType(MediaType mediaType, List<MediaType> acceptMediaTypes) throws HttpMediaTypeNotAcceptableException {
 		boolean iscompativel = acceptMediaTypes.stream()
 				.anyMatch(acceptedMediaType -> acceptedMediaType.isCompatibleWith(mediaType)

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,8 @@ public class RestauranteProdutoController {
 	
 	@Autowired
 	private ProdutoVOdisassembler produtoVOdisassembler;
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping
 	public List<ProdutoDTO> findAll(
 			@PathVariable Long restauranteId, 
@@ -53,13 +55,15 @@ public class RestauranteProdutoController {
 		}
 		
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping("/{produtoId}")
 	public ProdutoDTO findById(@PathVariable Long produtoId, @PathVariable Long restauranteId) {
 		return produtoDTOAssembler.produtoDTOConverter(
 				produtoService.findProdutoByIdAndRestaurante(produtoId, restauranteId));
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProdutoDTO save(@RequestBody @Valid ProdutoVO produtoVO, @PathVariable Long restauranteId) {

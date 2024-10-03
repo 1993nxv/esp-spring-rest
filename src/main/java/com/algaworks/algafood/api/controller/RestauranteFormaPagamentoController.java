@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import com.algaworks.algafood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,19 +28,22 @@ public class RestauranteFormaPagamentoController {
 	
 	@Autowired
 	private FormaPagementoDTOassembler DTOassembler;
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping
 	public List<FormaPagamentoDTO> findAll(@PathVariable Long restauranteId){
 		Restaurante restaurante = restauranteService.findById(restauranteId);
 		return DTOassembler.toListDTO(restaurante.getFormasPagamento());
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@DeleteMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void removeFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
 		restauranteService.removeFormaPagamento(restauranteId, formaPagamentoId);
 	}
-	
+
+	@@CheckSecurity.Restaurantes.PodeEditar
 	@PostMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<FormaPagamentoDTO> adicionaFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {

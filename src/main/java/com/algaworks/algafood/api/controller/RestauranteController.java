@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.algaworks.algafood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,7 +51,8 @@ public class RestauranteController {
 	
 	@Autowired
 	RestauranteVOdisassembler restauranteVOdisassembler;
-	
+
+
 	@ApiOperation(value = "Lista restaurantes")
 	@ApiImplicitParams({
 		@ApiImplicitParam(
@@ -62,12 +64,15 @@ public class RestauranteController {
 				required = false
 		)
 	})
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping
 	public List<RestauranteDTO> findAll(){
 		List<RestauranteDTO> restaurantes = restauranteDTOAssembler.toListDTO(restauranteService.findAll());
 		return restaurantes;
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@ApiOperation(value = "Lista restaurantes", hidden = true)
 	@JsonView(RestauranteNomesDTO.class)
 	@GetMapping(params = "projecao=apenas-nomes")
@@ -75,12 +80,14 @@ public class RestauranteController {
 		List<Restaurante> restaurantes = restauranteService.findAll();
 		return restaurantes;
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping("/{id}")
 	public RestauranteDTO findById(@PathVariable Long id) {
 		return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.findById(id));
 	}
 
+	@CheckSecurity.Restaurantes.PodeEditar
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public RestauranteDTO save(@RequestBody @Valid RestauranteVO restauranteVO) {
@@ -91,7 +98,8 @@ public class RestauranteController {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@PutMapping("/{id}")
 	public RestauranteDTO update(
 				@PathVariable Long id, 
@@ -108,13 +116,15 @@ public class RestauranteController {
 				throw new NegocioException(e.getMessage(), e);
 			}
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable Long id) {
 			findById(id);
 			restauranteService.deleteById(id);	
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@PatchMapping("/{id}")
 	public RestauranteDTO updatePartially(
 				@PathVariable Long id,
@@ -125,12 +135,14 @@ public class RestauranteController {
 			return restauranteDTOAssembler.restauranteDTOConverter(
 					restauranteService.updatePartially(restaurante, campos, request));			
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@PutMapping("/{id}/ativar")
 	public void ativacao(@PathVariable Long id) {
 		restauranteService.ativacao(id);
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@PutMapping("/ativar/todos")
 	@ResponseStatus(HttpStatus.OK)
 	public void ativacaoEmMassa() {
@@ -138,12 +150,14 @@ public class RestauranteController {
 		findAll().forEach(restaurante -> ids.add(restaurante.getId()));
 		restauranteService.ativacaoEmMassa(ids);
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@DeleteMapping("/{id}/inativar")
 	public void inativacao(@PathVariable Long id) {
 		restauranteService.inativacao(id);
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@DeleteMapping("/inativar/todos")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inativacaoEmMassa() {
@@ -151,30 +165,35 @@ public class RestauranteController {
 		findAll().forEach(restaurante -> ids.add(restaurante.getId()));
 		restauranteService.inativacaoEmMassa(ids);
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PutMapping("/{id}/abertura")
 	public void abrirRestaurante(@PathVariable Long id) {
 		restauranteService.abrirRestaurante(id);
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeEditar
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PutMapping("/{id}/fechamento")
 	public void fecharRestaurante(@PathVariable Long id) {
 		restauranteService.fecharRestaurante(id);
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping("/por-taxa")
 	public List<RestauranteDTO> findByTaxaFreteBetween
 		(@RequestParam BigDecimal taxaInicial, @RequestParam BigDecimal taxaFinal){		
 		return restauranteDTOAssembler.toListDTO(restauranteService.findByTaxaFreteBetween(taxaInicial, taxaFinal));
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping("/por-nome-e-id")
 	public List<RestauranteDTO> porNomeAndCozinhaId(@RequestParam String nome, @RequestParam Long cozinhaId){
 		return restauranteDTOAssembler.toListDTO(restauranteService.porNomeAndCozinhaId(nome, cozinhaId));
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping("/findImp")
 	public List<RestauranteDTO> findImpl(
 			 String nome, 
@@ -182,13 +201,15 @@ public class RestauranteController {
 			 BigDecimal taxaFreteFinal){		
 		return restauranteDTOAssembler.toListDTO(restauranteService.findImpl(nome, taxaFreteInicial, taxaFreteFinal));
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping("/frete-gratis")
 	@ResponseStatus(HttpStatus.CREATED)
 	public List<RestauranteDTO> findImpl(String nome){		
 		return restauranteDTOAssembler.toListDTO(restauranteService.findFreteGratis(nome));
 	}
-	
+
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping("/primeiro")
 	@ResponseStatus(HttpStatus.CREATED)
 	public RestauranteDTO buscarPrimeiro(){	
