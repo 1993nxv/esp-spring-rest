@@ -25,9 +25,6 @@ public class AlgaSecurity {
     }
 
     public boolean gerenciaRestaurante (Long restauranteId){
-        System.out.println("Pode: " + restauranteRepository.existsResponsavel(restauranteId, getUsuarioId()));
-        System.out.println("Restaurante id: " + restauranteId);
-        System.out.println("Usuario id: " + getUsuarioId());
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
     }
 
