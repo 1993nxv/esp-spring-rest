@@ -49,7 +49,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoContr
 	private DTOAssembler<FotoProduto, FotoProdutoDTO, RestauranteProdutoFotoController> assemblerDTO = 
 		new DTOAssembler<>(FotoProdutoDTO.class, RestauranteProdutoFotoController.class, modelMapper);
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoProdutoDTO atualizarFoto(
 			@PathVariable Long restauranteId,
@@ -113,7 +113,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoContr
 		
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@DeleteMapping
 	public ResponseEntity<?> delete(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		fotoProdutoService.delete(restauranteId, produtoId);

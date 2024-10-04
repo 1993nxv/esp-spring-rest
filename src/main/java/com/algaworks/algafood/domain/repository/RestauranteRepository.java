@@ -25,5 +25,7 @@ public interface RestauranteRepository extends
 	
 	@Query("from Restaurante where nome like %:nome% and cozinha.id = :cozinhaId")
 	List<Restaurante> porNomeAndCozinhaId(String nome, Long cozinhaId);
+
+	boolean existsResponsavel(Long restauranteId, Long usuarioId);
 	
 }

@@ -120,6 +120,17 @@ insert into usuario (id, nome, email, senha, data_cadastro) values
 
 insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2), (3, 3), (4, 4);
 
+-- Relacionando José Souza (ID 3) aos restaurantes Thai Gourmet (ID 1) e Thai Delivery (ID 2)
+INSERT INTO restaurante_usuario_responsavel (restaurante_id, usuario_id)
+VALUES (1, 3), (2, 3);
+
+-- Relacionando Sebastião Martins (ID 4) aos restaurantes Java Steakhouse (ID 4) e Tuk Tuk Comida Indiana (ID 3)
+INSERT INTO restaurante_usuario_responsavel (restaurante_id, usuario_id)
+VALUES (4, 4), (3, 4);
+
+-- Relacionando Manoel Lima (ID 5) aos restaurantes Lanchonete do Tio Sam (ID 5) e Bar da Maria (ID 6)
+INSERT INTO restaurante_usuario_responsavel (restaurante_id, usuario_id)
+VALUES (5, 5), (6, 5);
 
 insert into pedido (id, codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
                     endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,

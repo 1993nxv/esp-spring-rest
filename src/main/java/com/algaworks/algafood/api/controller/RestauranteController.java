@@ -87,7 +87,7 @@ public class RestauranteController {
 		return restauranteDTOAssembler.restauranteDTOConverter(restauranteService.findById(id));
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public RestauranteDTO save(@RequestBody @Valid RestauranteVO restauranteVO) {
@@ -99,7 +99,7 @@ public class RestauranteController {
 		}
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PutMapping("/{id}")
 	public RestauranteDTO update(
 				@PathVariable Long id, 
@@ -117,14 +117,14 @@ public class RestauranteController {
 			}
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable Long id) {
 			findById(id);
 			restauranteService.deleteById(id);	
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PatchMapping("/{id}")
 	public RestauranteDTO updatePartially(
 				@PathVariable Long id,
@@ -136,13 +136,13 @@ public class RestauranteController {
 					restauranteService.updatePartially(restaurante, campos, request));			
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PutMapping("/{id}/ativar")
 	public void ativacao(@PathVariable Long id) {
 		restauranteService.ativacao(id);
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PutMapping("/ativar/todos")
 	@ResponseStatus(HttpStatus.OK)
 	public void ativacaoEmMassa() {
@@ -151,13 +151,13 @@ public class RestauranteController {
 		restauranteService.ativacaoEmMassa(ids);
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@DeleteMapping("/{id}/inativar")
 	public void inativacao(@PathVariable Long id) {
 		restauranteService.inativacao(id);
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@DeleteMapping("/inativar/todos")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inativacaoEmMassa() {
@@ -166,14 +166,14 @@ public class RestauranteController {
 		restauranteService.inativacaoEmMassa(ids);
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PutMapping("/{id}/abertura")
 	public void abrirRestaurante(@PathVariable Long id) {
 		restauranteService.abrirRestaurante(id);
 	}
 
-	@CheckSecurity.Restaurantes.PodeGerenciar
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PutMapping("/{id}/fechamento")
 	public void fecharRestaurante(@PathVariable Long id) {

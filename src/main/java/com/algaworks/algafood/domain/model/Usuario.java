@@ -1,23 +1,14 @@
 package com.algaworks.algafood.domain.model;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -41,6 +32,9 @@ public class Usuario {
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime(2)")
 	private OffsetDateTime dataCadastro;
+
+	@ManyToMany(mappedBy = "responsaveis")
+	private Set<Restaurante> restaurantes = new HashSet<>();
 	
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo",

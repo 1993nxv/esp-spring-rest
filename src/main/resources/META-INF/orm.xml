@@ -8,9 +8,19 @@
     
     <named-query name="Restaurante.porNomeAndCozinhaId">
 		<query>
-		from Restaurante 
-		where nome like concat('%', :nome, '%')
-		and cozinha.id = :cozinhaId
+			from Restaurante
+			where nome like concat('%', :nome, '%')
+			and cozinha.id = :cozinhaId
+		</query>
+	</named-query>
+
+	<named-query name="Restaurante.existsResponsavel">
+		<query>
+			select case when count(*) > 0 then true else false end
+			from Restaurante rest
+			join rest.responsaveis resp
+			where rest.id = :restauranteId
+			and resp.id = :usuarioId
 		</query>
 	</named-query>
 
