@@ -33,9 +33,6 @@ public class Usuario {
 	@Column(nullable = false, columnDefinition = "datetime(2)")
 	private OffsetDateTime dataCadastro;
 
-	@ManyToMany(mappedBy = "responsaveis")
-	private Set<Restaurante> restaurantes = new HashSet<>();
-	
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo",
 				joinColumns = @JoinColumn(name = "usuario_id"),

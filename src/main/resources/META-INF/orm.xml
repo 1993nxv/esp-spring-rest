@@ -16,7 +16,7 @@
 
 	<named-query name="Restaurante.existsResponsavel">
 		<query>
-			select case when count(*) > 0 then true else false end
+			select count(resp) > 0
 			from Restaurante rest
 			join rest.responsaveis resp
 			where rest.id = :restauranteId

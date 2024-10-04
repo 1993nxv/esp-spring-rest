@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AlgaSecutiry {
+public class AlgaSecurity {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
@@ -25,6 +25,9 @@ public class AlgaSecutiry {
     }
 
     public boolean gerenciaRestaurante (Long restauranteId){
+        System.out.println("Pode: " + restauranteRepository.existsResponsavel(restauranteId, getUsuarioId()));
+        System.out.println("Restaurante id: " + restauranteId);
+        System.out.println("Usuario id: " + getUsuarioId());
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
     }
 

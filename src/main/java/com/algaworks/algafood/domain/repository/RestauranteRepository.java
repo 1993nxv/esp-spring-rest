@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import com.algaworks.algafood.domain.model.Restaurante;
+import org.springframework.data.repository.query.Param;
 
 public interface RestauranteRepository extends 
 				CustomJpaRepository<Restaurante, Long>,
@@ -26,6 +27,7 @@ public interface RestauranteRepository extends
 	@Query("from Restaurante where nome like %:nome% and cozinha.id = :cozinhaId")
 	List<Restaurante> porNomeAndCozinhaId(String nome, Long cozinhaId);
 
-	boolean existsResponsavel(Long restauranteId, Long usuarioId);
+	@Query(name = "Restaurante.existsResponsavel")
+	boolean existsResponsavel(@Param("restauranteId") Long restauranteId, @Param("usuarioId") Long usuarioId);
 	
 }

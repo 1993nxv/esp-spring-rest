@@ -3,7 +3,7 @@ package com.algaworks.algafood.domain.service;
 import java.util.List;
 import java.util.Set;
 
-import com.algaworks.algafood.core.security.AlgaSecutiry;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +34,7 @@ public class PedidoService {
 	private CidadeService cidadeService;
 
 	@Autowired
-	private AlgaSecutiry algaSecutiry;
+	private AlgaSecurity algaSecutiry;
 	
 	
 	public List<Pedido> findAll(){
