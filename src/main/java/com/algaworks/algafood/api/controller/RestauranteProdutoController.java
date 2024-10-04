@@ -63,7 +63,7 @@ public class RestauranteProdutoController {
 				produtoService.findProdutoByIdAndRestaurante(produtoId, restauranteId));
 	}
 
-	@CheckSecurity.Restaurantes.PodeEditar
+	@CheckSecurity.Restaurantes.PodeGerenciar
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProdutoDTO save(@RequestBody @Valid ProdutoVO produtoVO, @PathVariable Long restauranteId) {

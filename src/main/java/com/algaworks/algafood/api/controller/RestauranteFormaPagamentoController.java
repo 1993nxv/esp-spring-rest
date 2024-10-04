@@ -36,14 +36,14 @@ public class RestauranteFormaPagamentoController {
 		return DTOassembler.toListDTO(restaurante.getFormasPagamento());
 	}
 
-	@CheckSecurity.Restaurantes.PodeEditar
+	@CheckSecurity.Restaurantes.PodeGerenciar
 	@DeleteMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void removeFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
 		restauranteService.removeFormaPagamento(restauranteId, formaPagamentoId);
 	}
 
-	@@CheckSecurity.Restaurantes.PodeEditar
+	@CheckSecurity.Restaurantes.PodeGerenciar
 	@PostMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<FormaPagamentoDTO> adicionaFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
