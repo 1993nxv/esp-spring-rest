@@ -168,16 +168,16 @@ public class RestauranteController {
 
 	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@PutMapping("/{id}/abertura")
-	public void abrirRestaurante(@PathVariable Long id) {
-		restauranteService.abrirRestaurante(id);
+	@PutMapping("/{restaurenteId}/abertura")
+	public void abrirRestaurante(@PathVariable Long restaurenteId) {
+		restauranteService.abrirRestaurante(restaurenteId);
 	}
 
 	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@PutMapping("/{id}/fechamento")
-	public void fecharRestaurante(@PathVariable Long id) {
-		restauranteService.fecharRestaurante(id);
+	@PutMapping("/{restaurenteId}/fechamento")
+	public void fecharRestaurante(@PathVariable Long restaurenteId) {
+		restauranteService.fecharRestaurante(restaurenteId);
 	}
 
 	@CheckSecurity.Restaurantes.PodeConsultar
