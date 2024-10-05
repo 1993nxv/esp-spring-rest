@@ -1,6 +1,7 @@
 package com.algaworks.algafood.core.security;
 
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.ElementType;
@@ -45,12 +46,10 @@ public @interface CheckSecurity {
 
     }
 
-    public @interface  Pedidos {
+    public @interface Pedidos {
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and " +
-                "hasAuthority('CONSULTAR_PEDIDOS') or " +
-                "(@algaSecurity.clienteDoPedido(#pedidoCodigo)) or " +
-                "(@algaSecurity.gerenciaRestauranteDoPedido(#pedidoCodigo))")
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or @algaSecurity.getUsuarioId() == returnObject.cliente.id")
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         public @interface PodeBuscar { }

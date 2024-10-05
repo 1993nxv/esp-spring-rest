@@ -30,10 +30,4 @@ public interface RestauranteRepository extends
 	@Query(name = "Restaurante.existsResponsavel")
 	boolean existsResponsavel(Long restauranteId, Long usuarioId);
 
-	@Query(name = "Restaurante.isClienteDoPedido")
-	boolean isClienteDoPedido(String codigoPedido, Long usuarioId);
-
-	@Query(name = "Restaurante.gerenciaRestauranteDoPedido")
-	boolean gerenciaRestauranteDoPedido(String codigoPedido, Long usuarioId);
-
 }

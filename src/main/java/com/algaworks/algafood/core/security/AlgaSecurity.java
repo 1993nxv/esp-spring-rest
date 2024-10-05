@@ -28,12 +28,4 @@ public class AlgaSecurity {
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
     }
 
-    public boolean clienteDoPedido (String codigoPedido){
-        return restauranteRepository.isClienteDoPedido(codigoPedido, getUsuarioId());
-    }
-
-    public boolean gerenciaRestaurante (String codigoPedido){
-        return restauranteRepository.gerenciaRestauranteDoPedido(codigoPedido, getUsuarioId());
-    }
-
 }
