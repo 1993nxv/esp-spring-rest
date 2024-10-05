@@ -24,4 +24,28 @@
 		</query>
 	</named-query>
 
+	<named-query name="Restaurante.isClienteDoPedido">
+		<query>
+			<![CDATA[
+        select count(p) > 0
+        from Pedido p
+        where p.codigo = :codigoPedido
+        and p.cliente.id = :usuarioId
+        ]]>
+		</query>
+	</named-query>
+
+	<named-query name="Restaurante.gerenciaRestauranteDoPedido">
+		<query>
+			<![CDATA[
+        select count(p) > 0
+        from Pedido p
+        join p.restaurante r
+        join r.responsaveis resp
+        where p.codigo = :codigoPedido
+        and resp.id = :usuarioId
+        ]]>
+		</query>
+	</named-query>
+
 </entity-mappings>

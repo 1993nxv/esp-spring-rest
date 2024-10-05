@@ -28,6 +28,12 @@ public interface RestauranteRepository extends
 	List<Restaurante> porNomeAndCozinhaId(String nome, Long cozinhaId);
 
 	@Query(name = "Restaurante.existsResponsavel")
-	boolean existsResponsavel(@Param("restauranteId") Long restauranteId, @Param("usuarioId") Long usuarioId);
-	
+	boolean existsResponsavel(Long restauranteId, Long usuarioId);
+
+	@Query(name = "Restaurante.isClienteDoPedido")
+	boolean isClienteDoPedido(String codigoPedido, Long usuarioId);
+
+	@Query(name = "Restaurante.gerenciaRestauranteDoPedido")
+	boolean gerenciaRestauranteDoPedido(String codigoPedido, Long usuarioId);
+
 }

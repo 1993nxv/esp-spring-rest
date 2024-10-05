@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.controller;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.core.security.CheckSecurity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -85,14 +86,14 @@ public class PedidoController {
 				pedidosPage.getTotalElements());
 		return pedidosResumoDTOpage;
 	}
-	
+
+	@CheckSecurity.Pedidos.PodeBuscar
 	@ApiImplicitParams({
 		@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
 		name = "campos",
 		paramType = "query",
 		type = "String",
-		example = "name,asc")
-	})
+		example = "name,asc")})
 	@GetMapping("/{pedidoCodigo}")
 	public ResponseEntity<?> findByCodigo(@PathVariable String pedidoCodigo){		
 		Pedido pedido = pedidoService.findByCodigo(pedidoCodigo);
