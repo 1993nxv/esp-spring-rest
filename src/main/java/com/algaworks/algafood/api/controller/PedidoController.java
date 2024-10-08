@@ -95,10 +95,11 @@ public class PedidoController {
 		type = "String",
 		example = "name,asc")})
 	@GetMapping("/{pedidoCodigo}")
-	public ResponseEntity<?> findByCodigo(@PathVariable String pedidoCodigo){		
+	public ResponseEntity<PedidoDTO> findByCodigo(@PathVariable String pedidoCodigo){
 		Pedido pedido = pedidoService.findByCodigo(pedidoCodigo);
-		return ResponseEntity.ok(
-				assemblerDTO.toDTO(pedido, PedidoDTO.class));						
+		ResponseEntity<PedidoDTO> retorno = ResponseEntity.ok(
+				assemblerDTO.toDTO(pedido, PedidoDTO.class));
+		return retorno;
 	}
 	
 	@PostMapping

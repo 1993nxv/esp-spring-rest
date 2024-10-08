@@ -49,7 +49,9 @@ public @interface CheckSecurity {
     public @interface Pedidos {
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
-        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or @algaSecurity.getUsuarioId() == returnObject.cliente.id")
+        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " +
+                "@algaSecurity.getUsuarioId() == returnObject.getBody().getCliente().getId() or " +
+                "@algaSecurity.gerenciaRestaurante(returnObject.getBody().getRestaurante().getId())")
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         public @interface PodeBuscar { }
