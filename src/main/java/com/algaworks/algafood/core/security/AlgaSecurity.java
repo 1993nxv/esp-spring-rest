@@ -28,4 +28,9 @@ public class AlgaSecurity {
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
     }
 
+    public boolean usuarioAutenticadoIgual(Long usuarioId) {
+        return getUsuarioId() != null && usuarioId != null
+                && getUsuarioId().equals(usuarioId);
+    }
+
 }

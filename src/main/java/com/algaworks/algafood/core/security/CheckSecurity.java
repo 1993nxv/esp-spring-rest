@@ -56,6 +56,13 @@ public @interface CheckSecurity {
         @Target(ElementType.METHOD)
         public @interface PodeBuscar { }
 
+        @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULTAR_PEDIDOS') or " +
+                "@algaSecurity.usuarioAutenticadoIgual(#Object.getBody().getCliente().getId()) or " +
+                "@algaSecurity.gerenciaRestaurante(#Object.getBody().getRestaurante().getId())")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodePesquisar { }
+
     }
 
 }
