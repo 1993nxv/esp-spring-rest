@@ -1,21 +1,22 @@
-version: "3.9"
-
 networks:
   alga-network:
     driver: bridge
 
 services:
-  algafood-myql:
+  algafood-mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: "FAce1122@@"
+      MYSQL_DATABASE: "algafoodapi"
+      MYSQL_USER: "delmondes"
+      MYSQL_PASSWORD: "FAce1122@@"
     ports:
       - "3306:3306"
     networks:
       - alga-network
 
   algafood-oauth:
-    image: algafood-oauth
+    image: algafood-oauth:1.0
     environment:
       DB_HOST: algafood-mysql
     ports:
@@ -23,10 +24,10 @@ services:
     networks:
       - alga-network
     depends_on:
-      - algafood-myql
+      - algafood-mysql
 
   algafood-api:
-    image: algafoodapi
+    image: algafoodapi:1.0
     environment:
       DB_HOST: algafood-mysql
       OAUTH_HOST: algafood-oauth
@@ -35,5 +36,5 @@ services:
     networks:
       - alga-network
     depends_on:
-      - algafood-myql
-      - algafoodo-oauth
+      - algafood-mysql
+      - algafood-oauth
