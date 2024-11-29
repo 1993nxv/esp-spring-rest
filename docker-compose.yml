@@ -1,0 +1,39 @@
+version: "3.9"
+
+networks:
+  alga-network:
+    driver: bridge
+
+services:
+  algafood-myql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    networks:
+      - alga-network
+
+  algafood-oauth:
+    image: algafood-oauth
+    environment:
+      DB_HOST: algafood-mysql
+    ports:
+      - "8181:8181"
+    networks:
+      - alga-network
+    depends_on:
+      - algafood-myql
+
+  algafood-api:
+    image: algafoodapi
+    environment:
+      DB_HOST: algafood-mysql
+      OAUTH_HOST: algafood-oauth
+    ports:
+      - "8080:8080"
+    networks:
+      - alga-network
+    depends_on:
+      - algafood-myql
+      - algafoodo-oauth
