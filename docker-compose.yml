@@ -17,6 +17,7 @@ services:
 
   algafood-oauth:
     image: algafood-oauth:1.0
+    command: ["/wait-for-it.sh", "-t", "25", "algafood-mysql:3306", "--", "java", "-jar", "algafood-oauth.jar"]
     environment:
       DB_HOST: algafood-mysql
     ports:
@@ -28,6 +29,7 @@ services:
 
   algafood-api:
     image: algafoodapi:1.0
+    command: ["/wait-for-it.sh", "-t", "35", "algafood-oauth:8181", "--", "java", "-jar", "api.jar"]     #substui CMD do dockerfile
     environment:
       DB_HOST: algafood-mysql
       OAUTH_HOST: algafood-oauth
