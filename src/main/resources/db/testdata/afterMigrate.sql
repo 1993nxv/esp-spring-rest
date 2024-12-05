@@ -118,7 +118,7 @@ select 4, id from permissao where nome like '%_RESTAURANTES' or nome like '%_PRO
 
 
 insert into usuario (id, nome, email, senha, data_cadastro) values
-(1, 'Wellington Delmondes', 'wellington.apk@gmail.com', '$2a$12$dEOyuPn0XFGWsAml7EyXNekAJkjtYbL8SK6R9KhNhcUzlrZWNS6n6', utc_timestamp),
+(1, 'Wellington Delmondes', 'wellington.apk@gmail.com', '$2y$12$w3igMjsfS5XoAYuowoH3C.54vRFWlcXSHLjX7MwF990Kc2KKKh72e', utc_timestamp),
 (2, 'Bruna Franco', 'bruna@avanc.com', '$2a$12$dEOyuPn0XFGWsAml7EyXNekAJkjtYbL8SK6R9KhNhcUzlrZWNS6n6', utc_timestamp),
 (3, 'José Souza', 'jose.aux@avanc.com', '$2a$12$dEOyuPn0XFGWsAml7EyXNekAJkjtYbL8SK6R9KhNhcUzlrZWNS6n6', utc_timestamp),
 (4, 'Sebastião Martins', 'sebastiao.cad@avanc.com', '$2a$12$dEOyuPn0XFGWsAml7EyXNekAJkjtYbL8SK6R9KhNhcUzlrZWNS6n6', utc_timestamp),
@@ -222,3 +222,5 @@ values (
   'READ,WRITE', 'client_credentials', null, 'CONSULTAR_PEDIDOS,GERAR_RELATORIOS',
   null, null, null
 );
+
+unlock tables;
