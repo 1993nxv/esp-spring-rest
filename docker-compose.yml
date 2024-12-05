@@ -40,3 +40,13 @@ services:
     depends_on:
       - algafood-mysql
       - algafood-oauth
+
+  algafood-nginx-proxy:
+    build: ./nginx
+    image: algafood-nginx-proxy
+    ports:
+      - "80:80"
+    networks:
+      - alga-network
+    depends_on:
+      - algafood-api
