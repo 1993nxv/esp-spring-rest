@@ -27,6 +27,11 @@ services:
     depends_on:
       - algafood-mysql
 
+  algafood-redis:
+    image: redis:6.2.1-alpine
+    networks:
+      - alga-network
+
   algafood-api:
     image: algafoodapi:1.0
     command: ["/wait-for-it.sh", "-t", "35", "algafood-oauth:8181", "--", "java", "-jar", "api.jar"]     #substui CMD do dockerfile
